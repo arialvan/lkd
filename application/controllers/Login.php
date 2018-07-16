@@ -31,6 +31,7 @@ class Login extends CI_Controller {
 
     public function logout(){
         $dSession = array(
+                        'nipp',
                         'username',
                         'user_level',
                         'is_login'

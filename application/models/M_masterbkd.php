@@ -114,93 +114,28 @@ function show_katdosen()
     return $query;
 }
 
+function show_edit_skema()
+{
+    return $this->db->get_where($table,$where);
+}
+
 function show_bkdremun()
 {
-  /*
-  SELECT p.*
-   , group_concat(CASE f.name WHEN 'telephone' THEN fp.value END) telephone
-   , group_concat(CASE f.name WHEN 'address'   THEN fp.value END) address
-FROM person p
-JOIN field f
-  LEFT JOIN fieldPerson fp
-    ON    fp.personId = p.id
-      AND fp.fieldId = f.id
-GROUP BY p.id
-  */
-    // SELECT *,
-    //    CASE
-    //      WHEN master_kategori_dosen.id_kat_dosen = '1' AND master_kategori_dosen.id_bkd = '1' THEN 'sks_bkd'
-    //      WHEN table1.event = 't' AND table1.name = 'smith' THEN 'very low'
-    //      ELSE (SELECT table2.risk FROM table2 WHERE table2.value <= table1.value
-    //            ORDER BY table2.value DESC LIMIT 1)
-    //    END AS risk
-    // FROM table1
-    // ORDER BY FIELD( table1.event, 'r', 'f', 't' ), table1.value DESC
-
-
-    //
-
-
-      /*
-      SELECT *,
-                                        group_concat(CASE f.id_bkd WHEN '1' THEN fp.sks_bkd END) Pendidikan,
-                                        group_concat(CASE f.id_bkd WHEN '2' THEN fp.sks_bkd END) Penelitian,
-                                        group_concat(CASE f.id_bkd WHEN '3' THEN fp.sks_bkd END) Pengabdian,
-                                        group_concat(CASE f.id_bkd WHEN '4' THEN fp.sks_bkd END) Penunjang,
-                                        group_concat(CASE ff.id_remun WHEN '1' THEN fp.sks_remun END) Pendidikans,
-                                        group_concat(CASE ff.id_remun WHEN '2' THEN fp.sks_remun END) Penelitians,
-                                        group_concat(CASE ff.id_remun WHEN '3' THEN fp.sks_remun END) Pengabdians,
-                                        group_concat(CASE ff.id_remun WHEN '4' THEN fp.sks_remun END) Penunjangs,
-                                        group_concat(CASE ff.id_remun WHEN '1' THEN fp.poin_remun END) PoinPendidikan,
-                                        group_concat(CASE ff.id_remun WHEN '2' THEN fp.poin_remun END) PoinPenelitian,
-                                        group_concat(CASE ff.id_remun WHEN '3' THEN fp.poin_remun END) PoinPengabdian,
-                                        group_concat(CASE ff.id_remun WHEN '4' THEN fp.poin_remun END) PoinPenunjang
-                                FROM master_kategori_dosen b
-                                JOIN bkd f
-                                JOIN remunerasi ff
-                                LEFT JOIN bkd_remun_dosen fp
-                                      ON fp.id_kat_dosen = b.id_kat_dosen
-                                      AND fp.id_bkd      = f.id_bkd
-                                      AND fp.id_remun    = ff.id_remun
-                                GROUP BY fp.id_kat_dosen
-
-      */
-  //
-  // $query = $this->db->query("SELECT *,
-  //                                   group_concat(CASE WHEN fp.id_bkd='1' AND fp.id_kat_dosen='1' THEN fp.sks_bkd END) Pendidikan,
-  //                                   group_concat(CASE WHEN fp.id_bkd='2' AND fp.id_kat_dosen='1' THEN fp.sks_bkd END) Penelitian,
-  //                                   group_concat(CASE WHEN fp.id_bkd='3' AND fp.id_kat_dosen='1' THEN fp.sks_bkd END) Pengabdian,
-  //                                   group_concat(CASE WHEN fp.id_bkd='4' AND fp.id_kat_dosen='1' THEN fp.sks_bkd END) Penunjang,
-  //                                   group_concat(CASE ff.id_remun WHEN '1' THEN fp.sks_remun END) Pendidikans,
-  //                                   group_concat(CASE ff.id_remun WHEN '2' THEN fp.sks_remun END) Penelitians,
-  //                                   group_concat(CASE ff.id_remun WHEN '3' THEN fp.sks_remun END) Pengabdians,
-  //                                   group_concat(CASE ff.id_remun WHEN '4' THEN fp.sks_remun END) Penunjangs,
-  //                                   group_concat(CASE ff.id_remun WHEN '1' THEN fp.poin_remun END) PoinPendidikan,
-  //                                   group_concat(CASE ff.id_remun WHEN '2' THEN fp.poin_remun END) PoinPenelitian,
-  //                                   group_concat(CASE ff.id_remun WHEN '3' THEN fp.poin_remun END) PoinPengabdian,
-  //                                   group_concat(CASE ff.id_remun WHEN '4' THEN fp.poin_remun END) PoinPenunjang
-  //                           FROM master_kategori_dosen b
-  //                           JOIN bkd f
-  //                           JOIN remunerasi ff
-  //                           LEFT JOIN bkd_remun_dosen fp
-  //                                 ON fp.id_kat_dosen = b.id_kat_dosen
-  //                                 AND fp.id_bkd      = f.id_bkd
-  //                                 AND fp.id_remun    = ff.id_remun
-  //                           GROUP BY fp.id_kat_dosen ");
   $this->db->select('*,
-                      MAX(CASE WHEN bkd_remun_dosen.id_bkd = 1 THEN bkd_remun_dosen.sks_bkd END) AS pendidikan,
-                      MAX(CASE WHEN bkd_remun_dosen.id_bkd = 2 THEN bkd_remun_dosen.sks_bkd END) AS penelitian,
-                      MAX(CASE WHEN bkd_remun_dosen.id_bkd = 3 THEN bkd_remun_dosen.sks_bkd END) AS pengabdian,
-                      MAX(CASE WHEN bkd_remun_dosen.id_bkd = 4 THEN bkd_remun_dosen.sks_bkd END) AS penunjang,
-                      MAX(CASE WHEN bkd_remun_dosen.id_remun = 1 THEN bkd_remun_dosen.sks_remun END) AS pendidikans,
-                      MAX(CASE WHEN bkd_remun_dosen.id_remun = 2 THEN bkd_remun_dosen.sks_remun END) AS penelitians,
-                      MAX(CASE WHEN bkd_remun_dosen.id_remun = 3 THEN bkd_remun_dosen.sks_remun END) AS pengabdians,
-                      MAX(CASE WHEN bkd_remun_dosen.id_remun = 4 THEN bkd_remun_dosen.sks_remun END) AS penunjangs
+                      MAX(CASE WHEN bkd_remun_dosen.id_bkd = 1 THEN bkd_remun_dosen.sks_bkd END) AS Pendidikan,
+                      MAX(CASE WHEN bkd_remun_dosen.id_bkd = 2 THEN bkd_remun_dosen.sks_bkd END) AS Penelitian,
+                      MAX(CASE WHEN bkd_remun_dosen.id_bkd = 3 THEN bkd_remun_dosen.sks_bkd END) AS Pengabdian,
+                      MAX(CASE WHEN bkd_remun_dosen.id_bkd = 4 THEN bkd_remun_dosen.sks_bkd END) AS Penunjang,
+                      MAX(CASE WHEN bkd_remun_dosen.id_remun = 1 THEN bkd_remun_dosen.sks_remun END) AS Pendidikans,
+                      MAX(CASE WHEN bkd_remun_dosen.id_remun = 2 THEN bkd_remun_dosen.sks_remun END) AS Penelitians,
+                      MAX(CASE WHEN bkd_remun_dosen.id_remun = 3 THEN bkd_remun_dosen.sks_remun END) AS Pengabdians,
+                      MAX(CASE WHEN bkd_remun_dosen.id_remun = 4 THEN bkd_remun_dosen.sks_remun END) AS Penunjangs
                     ')
                   ->from('bkd_remun_dosen')
                   ->join('master_kategori_dosen','bkd_remun_dosen.id_kat_dosen = master_kategori_dosen.id_kat_dosen')
-                  ->group_by('bkd_remun_dosen.id_kat_dosen')
-                  ->order_by('bkd_remun_dosen.id');
+                  ->join('periode_lkd','bkd_remun_dosen.id_periode = periode_lkd.id_periode')
+                  ->where('periode_lkd.status=', 1)
+                  ->group_by('bkd_remun_dosen.id_kat_dosen');
   $query=$this->db->get();
   return $query;
 }
@@ -208,6 +143,36 @@ GROUP BY p.id
 function edit_katdosen($where,$table)
 {
     return $this->db->get_where($table,$where);
+}
+
+function edit_bkd_remun($id)
+{
+    // return $this->db->get_where($table,$where);
+    $this->db->select('*')
+                    ->from('bkd_remun_dosen')
+                    ->join('master_kategori_dosen', 'bkd_remun_dosen.id_kat_dosen = master_kategori_dosen.id_kat_dosen')
+                    ->join('periode_lkd', 'bkd_remun_dosen.id_periode = periode_lkd.id_periode')
+                    ->join('bkd', 'bkd_remun_dosen.id_bkd = bkd.id_bkd')
+                    ->where('bkd_remun_dosen.id_kat_dosen',$id)
+                    ->where('periode_lkd.status',1);
+    $query=$this->db->get();
+    return $query;
+}
+
+function edit_kat_dosen($id)
+{
+    // return $this->db->get_where($table,$where);
+    $this->db->select('*')
+                    ->from('master_kategori_dosen')
+                    ->where('id_kat_dosen',$id);
+    $query=$this->db->get();
+    return $query;
+}
+
+function update_bkdremun($where,$data,$table)
+{
+    $this->db->where($where);
+    $this->db->update($table,$data);
 }
 
 function update_katdosen($where,$data,$table)
@@ -346,6 +311,18 @@ function edit_subbkd($where,$table)
 {
     return $this->db->get_where($table,$where);
 }
+
+public function get_by_id($id)
+  {
+
+    $this->db->select('*');
+    $this->db->from('bkd_remun_dosen');
+    // $this->db->join('pegview', 'tb_pegawai_profil.nip = pegview.nip');
+    $this->db->where('id_kat_dosen', $id);
+    $query = $this->db->get();
+    return $query->row();
+  }
+
 // UPDATE
 function update_bkd($where,$data,$table)
 {

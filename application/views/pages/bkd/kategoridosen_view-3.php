@@ -84,19 +84,49 @@
                           ?>
                           <tr>
                               <th scope="row"><?php echo $no++; ?></th>
-                              <td bgcolor="#FFFFF0">
-                                <?php echo anchor('MasterBkd/EditSkema/'.$dt->id_kat_dosen,'<span class="text text-success">'.$dt->kategori_dosen.'</span>'); ?>
-                              </td>
                               <td>
-                                <?php echo $dt->Pendidikan; ?>
+                                <?php echo $dt->kategori_dosen; ?>
                               </td>
-                              <td><?php echo $dt->Penelitian; ?></td>
-                              <td><?php echo $dt->Pengabdian; ?></td>
-                              <td><?php echo $dt->Penunjang; ?></td>
-                              <td><?php echo $dt->Pendidikans; ?></td>
-                              <td><?php echo $dt->Penelitians; ?></td>
-                              <td><?php echo $dt->Pengabdians; ?></td>
-                              <td><?php echo $dt->Penunjangs; ?></td>
+                              <td class="bg-colour red" title="Klik 2x untuk Edit and tekan Enter untuk Simpan"
+                                  ondblclick="this.contentEditable=true; this.className='inEdit';"
+                                  onblur="this.contentEditable=false; this.className='';"
+                                  onkeypress="bkdpendidikan(event,'<?php echo $dt->id; ?>',$(this).html() )"><?php echo $dt->Pendidikan; ?>
+                              </td>
+                              <td class="bg-colour red" title="Klik 2x untuk Edit and tekan Enter untuk Simpan"
+                                  ondblclick="this.contentEditable=true; this.className='inEdit';"
+                                  onblur="this.contentEditable=false; this.className='';"
+                                  onkeypress="bkdpenelitian(event,'<?php echo $dt->id; ?>',$(this).html() )"><?php echo $dt->Penelitian; ?>
+                              </td>
+                              <td class="bg-colour red" title="Klik 2x untuk Edit and tekan Enter untuk Simpan"
+                                  ondblclick="this.contentEditable=true; this.className='inEdit';"
+                                  onblur="this.contentEditable=false; this.className='';"
+                                  onkeypress="bkdpengabdian(event,'<?php echo $dt->id; ?>',$(this).html() )"><?php echo $dt->Pengabdian; ?>
+                              </td>
+                              <td class="bg-colour red" title="Klik 2x untuk Edit and tekan Enter untuk Simpan"
+                                  ondblclick="this.contentEditable=true; this.className='inEdit';"
+                                  onblur="this.contentEditable=false; this.className='';"
+                                  onkeypress="bkdpenunjang(event,'<?php echo $dt->id; ?>',$(this).html() )"><?php echo $dt->Penunjang; ?>
+                              </td>
+                              <td class="bg-colour red" title="Klik 2x untuk Edit and tekan Enter untuk Simpan"
+                                  ondblclick="this.contentEditable=true; this.className='inEdit';"
+                                  onblur="this.contentEditable=false; this.className='';"
+                                  onkeypress="bkdpendidikans(event,'<?php echo $dt->id; ?>',$(this).html() )"><?php echo $dt->Pendidikans; ?>
+                              </td>
+                              <td class="bg-colour red" title="Klik 2x untuk Edit and tekan Enter untuk Simpan"
+                                  ondblclick="this.contentEditable=true; this.className='inEdit';"
+                                  onblur="this.contentEditable=false; this.className='';"
+                                  onkeypress="bkdpenelitians(event,'<?php echo $dt->id; ?>',$(this).html() )"><?php echo $dt->Penelitians; ?>
+                              </td>
+                              <td class="bg-colour red" title="Klik 2x untuk Edit and tekan Enter untuk Simpan"
+                                  ondblclick="this.contentEditable=true; this.className='inEdit';"
+                                  onblur="this.contentEditable=false; this.className='';"
+                                  onkeypress="bkdpengabdians(event,'<?php echo $dt->id; ?>',$(this).html() )"><?php echo $dt->Pengabdians; ?>
+                              </td>
+                              <td class="bg-colour red" title="Klik 2x untuk Edit and tekan Enter untuk Simpan"
+                                  ondblclick="this.contentEditable=true; this.className='inEdit';"
+                                  onblur="this.contentEditable=false; this.className='';"
+                                  onkeypress="bkdpenunjangs(event,'<?php echo $dt->id; ?>',$(this).html() )"><?php echo $dt->Penunjangs; ?>
+                              </td>
                           </tr>
                         <?php } ?>
                       </tbody>
@@ -107,4 +137,5 @@
                 </div>
 
               </div>
+          </div>
    </div>

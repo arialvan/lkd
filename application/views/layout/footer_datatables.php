@@ -30,6 +30,20 @@
     <script src="<?php echo base_url(); ?>assets/build/js/custom.min.js"></script>
 
 <script>
+//Modal Update Kategori Dosen Controller Dosen
+$(document).ready(function() {
+        // Untuk sunting
+        $('#edit-data').on('show.bs.modal', function (event) {
+            var div   = $(event.relatedTarget) // Tombol dimana modal di tampilkan
+            var modal = $(this)
+
+            // Isi nilai pada field
+            modal.find('#nama').attr("value",div.data('nama'));
+            modal.find('#nip').attr("value",div.data('nip'));
+            modal.find('#kategori').attr("value",div.data('kategori'));
+        });
+    });
+
 function ConfirmDelete() {
   return confirm("Anda yakin ingin menghapus data ini?");
 }

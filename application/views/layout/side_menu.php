@@ -24,7 +24,7 @@
                 <ul class="nav side-menu">
                   <li><a href="<?php echo base_url() ?>Master/Periode"><i class="fa fa-calendar"></i>Periode</a></li>
                   <li><a href="<?php echo base_url() ?>Verifikator"><i class="fa fa-user-md"></i>Verifikator</a></li>
-                  <li><a href="<?php echo base_url() ?>MasterBkd/SetProfil"><i class="fa fa-user"></i>Profil Dosen</a></li>
+                  <li><a href="<?php echo base_url() ?>Dosen"><i class="fa fa-user"></i>Profil Dosen</a></li>
                   <li><a><i class="fa fa-calculator"></i> Pengaturan Master <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li><a href="<?php echo base_url() ?>MasterBkd">BKD</a></li>

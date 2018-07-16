@@ -8,8 +8,6 @@
             <div class="clearfix"></div>
             <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
-                  <div class="x_panel" style="">
-                  <div class="x_title">
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                     </ul>
@@ -34,7 +32,7 @@
                             </select>
                         </div>
 
-                        <div class="col-sm-2">
+                          <div class="col-sm-2">
                           <label>BKD<span class="required">*</span></label>
                             <select id="id_bkd" name="id_bkd[]" class="form-control" required>
                                 <option value="">Pilih</option>
@@ -63,10 +61,11 @@
                         <label>SKS Remun<span class="required">*</span></label>
                           <input type="number" id="sks_remun" class="form-control" name="sks_remun[]" value="0" size="3" />
                         </div>
-                        <div class="col-sm-1">
+
+                        <!-- <div class="col-sm-1">
                         <label>Poin<span class="required">*</span></label>
                           <input type="text" id="poin_remun" class="form-control" name="poin_remun[]" value="0" size="3" />
-                        </div>
+                        </div> -->
 
                       </div>
 

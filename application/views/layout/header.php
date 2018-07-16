@@ -27,6 +27,10 @@
           width: 15px;
           height: 15px;
         }
+
+        .nomor {
+          width: 4em;
+        }
     </style>
   </head>
     <body class="nav-md">

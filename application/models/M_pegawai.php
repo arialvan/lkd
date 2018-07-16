@@ -116,8 +116,7 @@ var $tabless = 'pegview';
         }
         return $msg;
     }
-/*UPDATE PEGAWAI PROFIL*/
-
+/*UPDATE KATEGORI Dosen */
     public function get_by_id($id)
     	{
 
@@ -126,10 +125,6 @@ var $tabless = 'pegview';
         $this->db->join('pegview', 'tb_pegawai_profil.nip = pegview.nip');
         $this->db->where('tb_pegawai_profil.nip', $id);
         $query = $this->db->get();
-
-    		// $this->db->from($this->tabless);
-    		// $this->db->where('nip',$id);
-    		// $query = $this->db->get();
 
     		return $query->row();
     	}

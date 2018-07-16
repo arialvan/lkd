@@ -409,6 +409,36 @@ public function ProfilDosen()
 				redirect('MasterBkd/ProfilDosen');
 	}
 
+	/* Edit Skema Renumerasi */
+	public function EditSkema($id)
+	{
+		$data['name'] = $this->session->userdata('username');
+		$data['dosen'] = $this->M_masterbkd->edit_bkd_remun($id)->result();
+		$data['kategori_dosen'] = $this->M_masterbkd->edit_kat_dosen($id)->result();
+		$data['title'] = 'Edit Skema Remunerasi';
+		$this->load->view('layout/header',$data);
+		$this->load->view('layout/side_menu');
+		$this->load->view('pages/bkd/skema_edit');
+		$this->load->view('layout/footer');
+	}
+
+	function UpdateSkema()
+	{
+					foreach($this->input->post('id') as $b => $key)
+			        {
+
+			          $data = array(
+													'sks_bkd' => $this->input->post('sks_bkd')[$b],
+													'sks_remun' => $this->input->post('sks_remun')[$b]
+			            );
+								$where = array('id' => $key);
+								$this->M_masterbkd->update_bkdremun($where, $data, 'bkd_remun_dosen');
+			         }
+				echo "Update Succes"; redirect('MasterBkd/ProfilDosen','refresh');
+
+	}
+	/* Close */
+
 	public function EditKatDosen($id)
 	{
 	        $data['name'] = $this->session->userdata('username');
@@ -457,24 +487,26 @@ public function FormSkema()
 
 function InsertSkema()
 {
-
-    foreach($this->input->post('id_kat_dosen') as $bkd => $key)
+		// $x=count($this->input->post('id_kat_dosen'));
+		// for($i=0; $i<=$x; $i++){
+		// 	echo "The number is: $x <br>";
+		// }
+    foreach($this->input->post('id_kat_dosen') as $b => $key)
         {
-      //  echo $this->input->post('sub_kegiatan')[$bkd].'<br />';
-            $data = array(
-                'id_kat_dosen' => $key,
-                'id_bkd' => $this->input->post('id_bkd')[$bkd],
-                'id_remun' => $this->input->post('id_remun')[$bkd],
-								'sks_bkd' => $this->input->post('sks_bkd')[$bkd],
-								'sks_remun' => $this->input->post('sks_remun')[$bkd],
-								'id_periode' => $this->input->post('id_periode'),
-                'user_create' => $this->session->userdata('username')
-            );
-           //var_dump($data);
-          $this->M_masterbkd->insert_skema($data, 'bkd_remun_dosen');
 
-        }
-				redirect('MasterBkd/FormSkema');
+          $data = array(
+		                'id_kat_dosen' => $key,
+		                'id_bkd' => $this->input->post('id_bkd')[$b],
+		                'id_remun' => $this->input->post('id_remun')[$b],
+										'sks_bkd' => $this->input->post('sks_bkd')[$b],
+										'sks_remun' => $this->input->post('sks_remun')[$b],
+										'id_periode' => $this->input->post('id_periode'),
+		                'user_create' => $this->session->userdata('username')
+            );
+           var_dump($data);
+           $this->M_masterbkd->insert_skema($data,'bkd_remun_dosen');
+         }
+				 	redirect('MasterBkd/ProfilDosen');
 }
 
 /* Edit Table SKEMA */
@@ -493,7 +525,6 @@ function Skema1()
 			$fields = array(
 									'sks_bkd' => $title,
 								);
-
 			//$this->M_masterbkd->update_skema1($id_kat_dosen,$id_bkd,$fields);
 			$this->M_masterbkd->update_skema1($id,$fields);
 			echo "Update Succes"; redirect('MasterBkd','refresh');
@@ -631,19 +662,6 @@ function Skema8()
 
 			echo "Update Succes"; redirect('MasterBkd','refresh');
 
-}
-
-// SET UP PROFIL DOSEN
-public function SetProfil()
-{
-    $data['name'] = $this->session->userdata('username');
-    $data['dosen'] = $this->M_verifikator->show_dosen();
-		$data['profil'] = $this->M_verifikator->show_dosen_profil();
-    $data['title'] = 'Profil Dosen';
-    $this->load->view('layout/header_datatables',$data);
-    $this->load->view('layout/side_menu');
-    $this->load->view('pages/verifikator/setprofil_view');
-    $this->load->view('layout/footer_datatables');
 }
 
 //LOGOUT

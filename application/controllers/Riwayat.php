@@ -18,11 +18,12 @@ class Riwayat extends CI_Controller {
             return (bool) preg_match('#^HTTP/.*\s+[(200|301|302)]+\s#i', $headers);
 
         }
-        
-/* RIWAYAT PENDIDIKAN */         
+
+/* RIWAYAT PENDIDIKAN */
 	public function index()
 	{
             $data['name'] = $this->session->userdata('username');
+            $data['nipp'] = $this->session->userdata('nipp');
             $data['pegawai'] = $this->M_pegawai->show_pegawai();
             $data['pendidikan'] = $this->M_master->show_pendidikan();
             $data['title'] = 'Input Riwayat Pendidikan';
@@ -31,7 +32,7 @@ class Riwayat extends CI_Controller {
             $this->load->view('pages/riwayat/riwayat_pendidikan');
             $this->load->view('layout/footer');
         }
-   
+
         function InsertRiwayatPendidikan() {
             $data = array(
                 'id_pendidikan' => $this->input->post('id_pendidikan'),
@@ -45,11 +46,12 @@ class Riwayat extends CI_Controller {
             $this->M_riwayat->insert_riwayatpendidikan($data, 'tb_riwayatpendidikan');
             redirect('Riwayat');
         }
-        
-/* RIWAYAT JABATAN */  
+
+/* RIWAYAT JABATAN */
         public function RiwayatJabatan()
 	{
             $data['name'] = $this->session->userdata('username');
+            $data['nipp'] = $this->session->userdata('nipp');
             $data['pegawai'] = $this->M_pegawai->show_pegawai();
             $data['jabatan'] = $this->M_master->show_jabatan();
             $data['title'] = 'Input Riwayat Jabatan';
@@ -58,7 +60,7 @@ class Riwayat extends CI_Controller {
             $this->load->view('pages/riwayat/riwayat_jabatan');
             $this->load->view('layout/footer');
         }
-        
+
         function InsertRiwayatJabatan() {
             $data = array(
                 'id_jabatan' => $this->input->post('id_jabatan'),
@@ -69,11 +71,12 @@ class Riwayat extends CI_Controller {
             $this->M_riwayat->insert_riwayatjabatan($data, 'tb_riwayatjabatan');
             redirect('Riwayat/RiwayatJabatan');
         }
-        
-/* RIWAYAT DIKLAT */  
+
+/* RIWAYAT DIKLAT */
         public function RiwayatDiklat()
 	{
             $data['name'] = $this->session->userdata('username');
+            $data['nipp'] = $this->session->userdata('nipp');
             $data['pegawai'] = $this->M_pegawai->show_pegawai();
             $data['title'] = 'Input Riwayat Diklat';
             $this->load->view('layout/header',$data);
@@ -81,7 +84,7 @@ class Riwayat extends CI_Controller {
             $this->load->view('pages/riwayat/riwayat_diklat');
             $this->load->view('layout/footer');
         }
-        
+
         function InsertRiwayatDiklat() {
             $data = array(
                 'nip' => $this->input->post('nip'),
@@ -96,11 +99,12 @@ class Riwayat extends CI_Controller {
             $this->M_riwayat->insert_riwayatdiklat($data, 'tb_riwayatdiklat');
             redirect('Riwayat/RiwayatDiklat');
         }
-        
- /* RIWAYAT SEMINAR */  
+
+ /* RIWAYAT SEMINAR */
         public function RiwayatSeminar()
 	{
             $data['name'] = $this->session->userdata('username');
+            $data['nipp'] = $this->session->userdata('nipp');
             $data['pegawai'] = $this->M_pegawai->show_pegawai();
             $data['title'] = 'Input Riwayat Seminar';
             $this->load->view('layout/header',$data);
@@ -108,7 +112,7 @@ class Riwayat extends CI_Controller {
             $this->load->view('pages/riwayat/riwayat_seminar');
             $this->load->view('layout/footer');
         }
-        
+
         function InsertRiwayatSeminar() {
             $data = array(
                 'nip' => $this->input->post('nip'),
@@ -122,12 +126,13 @@ class Riwayat extends CI_Controller {
             //var_dump($data);
             $this->M_riwayat->insert_riwayatseminar($data, 'tb_riwayatseminar');
             redirect('Riwayat/RiwayatSeminar');
-        }      
-        
-        
-/*EDIT PEGAWAI*/      
+        }
+
+
+/*EDIT PEGAWAI*/
         public function EditPegawai($id) {
             $data['name'] = $this->session->userdata('username');
+            $data['nipp'] = $this->session->userdata('nipp');
             $where = array('nip' => $id);
             $data['pegawai'] = $this->M_pegawai->edit_pegawai($where, 'tb_pegawai')->result();
             $data['views'] = $this->M_pegawai->show_viewpages();
@@ -142,7 +147,7 @@ class Riwayat extends CI_Controller {
             $this->load->view('pages/pegawai/pegawai_edit');
             $this->load->view('layout/footer');
     }
-/*UPDATE PEGAWAI*/    
+/*UPDATE PEGAWAI*/
     function UpdatePegawai() {
 
         $data = array(
@@ -175,13 +180,13 @@ class Riwayat extends CI_Controller {
         redirect('Pegawai');
     }
 
-/*HAPUS PEGAWAI*/ 
+/*HAPUS PEGAWAI*/
     function HapusPegawai($id) {
         $where = array('nip' => $id);
         $this->M_pegawai->hapus_pegawai($where, 'tb_pegawai');
         redirect('Pegawai');
     }
-    
+
 //LOGOUT
     public function is_logged_in() {
         $is_logged_in = $this->session->userdata('is_login');

@@ -38,8 +38,14 @@ function edit_bkdsubkegiatan($where,$table)
     return $this->db->get_where($table,$where);
 }
 
-//update
 function update_bkdsubkegiatan($where,$data,$table)
+{
+    $this->db->where($where);
+    $this->db->update($table,$data);
+}
+
+//update
+function update_rencana($where,$data,$table)
 {
     $this->db->where($where);
     $this->db->update($table,$data);
@@ -63,10 +69,10 @@ function show_laporan()
 {
   $this->db->select('*')
                   ->from('bkd_subkegiatan')
-                  // ->where('app_ketuaprodi=', 1)
-                  // ->where('app_assesor1=', 2)
-                  // ->where('app_assesor2=', 3)
-                  ->order_by('id_subkegiatan');
+                  ->join('bkd_kegiatan','bkd_subkegiatan.id_kegiatan = bkd_kegiatan.id_kegiatan')
+                  ->where('bkd_subkegiatan.id_bkd=', 1)
+                  ->where('bkd_subkegiatan.nip=', $this->session->userdata('nipp'))
+                  ->order_by('bkd_subkegiatan.id_subkegiatan');
   $query=$this->db->get()->result();
   return $query;
 }
@@ -75,8 +81,10 @@ function show_rencana()
 {
   $this->db->select('*')
                   ->from('bkd_subkegiatan')
-                  ->where('id_bkd=', 1)
-                  ->order_by('id_subkegiatan');
+                  ->join('bkd_kegiatan','bkd_subkegiatan.id_kegiatan = bkd_kegiatan.id_kegiatan')
+                  ->where('bkd_subkegiatan.id_bkd=', 1)
+                  ->where('bkd_subkegiatan.nip=', $this->session->userdata('nipp'))
+                  ->order_by('bkd_subkegiatan.id_subkegiatan');
   //$this->db->select_sum('sks_subkegiatan');
   $query=$this->db->get()->result();
   return $query;
@@ -86,8 +94,10 @@ function show_rencana_penelitian()
 {
   $this->db->select('*')
                   ->from('bkd_subkegiatan')
-                  ->where('id_bkd=', 2)
-                  ->order_by('id_subkegiatan');
+                  ->join('bkd_kegiatan','bkd_subkegiatan.id_kegiatan = bkd_kegiatan.id_kegiatan')
+                  ->where('bkd_subkegiatan.id_bkd=', 2)
+                  ->where('bkd_subkegiatan.nip=', $this->session->userdata('nipp'))
+                  ->order_by('bkd_subkegiatan.id_subkegiatan');
   $query=$this->db->get()->result();
   return $query;
 }
@@ -96,8 +106,10 @@ function show_rencana_pengabdian()
 {
   $this->db->select('*')
                   ->from('bkd_subkegiatan')
-                  ->where('id_bkd=', 3)
-                  ->order_by('id_subkegiatan');
+                  ->join('bkd_kegiatan','bkd_subkegiatan.id_kegiatan = bkd_kegiatan.id_kegiatan')
+                  ->where('bkd_subkegiatan.id_bkd=', 3)
+                  ->where('bkd_subkegiatan.nip=', $this->session->userdata('nipp'))
+                  ->order_by('bkd_subkegiatan.id_subkegiatan');
   $query=$this->db->get()->result();
   return $query;
 }
@@ -106,8 +118,22 @@ function show_rencana_penunjang()
 {
   $this->db->select('*')
                   ->from('bkd_subkegiatan')
-                  ->where('id_bkd=', 4)
-                  ->order_by('id_subkegiatan');
+                  ->join('bkd_kegiatan','bkd_subkegiatan.id_kegiatan = bkd_kegiatan.id_kegiatan')
+                  ->where('bkd_subkegiatan.id_bkd=', 4)
+                  ->where('bkd_subkegiatan.nip=', $this->session->userdata('nipp'))
+                  ->order_by('bkd_subkegiatan.id_subkegiatan');
+  $query=$this->db->get()->result();
+  return $query;
+}
+
+function show_verifikator()
+{
+  $this->db->select('*')
+                  ->from('verifikasi')
+                  ->join('periode_lkd','verifikasi.id_periode = periode_lkd.id_periode')
+                  ->where('verifikasi.nip',$this->session->userdata('nipp'))
+                  ->where('periode_lkd.status',1)
+                  ->order_by('verifikasi.id_verifikator');
   $query=$this->db->get()->result();
   return $query;
 }

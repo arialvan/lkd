@@ -23,10 +23,12 @@ class RencanaKerja extends CI_Controller {
 public function index()
 	{
 	 	$data['name'] = $this->session->userdata('username');
+		$data['nipp'] = $this->session->userdata('nipp');
 		$data['rencanakerja'] = $this->M_rencanakerja->show_rencana();
 		$data['penelitian'] = $this->M_rencanakerja->show_rencana_penelitian();
 		$data['pengabdian'] = $this->M_rencanakerja->show_rencana_pengabdian();
 		$data['penunjang'] = $this->M_rencanakerja->show_rencana_penunjang();
+		$data['verifikator'] = $this->M_rencanakerja->show_verifikator();
 		$data['title'] = 'Beban Kinerja Dosen';
 		$this->load->view('layout/header_datatables',$data);
 		$this->load->view('layout/side_menu');
@@ -37,6 +39,7 @@ public function index()
 	public function Laporan()
 		{
 		 	$data['name'] = $this->session->userdata('username');
+			$data['nipp'] = $this->session->userdata('nipp');
 			$data['laporan'] = $this->M_rencanakerja->show_laporan();
 			$data['title'] = 'Rekap Rencana Kerja Dosen';
 			$this->load->view('layout/header_datatables',$data);
@@ -49,6 +52,7 @@ public function index()
 public function FormRencana()
 {
       $data['name'] = $this->session->userdata('username');
+			$data['nipp'] = $this->session->userdata('nipp');
       $data['bkd'] = $this->M_rencanakerja->show_bkd();
       $data['bkdkegiatan'] = $this->M_rencanakerja->show_bkdkegiatan();
       $data['title'] = 'Input Rencana Kerja';
@@ -65,22 +69,35 @@ function InsertRencana()
         {
       //  echo $this->input->post('sub_kegiatan')[$bkd].'<br />';
             $data = array(
-								'id_bkd' => $this->input->post('bkd')[$bkd],
-                'id_kegiatan' => $key,
-                'sub_kegiatan' => $this->input->post('sub_kegiatan')[$bkd],
-								'sks_subkegiatan' => $this->input->post('sks_subkegiatan')[$bkd],
-                'status' => 0,
-                'user_create' => $this->session->userdata('username')
+										'nip' => $this->session->userdata('nipp'),
+										'id_bkd' => $this->input->post('bkd')[$bkd],
+		                'id_kegiatan' => $key,
+		                'sub_kegiatan' => $this->input->post('sub_kegiatan')[$bkd],
+										'sks_subkegiatan' => $this->input->post('sks_subkegiatan')[$bkd],
+		                'status' => 0,
+		                'user_create' => $this->session->userdata('username')
             );
            //var_dump($data);
             $this->M_rencanakerja->insert_rencanakerja($data, 'bkd_subkegiatan');
           //Update Tabel Pegawai
-            $data1 = array('status_bkd' => 1);
-            $where = array('nip' => $this->session->userdata('username'));
-            $this->M_pegawai->update_pegawai($where, $data1, 'tb_pegawai');
+            // $data1 = array('status_bkd' => 1);
+            // $where = array('nip' => $this->session->userdata('username'));
+            // $this->M_pegawai->update_pegawai($where, $data1, 'tb_pegawai');
         }
 
             redirect('RencanaKerja');
+}
+
+function UpdateRencana()
+{
+	$data = array('id_subkegiatan' => $this->input->post('id'),
+								'sub_kegiatan' => $this->input->post('subkegiatan'),
+								'sks_subkegiatan	' => $this->input->post('sks')
+							 );
+  $where = array('id_subkegiatan' => $this->input->post('id'));
+  $this->M_rencanakerja->update_rencana($where, $data, 'bkd_subkegiatan');
+	// var_dump($where);
+	redirect('RencanaKerja');
 }
 
 //LOGOUT

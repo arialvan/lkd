@@ -22,12 +22,13 @@ class Dosen extends CI_Controller {
 public function index()
 {
   $data['name'] = $this->session->userdata('username');
+	$data['nipp'] = $this->session->userdata('nipp');
   $data['dosen'] = $this->M_dosen->show_dosen();
 	$data['kategoridosen'] = $this->M_dosen->show_kat_dosen();
   $data['title'] = 'Profil Dosen';
   $this->load->view('layout/header_datatables',$data);
   $this->load->view('layout/side_menu');
-  $this->load->view('pages/Dosen/setprofil_view');
+  $this->load->view('pages/dosen/setprofil_view');
   $this->load->view('layout/footer_datatables');
 }
 
@@ -35,16 +36,18 @@ public function FormDosen()
 {
     if($this->session->userdata('user_level')==1){
         $data['name']    = $this->session->userdata('username');
+				$data['nipp'] = $this->session->userdata('nipp');
         $data['dosen']   = $this->M_dosen->show_dosen_profil();
         $data['katdosen'] = $this->M_dosen->show_kat_dosen();
 
         $data['title'] = 'Pengaturan Profil Dosen';
         $this->load->view('layout/header_datatables',$data);
         $this->load->view('layout/side_menu');
-        $this->load->view('pages/Dosen/dosen_input');
+        $this->load->view('pages/dosen/dosen_input');
         $this->load->view('layout/footer_datatables');
     }else {
         $data['name'] = $this->session->userdata('username');
+				$data['nipp'] = $this->session->userdata('nipp');
         $this->load->view('layout/header',$data);
         $this->load->view('layout/side_menu');
         $this->load->view('pages/error.php');
@@ -78,6 +81,7 @@ public function EditVerifikator($id)
   if($this->session->userdata('user_level')==1)
   {
         $data['name'] = $this->session->userdata('username');
+				$data['nipp'] = $this->session->userdata('nipp');
         $where = array('id_verifikator' => $id);
         $data['verifikator'] = $this->M_verifikator->edit_verifikator($where, 'verifikator')->result();
         $data['title'] = 'Edit Verifikator';
@@ -88,6 +92,7 @@ public function EditVerifikator($id)
   }else
   {
         $data['name'] = $this->session->userdata('username');
+				$data['nipp'] = $this->session->userdata('nipp');
         $this->load->view('layout/header',$data);
         $this->load->view('layout/side_menu');
         $this->load->view('pages/error.php');

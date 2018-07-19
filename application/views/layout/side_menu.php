@@ -6,12 +6,9 @@
                   <li><a href="<?php echo base_url() ?>Dashboard"><i class="fa fa-dashboard"></i> Dashboard </a></li>
                 </ul>
                 <ul class="nav side-menu">
-                  <li><a><i class="fa fa-users"></i> Data Pegawai <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-users"></i> Data Dosen <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <?php if($this->session->userdata('user_level')==1) { ?>
-                        <li><a href="<?php echo base_url() ?>Pegawai/PegawaiAll">Pegawai All</a></li>
-                      <?php } ?>
-                        <li><a href="<?php echo base_url() ?>Pegawai">Pegawai Profil</a></li>
+                        <li><a href="<?php echo base_url() ?>Pegawai">View</a></li>
                         <li><a href="<?php echo base_url() ?>Import">Import</a></li>
                     </ul>
                   </li>

@@ -22,6 +22,7 @@ function ceklink($url)
 public function index()
 {
   $data['name'] = $this->session->userdata('username');
+  $data['nipp'] = $this->session->userdata('nipp');
   $data['level'] = $this->session->userdata('user_level');
   $data['pegawai'] = $this->M_pegawai->show_viewpages();
   $data['title'] = 'Data Pegawai';
@@ -39,6 +40,7 @@ public function PegawaiAll()
 {
   $this->output->cache(1);
   $data['name'] = $this->session->userdata('username');
+  $data['nipp'] = $this->session->userdata('nipp');
   $data['level'] = $this->session->userdata('user_level');
   $data['pegawai'] = $this->M_pegawai->show_pegawai();
   $data['title'] = 'Data Pegawai';
@@ -52,6 +54,7 @@ public function FormPegawai()
 {
     if($this->session->userdata('user_level')==1){
         $data['name'] = $this->session->userdata('username');
+        $data['nipp'] = $this->session->userdata('nipp');
         $data['golongan'] = $this->M_master->show_golongan();
         $data['agama'] = $this->M_master->show_agama();
         $data['mapel'] = $this->M_master->show_mapel();
@@ -62,6 +65,7 @@ public function FormPegawai()
         $this->load->view('layout/footer');
     }else {
         $data['name'] = $this->session->userdata('username');
+        $data['nipp'] = $this->session->userdata('nipp');
         $this->load->view('layout/header',$data);
         $this->load->view('layout/side_menu');
         $this->load->view('pages/error.php');
@@ -123,6 +127,7 @@ public function EditPegawai($id)
   if($this->session->userdata('user_level')==1)
   {
         $data['name'] = $this->session->userdata('username');
+        $data['nipp'] = $this->session->userdata('nipp');
         $where = array('nip' => $id);
         $data['pegawai'] = $this->M_pegawai->edit_pegawai($where, 'tb_pegawai')->result();
         $data['views'] = $this->M_pegawai->show_viewpages_edit($where, 'pegview')->result();
@@ -137,6 +142,7 @@ public function EditPegawai($id)
   }else
   {
         $data['name'] = $this->session->userdata('username');
+        $data['nipp'] = $this->session->userdata('nipp');
         $this->load->view('layout/header',$data);
         $this->load->view('layout/side_menu');
         $this->load->view('pages/error.php');
@@ -227,6 +233,7 @@ public function InputProfilPegawai()
   if($this->session->userdata('user_level')==1)
   {
       $data['name'] = $this->session->userdata('username');
+      $data['nipp'] = $this->session->userdata('nipp');
       $data['pegawai'] = $this->M_pegawai->show_pegawai_setting();
       $data['eselon'] = $this->M_master->show_eselon();
       $data['golongan'] = $this->M_master->show_golongan();
@@ -243,6 +250,7 @@ public function InputProfilPegawai()
       $this->load->view('layout/footer_datatables');
   }else {
       $data['name'] = $this->session->userdata('username');
+      $data['nipp'] = $this->session->userdata('nipp');
       $this->load->view('layout/header',$data);
       $this->load->view('layout/side_menu');
       $this->load->view('pages/error.php');
@@ -425,6 +433,7 @@ $data = array(
 /*RIWAYAT PEGAWAI*/
 public function ProfilPegawai($id) {
         $data['name'] = $this->session->userdata('username');
+        $data['nipp'] = $this->session->userdata('nipp');
         $where = array('nip' => $id);
         $data['pegawai'] = $this->M_pegawai->edit_pegawai($where, 'tb_pegawai')->result();
         $data['riw_pendidikan'] = $this->M_pegawai->riwayatpendidikan($id);
@@ -444,6 +453,7 @@ public function SetOrganisasi()
   if($this->session->userdata('user_level')==1)
   {
       $data['name'] = $this->session->userdata('username');
+      $data['nipp'] = $this->session->userdata('nipp');
       $data['organisasi'] = $this->M_pegawai->show_organisasi();
       $data['jabatan'] = $this->M_master->show_jabatan();
       $data['unit'] = $this->M_master->show_unit();
@@ -457,6 +467,7 @@ public function SetOrganisasi()
       $this->load->view('layout/footer_datatables');
   }else {
       $data['name'] = $this->session->userdata('username');
+      $data['nipp'] = $this->session->userdata('nipp');
       $this->load->view('layout/header',$data);
       $this->load->view('layout/side_menu');
       $this->load->view('pages/error.php');
@@ -487,6 +498,7 @@ function InsertSetOrganisasi() {
 /*EDIT PASSWORD */
 public function PegawaiPassword($id) {
 			$data['name'] = $this->session->userdata('username');
+      $data['nipp'] = $this->session->userdata('nipp');
 			$where = array('nip' => $id);
 			$data['password'] = $this->M_pegawai->edit_password($where, 'tb_pegawai_profil')->result();
 			$data['title'] = 'Edit Jabatan';
@@ -510,6 +522,7 @@ function Success() {
 /*EDIT PROFIL */
 public function EditProfil($id) {
 			$data['name'] = $this->session->userdata('username');
+      $data['nipp'] = $this->session->userdata('nipp');
 			$where = array('nip' => $id);
 			$data['profil'] = $this->M_pegawai->edit_profil($where, 'tb_pegawai_profil')->result();
       $this->load->view('pages/pegawai/pegawai_modal_update',$data);
@@ -530,6 +543,7 @@ public function InputProfilDosen()
   if($this->session->userdata('user_level')==1)
   {
       $data['name'] = $this->session->userdata('username');
+      $data['nipp'] = $this->session->userdata('nipp');
       $data['pegawai'] = $this->M_pegawai->show_dosen_setting();
       $data['eselon'] = $this->M_master->show_eselon();
       $data['golongan'] = $this->M_master->show_golongan();
@@ -548,6 +562,7 @@ public function InputProfilDosen()
       $this->load->view('layout/footer_datatables');
   }else {
       $data['name'] = $this->session->userdata('username');
+      $data['nipp'] = $this->session->userdata('nipp');
       $this->load->view('layout/header',$data);
       $this->load->view('layout/side_menu');
       $this->load->view('pages/error.php');

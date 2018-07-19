@@ -110,8 +110,13 @@ function show_bkd_kegiatan()
 /*DOSEN*/
 function show_katdosen()
 {
-    $query = $this->db->get('master_kategori_dosen')->result();
+    $this->db->select('*')
+                    ->from('master_kategori_dosen')
+                    ->where('id_kat_dosen!=0');
+    $query=$this->db->get()->result();
     return $query;
+    // $query = $this->db->get('master_kategori_dosen')->result();
+    // return $query;
 }
 
 function show_edit_skema()

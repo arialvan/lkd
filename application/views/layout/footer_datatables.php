@@ -44,6 +44,20 @@ $(document).ready(function() {
         });
     });
 
+//Modal Update Sub kegiatan dosen
+    $(document).ready(function() {
+            // Untuk sunting
+            $('#edit-pendidikan').on('show.bs.modal', function (event) {
+                var div   = $(event.relatedTarget) // Tombol dimana modal di tampilkan
+                var modal = $(this)
+
+                // Isi nilai pada field
+                modal.find('#id').attr("value",div.data('id'));
+                modal.find('#subkegiatan').attr("value",div.data('subkegiatan'));
+                modal.find('#sks').attr("value",div.data('sks'));
+            });
+        });
+
 function ConfirmDelete() {
   return confirm("Anda yakin ingin menghapus data ini?");
 }

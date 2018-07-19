@@ -21,13 +21,8 @@
                           <th>#</th>
                           <th>Nip</th>
                           <th>Nama</th>
-                          <th>Eselon</th>
-                          <th>Golongan-Jabatan</th>
-                          <th>Jabatan Struktural</th>
-                          <th>JP</th>
-                          <th>Unit Organisasi</th>
-                          <th>Unit Kerja</th>
-                          <th>Satuan Kerja</th>
+                          <th>Kategori Dosen</th>
+                          <th>Pendidikan Terakhir</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -40,13 +35,8 @@
                           <th scope="row"><?php echo $no++; ?></th>
                           <td><?php echo $dt->nip; ?></td>
                           <td><?php echo $dt->nama_peg; ?></td>
-                          <td><?php echo $dt->eselon; ?></td>
-                          <td><?php echo $dt->nama_golongan.'<br />'.$dt->nama_jabatan; ?></td>
-                          <td><?php echo $dt->jabatan_struktural; ?></td>
-                          <td><?php echo $dt->nama_pendidikan; ?></td>
-                          <td><?php echo $dt->unit_organisasi; ?></td>
-                          <td><?php echo $dt->unit_kerja; ?></td>
-                          <td><?php echo $dt->satuan_kerja; ?></td>
+                          <td><?php echo $dt->kategori_dosen; ?></td>
+                          <td><?php echo $dt->s3; ?></td>
                           <td>
                               <?php echo anchor('Pegawai/ProfilPegawai/'.$dt->nip,'<span class="glyphicon glyphicon-arrow-right" title="Detil Data"></span>'); ?>&nbsp;&nbsp;
                               <?php if($level==1){ ?>

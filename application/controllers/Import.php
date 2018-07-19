@@ -24,6 +24,7 @@ public function index()
     if($this->session->userdata('user_level')==1)
     {
         $data['name'] = $this->session->userdata('username');
+        $data['nipp'] = $this->session->userdata('nipp');
         $data['title'] = 'Import Data Pegawai';
         $this->load->view('layout/header',$data);
         $this->load->view('layout/side_menu');
@@ -31,6 +32,7 @@ public function index()
         $this->load->view('layout/footer');
     }else{
         $data['name'] = $this->session->userdata('username');
+        $data['nipp'] = $this->session->userdata('nipp');
         $this->load->view('layout/header',$data);
         $this->load->view('layout/side_menu');
         $this->load->view('pages/error.php');

@@ -21,41 +21,22 @@
                           <th>#</th>
                           <th>Nip</th>
                           <th>Nama</th>
-                          <th>Tgl Lahir</th>
-                          <th>Status Pegawai</th>
-                          <th>Status Profesi</th>
+                          <th>Kategori Dosen</th>
+                          <th>Pendidikan Terakhir</th>
                           <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         <?php
-                        $no = 1;
-                        foreach($pegawai as $dt){
-                            if($dt->status_profesi==1){
-                                $prof="JFU";
-                            }elseif($dt->status_profesi==2){
-                                $prof="Dosen";
-                            }elseif($dt->status_profesi==3){
-                                $prof="JFT";
-                            }elseif($dt->status_profesi==4){
-                                $prof="Kontrak";
-                            }else{
-                                $prof="-";
-                            }
-
-                            if($dt->status_peg==1){
-                                $peg="PNS";
-                            }else{
-                                $peg="Non PNS";
-                            }
+                          $no = 1;
+                          foreach($pegawai as $dt){
                         ?>
                         <tr>
                           <th scope="row"><?php echo $no++; ?></th>
                           <td><?php echo $dt->nip; ?></td>
-                          <td class=""><?php echo $dt->nama_peg; ?></td>
-                          <td><?php echo $dt->tgl_lahir; ?></td>
-                          <td><?php echo $peg; ?></td>
-                          <td><?php echo $prof ?></td>
+                          <td><?php echo $dt->nama_peg; ?></td>
+                          <td><?php echo $dt->kategori_dosen; ?></td>
+                          <td><?php echo $dt->s3; ?></td>
                           <td>
                               <?php echo anchor('Pegawai/ProfilPegawai/'.$dt->nip,'<span class="glyphicon glyphicon-arrow-right" title="Detil Data"></span>'); ?> |
                               <?php if($level==1){ ?>

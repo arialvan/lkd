@@ -22,6 +22,7 @@ class Verifikator extends CI_Controller {
 public function index()
 {
     $data['name'] = $this->session->userdata('username');
+		$data['nipp'] = $this->session->userdata('nipp');
     $data['verifikator'] = $this->M_verifikator->show_verifikator();
     $data['title'] = 'Verifikator';
     $this->load->view('layout/header_datatables',$data);
@@ -34,6 +35,7 @@ public function FormVerifikator()
 {
     if($this->session->userdata('user_level')==1){
         $data['name']    = $this->session->userdata('username');
+				$data['nipp'] = $this->session->userdata('nipp');
         $data['dosen']   = $this->M_verifikator->show_dosen();
         $data['periode'] = $this->M_verifikator->show_periode();
         $data['assesor1'] = $this->M_verifikator->show_assesor1();
@@ -47,6 +49,7 @@ public function FormVerifikator()
         $this->load->view('layout/footer_datatables');
     }else {
         $data['name'] = $this->session->userdata('username');
+				$data['nipp'] = $this->session->userdata('nipp');
         $this->load->view('layout/header',$data);
         $this->load->view('layout/side_menu');
         $this->load->view('pages/error.php');
@@ -81,6 +84,7 @@ public function EditVerifikator($id)
   if($this->session->userdata('user_level')==1)
   {
         $data['name'] = $this->session->userdata('username');
+				$data['nipp'] = $this->session->userdata('nipp');
         $where = array('id_verifikator' => $id);
         $data['verifikator'] = $this->M_verifikator->edit_verifikator($where, 'verifikator')->result();
         $data['title'] = 'Edit Verifikator';
@@ -91,6 +95,7 @@ public function EditVerifikator($id)
   }else
   {
         $data['name'] = $this->session->userdata('username');
+				$data['nipp'] = $this->session->userdata('nipp');
         $this->load->view('layout/header',$data);
         $this->load->view('layout/side_menu');
         $this->load->view('pages/error.php');

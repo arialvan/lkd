@@ -26,10 +26,12 @@ var $tabless = 'pegview';
 
 /*PEGAWAI ALL*/
     function show_pegawai(){
-      $this->db->select('*')
-                      ->from('tb_pegawai')
-                      ->where('nip !=', 007)
-                      ->order_by('nip');
+      $this->db->select('profil_dosen.nip,profil_dosen.s3,tb_pegawai.nama_peg,master_kategori_dosen.kategori_dosen')
+                      ->from('profil_dosen')
+                      ->join('tb_pegawai','profil_dosen.nip=tb_pegawai.nip')
+                      ->join('master_kategori_dosen','profil_dosen.id_kat_dosen=master_kategori_dosen.id_kat_dosen')
+                      ->where('profil_dosen.nip !=', 007)
+                      ->order_by('profil_dosen.nip ASC');
       $query=$this->db->get()->result();
       return $query;
     }
@@ -71,10 +73,12 @@ var $tabless = 'pegview';
  /*PEGAWAI VIEWS*/
 
     function show_viewpages(){
-      $this->db->select('*')
-                      ->from('pegview')
-                      ->where('nip !=', 007)
-                      ->order_by('nip');
+      $this->db->select('profil_dosen.nip,profil_dosen.s3,tb_pegawai.nama_peg,master_kategori_dosen.kategori_dosen')
+                      ->from('profil_dosen')
+                      ->join('tb_pegawai','profil_dosen.nip=tb_pegawai.nip')
+                      ->join('master_kategori_dosen','profil_dosen.id_kat_dosen=master_kategori_dosen.id_kat_dosen')
+                      ->where('profil_dosen.nip !=', 007)
+                      ->order_by('profil_dosen.nip ASC');
       $query=$this->db->get()->result();
       return $query;
     }

@@ -2,11 +2,30 @@
           <div class="">
             <div class="page-title">
               <div class="title_left">
-                <h3><?php echo $title; ?></h3> <a href="<?php echo base_url() ?>RencanaKerja/FormRencana" class="btn btn-primary"> + Form Pengisian BKD</a>
               </div>
+
             </div>
             <div class="clearfix"></div>
             <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="alert alert-success fade in">
+                  <a href="#" class="close" data-dismiss="alert">&times;</a>
+                  <h3><u><?php //echo $title; ?></u></h3>
+
+                      <?php
+                        foreach($verifikator as $d)
+                          {
+                            echo'<ul><li><h5>Ketua Prodi  =  '.$d->ketuaprodi.'</h5></li>';
+                            echo'<li><h5>Assesor I  = '.$d->assesor1.'</h5></li>';
+                            echo'<li><h5>Assesor 2  = '.$d->assesor2.'</h5></li></ul>';
+                          }
+                      ?>
+              </div>
+              <a href="<?php echo base_url() ?>RencanaKerja/FormRencana" class="btn btn-primary"> + Form Pengisian BKD</a>
+<!--
+=========================
+PENDIDIKAN
+=========================
+-->
                 <div class="x_panel">
                   <div class="x_title">
                     <b>PENDIDIKAN</b>
@@ -35,7 +54,15 @@
                         ?>
                         <tr>
                           <th scope="row"><?php echo $no++; ?></th>
-                          <td><?php echo $dt->sub_kegiatan; ?></td>
+                          <td>
+                            <a href="javascript:;"
+                                data-id="<?php echo $dt->id_subkegiatan ?>"
+                                data-subkegiatan="<?php echo $dt->sub_kegiatan ?>"
+                                data-sks="<?php echo $dt->sks_subkegiatan ?>"
+                                data-toggle="modal" data-target="#edit-pendidikan" class="text text-success">
+                                <?php echo $dt->sub_kegiatan; ?>
+                            </a>
+                          </td>
                           <td><?php echo $dt->sks_subkegiatan; ?></td>
                           <td><?php echo $dt->app_ketuaprodi; ?></td>
                           <td><?php echo $dt->app_assesor1; ?></td>
@@ -55,8 +82,45 @@
                     </table>
                   </div>
                   <div class="clearfix"></div>
-                </div>
 
+<!-- MODAL PENDIDIKAN -->
+                  <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="edit-pendidikan" class="modal fade">
+                      <div class="modal-dialog">
+                          <div class="modal-content">
+                              <div class="modal-header">
+                                  <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                                  <h4 class="modal-title">Ubah Data</h4>
+                              </div>
+                              <form class="form form-horizontal" role="form" method="post" action="<?php echo base_url(); ?>RencanaKerja/UpdateRencana">
+                                <input type="hidden" class="form-control" id="id" name="id" />
+                                <div class="modal-body">
+                  	                    <div class="form-group">
+                  	                        <label class="col-lg-2 col-sm-2 control-label">Kegiatan</label>
+                  	                        <div class="col-lg-10">
+                  	                            <input type="text" class="form-control" id="subkegiatan" name="subkegiatan" />
+                  	                        </div>
+                  	                    </div>
+                  	                    <div class="form-group">
+                  	                        <label class="col-lg-2 col-sm-2 control-label">SKS</label>
+                  	                        <div class="col-lg-10">
+                  	                        	<input type="text" class="form-control" id="sks" name="sks" />
+                  	                        </div>
+                  	                    </div>
+                  	                </div>
+                  	                <div class="modal-footer">
+                  	                    <button class="btn btn-info" type="submit"> Simpan&nbsp;</button>
+                  	                    <button type="button" class="btn btn-warning" data-dismiss="modal"> Batal</button>
+                  	                </div>
+                                  </form>
+                              </div>
+                          </div>
+                      </div>
+                </div>
+<!--
+  =========================
+  PENELTIAN
+  =========================
+-->
                 <div class="x_panel">
                   <div class="x_title">
                     <b>PENELITIAN</b>
@@ -85,7 +149,15 @@
                         ?>
                         <tr>
                           <th scope="row"><?php echo $no++; ?></th>
-                          <td><?php echo $dt1->sub_kegiatan; ?></td>
+                          <td>
+                            <a href="javascript:;"
+                                data-id="<?php echo $dt1->id_subkegiatan ?>"
+                                data-subkegiatan="<?php echo $dt1->sub_kegiatan ?>"
+                                data-sks="<?php echo $dt1->sks_subkegiatan ?>"
+                                data-toggle="modal" data-target="#edit-pendidikan" class="text text-success">
+                                <?php echo $dt1->sub_kegiatan; ?>
+                            </a>
+                          </td>
                           <td><?php echo $dt1->sks_subkegiatan; ?></td>
                           <td><?php echo $dt1->app_ketuaprodi; ?></td>
                           <td><?php echo $dt1->app_assesor1; ?></td>
@@ -135,7 +207,15 @@
                         ?>
                         <tr>
                           <th scope="row"><?php echo $no++; ?></th>
-                          <td><?php echo $dt2->sub_kegiatan; ?></td>
+                          <td>
+                            <a href="javascript:;"
+                                data-id="<?php echo $dt2->id_subkegiatan ?>"
+                                data-subkegiatan="<?php echo $dt2->sub_kegiatan ?>"
+                                data-sks="<?php echo $dt2->sks_subkegiatan ?>"
+                                data-toggle="modal" data-target="#edit-pendidikan" class="text text-success">
+                                <?php echo $dt2->sub_kegiatan; ?>
+                            </a>
+                          </td>
                           <td><?php echo $dt2->sks_subkegiatan; ?></td>
                           <td><?php echo $dt2->app_ketuaprodi; ?></td>
                           <td><?php echo $dt2->app_assesor1; ?></td>
@@ -186,7 +266,15 @@
                         ?>
                         <tr>
                           <th scope="row"><?php echo $no++; ?></th>
-                          <td><?php echo $dt3->sub_kegiatan; ?></td>
+                          <td>
+                            <a href="javascript:;"
+                                data-id="<?php echo $dt3->id_subkegiatan ?>"
+                                data-subkegiatan="<?php echo $dt3->sub_kegiatan ?>"
+                                data-sks="<?php echo $dt3->sks_subkegiatan ?>"
+                                data-toggle="modal" data-target="#edit-pendidikan" class="text text-success">
+                                <?php echo $dt3->sub_kegiatan; ?>
+                            </a>
+                          </td>
                           <td><?php echo $dt3->sks_subkegiatan; ?></td>
                           <td><?php echo $dt3->app_ketuaprodi; ?></td>
                           <td><?php echo $dt3->app_assesor1; ?></td>

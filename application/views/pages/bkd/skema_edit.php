@@ -18,6 +18,14 @@
                   </div>
                   <div class="x_content">
                     <form class="form form-horizontal" role="form" method="post" action="<?php echo base_url(); ?>MasterBkd/UpdateSkema">
+                      <div class="form-group">
+                        <div class="col-sm-3">
+                          <label><b><u>BKD</b></u></label>
+                        </div>
+                        <div class="col-sm-3">
+                          <label><b><u>REMUNERASI</b></u></label>
+                        </div>
+                      </div>
 
                        <?php foreach($dosen as $dt){ ?>
                          <input type="hidden" name="id[]" value="<?php echo $dt->id ; ?>" size="3" />

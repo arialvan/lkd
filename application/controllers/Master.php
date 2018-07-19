@@ -22,6 +22,7 @@ class Master extends CI_Controller {
 public function Periode()
 {
     $data['name'] = $this->session->userdata('username');
+		$data['nipp'] = $this->session->userdata('nipp');
     $data['periodelkd'] = $this->M_master->show_periode();
     $data['title'] = 'Periode';
     $this->load->view('layout/header',$data);
@@ -33,6 +34,7 @@ public function FormPeriode()
 {
     if($this->session->userdata('user_level')==1){
         $data['name'] = $this->session->userdata('username');
+				$data['nipp'] = $this->session->userdata('nipp');
         $data['title'] = 'Form Tambah Periode';
         $this->load->view('layout/header',$data);
         $this->load->view('layout/side_menu');
@@ -40,6 +42,7 @@ public function FormPeriode()
         $this->load->view('layout/footer');
     }else {
         $data['name'] = $this->session->userdata('username');
+				$data['nipp'] = $this->session->userdata('nipp');
         $this->load->view('layout/header',$data);
         $this->load->view('layout/side_menu');
         $this->load->view('pages/error.php');
@@ -63,6 +66,7 @@ public function EditPeriode($id)
   if($this->session->userdata('user_level')==1)
   {
         $data['name'] = $this->session->userdata('username');
+				$data['nipp'] = $this->session->userdata('nipp');
         $where = array('id_periode' => $id);
         $data['periode'] = $this->M_master->edit_periode($where, 'periode_lkd')->result();
         $data['title'] = 'Edit Periode';
@@ -73,6 +77,7 @@ public function EditPeriode($id)
   }else
   {
         $data['name'] = $this->session->userdata('username');
+				$data['nipp'] = $this->session->userdata('nipp');
         $this->load->view('layout/header',$data);
         $this->load->view('layout/side_menu');
         $this->load->view('pages/error.php');

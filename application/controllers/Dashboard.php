@@ -19,6 +19,7 @@ var $acl;
 	public function index()
 	{
             $data['name'] = $this->session->userdata('username');
+						$data['nipp'] = $this->session->userdata('nipp');
 						$data['all'] = $this->M_counting->all_pegawai();
 						$data['pns'] = $this->M_counting->all_pns();
 						$data['dosen'] = $this->M_counting->all_dosen();

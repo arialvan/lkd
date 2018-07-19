@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="<?php echo base_url(); ?>assets/images/favicon.png" type="image/ico" />
 
-    <title>Simpeg UIN</title>
+    <title>E-LKD</title>
 
     <!-- Bootstrap -->
     <link href="<?php echo base_url(); ?>assets/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -59,6 +59,7 @@
               <div class="profile_info">
                 <span>Welcome,</span>
                 <h2><?php echo $name; ?></h2>
+                <span>(<?php echo $nipp; ?>)</span>
               </div>
             </div>
             <!-- /menu profile quick info -->

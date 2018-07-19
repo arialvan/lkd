@@ -29,6 +29,7 @@ public function index()
 		$data['pengabdian'] = $this->M_rencanakerja->show_rencana_pengabdian();
 		$data['penunjang'] = $this->M_rencanakerja->show_rencana_penunjang();
 		$data['verifikator'] = $this->M_rencanakerja->show_verifikator();
+		$data['bkdkegiatan'] = $this->M_rencanakerja->show_bkdkegiatan();
 		$data['title'] = 'Beban Kinerja Dosen';
 		$this->load->view('layout/header_datatables',$data);
 		$this->load->view('layout/side_menu');
@@ -65,6 +66,11 @@ public function FormRencana()
 /*INSERT RENCANA KERJA*/
 function InsertRencana()
 {
+/*============================
+			Logic Perhitungan Skema
+==============================*/
+
+
     foreach($this->input->post('bkd_kegiatan') as $bkd => $key)
         {
       //  echo $this->input->post('sub_kegiatan')[$bkd].'<br />';
@@ -90,14 +96,21 @@ function InsertRencana()
 
 function UpdateRencana()
 {
-	$data = array('id_subkegiatan' => $this->input->post('id'),
-								'sub_kegiatan' => $this->input->post('subkegiatan'),
+	$data = array('sub_kegiatan' => $this->input->post('subkegiatan'),
 								'sks_subkegiatan	' => $this->input->post('sks')
+								// 'poin_subkegiatan	' => $this->input->post('poin_subkegiatan')
 							 );
-  $where = array('id_subkegiatan' => $this->input->post('id'));
+  $where = array('id_subkegiatan' => $this->input->post('id_subkegiatan'));
   $this->M_rencanakerja->update_rencana($where, $data, 'bkd_subkegiatan');
 	// var_dump($where);
 	redirect('RencanaKerja');
+}
+
+/* HAPUS SUB KEGIATAN */
+function HapusSubkegiatan($id) {
+    $where = array('id_subkegiatan' => $id);
+    $this->M_rencanakerja->hapus_bkdsubkegiatan($where, 'bkd_subkegiatan');
+    redirect('RencanaKerja','refresh');
 }
 
 //LOGOUT

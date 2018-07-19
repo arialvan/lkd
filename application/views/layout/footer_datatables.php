@@ -52,7 +52,9 @@ $(document).ready(function() {
                 var modal = $(this)
 
                 // Isi nilai pada field
-                modal.find('#id').attr("value",div.data('id'));
+                modal.find('#id_kegiatan').attr("value",div.data('id_kegiatan'));
+                modal.find('#id_subkegiatan').attr("value",div.data('id_subkegiatan'));
+                modal.find('#kegiatan').attr("value",div.data('kegiatan'));
                 modal.find('#subkegiatan').attr("value",div.data('subkegiatan'));
                 modal.find('#sks').attr("value",div.data('sks'));
             });

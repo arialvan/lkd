@@ -44,7 +44,7 @@
                         </div>
 
                         <div class="col-sm-2">
-                        <label>SKS<span class="required">*</span></label>
+                        <label>Volume/SKS<span class="required">*</span></label>
                           <input id="sks_subkegiatan" class="form-control" name="sks_subkegiatan[]" />
                         </div>
 

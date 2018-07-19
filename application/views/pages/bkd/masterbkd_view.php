@@ -65,9 +65,9 @@
                           <th>#</th>
                           <th>Sub BKD</th>
                           <th>Hitung BKD</th>
-                          <th>SKS</th>
+                          <th>Satuan SKS</th>
                           <th>Hitung Remunerasi</th>
-                          <th>Poin</th>
+                          <th>Satuan Poin</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -103,9 +103,9 @@
                           <th>#</th>
                           <th>Sub BKD</th>
                           <th>Hitung BKD</th>
-                          <th>SKS</th>
+                          <th>Satuan SKS</th>
                           <th>Hitung Remunerasi</th>
-                          <th>Poin</th>
+                          <th>Satuan Poin</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -142,9 +142,9 @@
                           <th>#</th>
                           <th>Sub BKD</th>
                           <th>Hitung BKD</th>
-                          <th>SKS</th>
+                          <th>Satuan SKS</th>
                           <th>Hitung Remunerasi</th>
-                          <th>Poin</th>
+                          <th>Satuan Poin</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -180,9 +180,9 @@
                           <th>#</th>
                           <th>Sub BKD</th>
                           <th>Hitung BKD</th>
-                          <th>SKS</th>
+                          <th>Satuan SKS</th>
                           <th>Hitung Remunerasi</th>
-                          <th>Poin</th>
+                          <th>Satuan Poin</th>
                           <th>Action</th>
                         </tr>
                       </thead>

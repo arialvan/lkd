@@ -12,7 +12,7 @@ class M_login extends CI_Model {
         // Prep the query
         // $this->db->where(array('nip' => $username, 'password' => md5($password)));
         // $query = $this->db->get('tb_pegawai_profil')->row();
-        $this->db->select('profil_dosen.nip,profil_dosen.password,profil_dosen.user_level,tb_pegawai.nama_peg');
+        $this->db->select('profil_dosen.nip,profil_dosen.password,profil_dosen.user_level,profil_dosen.id_kat_dosen,tb_pegawai.nama_peg');
         $this->db->from('profil_dosen');
         $this->db->join('tb_pegawai', 'profil_dosen.nip = tb_pegawai.nip', 'left');
         $this->db->where('profil_dosen.nip', $username);
@@ -28,6 +28,7 @@ class M_login extends CI_Model {
                                                     'nipp' => $query->nip,
                                                     'username' => $query->nama_peg,
                                                     'user_level' => $query->user_level,
+                                                    'kat_dosen' => $query->id_kat_dosen,
                                                     'is_login' => TRUE
                                                   );
                                     $this->session->set_userdata($sess);

@@ -34,6 +34,7 @@ class Login extends CI_Controller {
                         'nipp',
                         'username',
                         'user_level',
+                        'kat_dosen',
                         'is_login'
                         );
         $this->session->unset_userdata($dSession);

@@ -2,13 +2,20 @@
           <div class="">
             <div class="page-title">
               <div class="title_left">
-                <h3><?php echo $title; ?></h3> <a href="<?php echo base_url() ?>RencanaKerja/FormRencana" class="btn btn-primary"> + Form Pengisian BKD</a>
               </div>
+
             </div>
             <div class="clearfix"></div>
             <div class="col-md-12 col-sm-12 col-xs-12">
+              <a href="<?php echo base_url() ?>RencanaKerja/FormRencana" class="btn btn-primary"> + Tambah Kegiatan</a>
+<!--
+=========================
+PENDIDIKAN
+=========================
+-->
                 <div class="x_panel">
                   <div class="x_title">
+                    <b>PENDIDIKAN</b>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                     </ul>
@@ -20,27 +27,47 @@
                         <tr>
                           <th>#</th>
                           <th>Kegiatan</th>
-                          <th>SKS</th>
-                          <th>App Ketua Prodi</th>
-                          <th>App Assesor 1</th>
-                          <th>App Assesor 2</th>
+                          <th>BKD SKS</th>
+                          <th>Poin Remunerasi</th>
+                          <th>Laporan</th>
+                          <th>Bukti Fisik</th>
                         </tr>
                       </thead>
                       <tbody>
                         <?php
                         $no = 1;
-                        foreach($laporan as $dt){
+                        foreach($rencanakerja as $dt){
                           $total[]=$dt->sks_subkegiatan;
+                          $poin[]=$dt->poin_subkegiatan;
+                          // $x=explode('#',$dt->syarat_file);
+                          // echo $x[0];
                         ?>
                         <tr>
                           <th scope="row"><?php echo $no++; ?></th>
                           <td>
-                            <a data-toggle="modal" data-id="<?php echo $dt->id_subkegiatan; ?>" data-toggle="modal" title="Add this item" class="open-AddBookDialog" href="#addBookDialog"><?php echo $dt->sub_kegiatan; ?></a>
+                            <a href="javascript:;"
+                                data-id_kegiatan="<?php echo $dt->id_kegiatan ?>"
+                                data-id_subkegiatan="<?php echo $dt->id_subkegiatan ?>"
+                                data-kegiatan="<?php echo $dt->kegiatan ?>"
+                                data-subkegiatan="<?php echo $dt->sub_kegiatan ?>"
+                                data-sks="<?php echo $dt->sks_subkegiatan ?>"
+                                data-toggle="modal" data-target="#edit-pendidikan">
+                                <?php echo $dt->kegiatan.'<br /><span class="text text-danger">('.$dt->sub_kegiatan.')</span>'; ?>
+                            </a>
                           </td>
                           <td><?php echo $dt->sks_subkegiatan; ?></td>
-                          <td><?php echo $dt->app_ketuaprodi; ?></td>
-                          <td><?php echo $dt->app_assesor1; ?></td>
-                          <td><?php echo $dt->app_assesor2; ?></td>
+                          <td><?php echo $dt->poin_subkegiatan; ?></td>
+                          <td><?php echo anchor('RencanaKerja/HapusSubkegiatan/'.$dt->id_subkegiatan,'<span>Buat Laporan</span>'); ?></td>
+                          <td>
+                            <?php
+                                $file = $dt->syarat_file;
+                                $file=explode('#',$dt->syarat_file);
+                                foreach ($file as $key => $value) {
+                                          echo $value."<br />";
+                                }
+                                // echo $namafile;
+                            ?>
+                          </td>
                         </tr>
                         <?php } ?>
                       </tbody>
@@ -48,6 +75,79 @@
                         <tr>
                             <th colspan="2" style="text-align:right">Total:</th>
                             <th><?php echo @array_sum($total); ?></th>
+                            <th><?php echo @array_sum($poin); ?></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                    </table>
+                  </div>
+                  <div class="clearfix"></div>
+
+<!--
+  =========================
+  PENELTIAN
+  =========================
+-->
+                <div class="x_panel">
+                  <div class="x_title">
+                    <b>PENELITIAN</b>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <table id="datatable-buttons" class="table table-striped table-bordered">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Kegiatan</th>
+                          <th>BKD SKS</th>
+                          <th>Poin Remunerasi</th>
+                          <th>App Ketua Prodi</th>
+                          <th>App Assesor 1</th>
+                          <th>App Assesor 2</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <?php
+                        $no = 1;
+                        foreach($penelitian as $dt1){
+                          $total1[]=$dt1->sks_subkegiatan;
+                          $poin1[]=$dt1->poin_subkegiatan;
+                        ?>
+                        <tr>
+                          <th scope="row"><?php echo $no++; ?></th>
+                          <td>
+                            <a href="javascript:;"
+                                data-id_kegiatan="<?php echo $dt1->id_kegiatan ?>"
+                                data-id_subkegiatan="<?php echo $dt1->id_subkegiatan ?>"
+                                data-kegiatan="<?php echo $dt1->kegiatan ?>"
+                                data-subkegiatan="<?php echo $dt1->sub_kegiatan ?>"
+                                data-sks="<?php echo $dt1->sks_subkegiatan ?>"
+                                data-toggle="modal" data-target="#edit-pendidikan">
+                                <?php echo $dt1->kegiatan.'<br /><span class="text text-danger">('.$dt1->sub_kegiatan.')</span>'; ?>
+                            </a>
+                          </td>
+                          <td><?php echo $dt1->sks_subkegiatan; ?></td>
+                          <td><?php echo $dt1->poin_subkegiatan; ?></td>
+                          <td><?php echo $dt1->app_ketuaprodi; ?></td>
+                          <td><?php echo $dt1->app_assesor1; ?></td>
+                          <td><?php echo $dt1->app_assesor2; ?></td>
+                          <td>
+                            <?php echo anchor('RencanaKerja/HapusSubkegiatan/'.$dt1->id_subkegiatan,'<span class="glyphicon glyphicon-remove" title="Hapus Data" Onclick="return ConfirmDelete()"></span>'); ?>
+                          </td>
+                        </tr>
+                        <?php } ?>
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                            <th colspan="2" style="text-align:right">Total:</th>
+                            <th><?php echo @array_sum($total1); ?></th>
+                            <th><?php echo @array_sum($poin1); ?></th>
+                            <th></th>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -57,144 +157,187 @@
                   </div>
                   <div class="clearfix"></div>
                 </div>
-<!-- MODAL UPLOAD FILE LAPORAN    -->
-                <div class="modal fade" id="addBookDialog" tabindex="-1" role="dialog" aria-hidden="true">
-                  <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
 
-                      <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                        </button>
-                        <h4 class="modal-title" id="myModalLabel">Insert Profil Pegawai</h4>
-                      </div>
-                        <form class="contact-form" method="post" >
-
-                          <input type="hidden" name="user_level" id="user_level" value="3" class="form-control col-md-7 col-xs-12">
-                          <div class="modal-body">
-                              <div class="form-group">
-                                  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">NIP<span class="required">*</span></label>
-                                  <div class="col-md-6 col-sm-6 col-xs-12">
-                                      <input type="text" name="nip" id="bookId" disabled="disabled" class="form-control col-md-7 col-xs-12">
-                                      <input type="hidden" name="nip" id="bookId" class="form-control col-md-7 col-xs-12">
-                                  </div>
-                              </div>
-                          </div>
-
-                          <div class="modal-body">
-                              <div class="form-group">
-                                  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Pendidikan Terakhir<span class="required">*</span></label>
-                                  <div class="col-md-6 col-sm-6 col-xs-12">
-                                      <select name="id_pendidikan" id="id_pendidikan" class="form-control col-md-7 col-xs-12">
-                                          <?php foreach ($pendidikan as $p){ ?>
-                                               <option value="<?php echo $p->id_pendidikan; ?>"><?php echo $p->nama_pendidikan; ?></option>
-                                          <?php } ?>
-                                      </select>
-                                  </div>
-                              </div>
-                          </div>
-
-                          <div class="modal-body">
-                              <div class="form-group">
-                                  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Eselon<span class="required">*</span></label>
-                                  <div class="col-md-6 col-sm-6 col-xs-12">
-                                      <select name="id_eselon" class="form-control col-md-7 col-xs-12">
-                                          <?php foreach ($eselon as $s){ ?>
-                                               <option value="<?php echo $s->id_eselon; ?>"><?php echo $s->eselon; ?></option>
-                                          <?php } ?>
-                                      </select>
-                                  </div>
-                              </div>
-                          </div>
-
-                          <div class="modal-body">
-                              <div class="form-group">
-                                  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Golongan<span class="required">*</span></label>
-                                  <div class="col-md-6 col-sm-6 col-xs-12">
-                                      <select name="id_gol" id="id_gol" class="form-control col-md-7 col-xs-12">
-                                          <?php foreach ($golongan as $g){ ?>
-                                               <option value="<?php echo $g->id_gol; ?>"><?php echo $g->nama_golongan; ?></option>
-                                          <?php } ?>
-                                      </select>
-                                  </div>
-                              </div>
-                          </div>
-
-                          <br /><br />
-                          <div class="line line-block"></div>
-                          <div class="form-group">
-                              <h4 class="modal-title" id="myModalLabel">Kelompok Organisasi</h4>
-                              <hr />
-                          </div>
-
-                          <div class="modal-body">
-                              <div class="form-group">
-                                  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Unit Organisasi<span class="required">*</span></label>
-                                  <div class="col-md-6 col-sm-6 col-xs-12">
-                                      <select name="id_unit" id="id_unit" class="form-control col-md-7 col-xs-12" onchange="seljabatan()">
-                                          <option value="">-- Pilih Unit --</option>
-                                          <?php foreach ($unit as $u){ ?>
-                                               <option value="<?php echo $u->id_unit; ?>"><?php echo $u->unit_organisasi; ?></option>
-                                          <?php } ?>
-                                      </select>
-                                  </div>
-                              </div>
-                          </div>
-
-                          <div class="modal-body">
-                              <div class="form-group">
-                                  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Jabatan<span class="required">*</span></label>
-                                  <div class="col-md-6 col-sm-6 col-xs-12">
-                                      <select name="id_jabatan" id="id_jabatan" class="form-control col-md-7 col-xs-12 types" onchange="selunitkerja()">
-                                          <option value="">- Pilih Jabatan  - </option>
-                                      </select>
-                                  </div>
-                              </div>
-                          </div>
-
-                          <div class="modal-body">
-                              <div class="form-group">
-                                  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Unit Kerja<span class="required">*</span></label>
-                                  <div class="col-md-6 col-sm-6 col-xs-12">
-                                      <select name="id_unit_kerja" class="id_unit_kerja form-control col-md-7 col-xs-12" onchange="selsatuankerja()">
-
-                                      </select>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="modal-body">
-                              <div class="form-group">
-                                  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Unit Satuan Kerja<span class="required">*</span></label>
-                                  <div class="col-md-6 col-sm-6 col-xs-12">
-                                      <select name="id_satuan_kerja" id="unitkerja" class="id_unit_kerja unitkerja form-control col-md-7 col-xs-12" onchange="seljfu()">
-
-                                      </select>
-                                  </div>
-                              </div>
-                          </div>
-
-                          <div id="row_dims" class="modal-body">
-                              <div class="form-group">
-                                  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">JFU<span class="required">*</span></label>
-                                  <div class="col-md-6 col-sm-6 col-xs-12">
-                                      <select name="id_jfu" id="id_jfu" class="form-control col-md-7 col-xs-12">
-
-                                      </select>
-                                  </div>
-                              </div>
-                          </div>
-
-                          <br />
-                          <h3 class="alert-success" id="testDIV"></h3>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <input type="submit" class="btn btn-primary" value="Save" />
-                          </div>
-                      </form>
-                      <div class="form-status-holder"></div>
-                    </div>
+                <div class="x_panel">
+                  <div class="x_title">
+                    <b>PENGABDIAN</b>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
                   </div>
+                  <div class="x_content">
+                    <table id="datatable-buttons" class="table table-striped table-bordered">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Kegiatan</th>
+                          <th>BKD SKS</th>
+                          <th>Poin Remunerasi</th>
+                          <th>App Ketua Prodi</th>
+                          <th>App Assesor 1</th>
+                          <th>App Assesor 2</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <?php
+                        $no = 1;
+                        foreach($pengabdian as $dt2){
+                          $total2[]=$dt2->sks_subkegiatan;
+                          $poin2[]=$dt2->poin_subkegiatan;
+                        ?>
+                        <tr>
+                          <th scope="row"><?php echo $no++; ?></th>
+                          <td>
+                            <a href="javascript:;"
+                                data-id_kegiatan="<?php echo $dt2->id_kegiatan ?>"
+                                data-id_subkegiatan="<?php echo $dt2->id_subkegiatan ?>"
+                                data-kegiatan="<?php echo $dt2->kegiatan ?>"
+                                data-subkegiatan="<?php echo $dt2->sub_kegiatan ?>"
+                                data-sks="<?php echo $dt2->sks_subkegiatan ?>"
+                                data-toggle="modal" data-target="#edit-pendidikan">
+                                <?php echo $dt2->kegiatan.'<br /><span class="text text-danger">('.$dt2->sub_kegiatan.')</span>'; ?>
+                            </a>
+                          </td>
+                          <td><?php echo $dt2->sks_subkegiatan; ?></td>
+                          <td><?php echo $dt2->poin_subkegiatan; ?></td>
+                          <td><?php echo $dt2->app_ketuaprodi; ?></td>
+                          <td><?php echo $dt2->app_assesor1; ?></td>
+                          <td><?php echo $dt2->app_assesor2; ?></td>
+                          <td>
+                            <?php echo anchor('RencanaKerja/HapusSubkegiatan/'.$dt2->id_subkegiatan,'<span class="glyphicon glyphicon-remove" title="Hapus Data" Onclick="return ConfirmDelete()"></span>'); ?>
+                          </td>
+                        </tr>
+                        <?php } ?>
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                            <th colspan="2" style="text-align:right">Total:</th>
+                            <th><?php echo @array_sum($total2); ?></th>
+                            <th><?php echo @array_sum($poin2); ?></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                    </table>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+
+
+                <div class="x_panel">
+                  <div class="x_title">
+                    <b>PENUNJANG</b>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <table id="datatable-buttons" class="table table-striped table-bordered">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Kegiatan</th>
+                          <th>BKD SKS</th>
+                          <th>Poin Remunerasi</th>
+                          <th>App Ketua Prodi</th>
+                          <th>App Assesor 1</th>
+                          <th>App Assesor 2</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <?php
+                        $no = 1;
+                        foreach($penunjang as $dt3){
+                          $total3[]=$dt3->sks_subkegiatan;
+                          $poin3[]=$dt->poin_subkegiatan;
+                        ?>
+                        <tr>
+                          <th scope="row"><?php echo $no++; ?></th>
+                          <td>
+                            <a href="javascript:;"
+                                data-id_kegiatan="<?php echo $dt3->id_kegiatan ?>"
+                                data-id_subkegiatan="<?php echo $dt3->id_subkegiatan ?>"
+                                data-kegiatan="<?php echo $dt3->kegiatan ?>"
+                                data-subkegiatan="<?php echo $dt3->sub_kegiatan ?>"
+                                data-sks="<?php echo $dt3->sks_subkegiatan ?>"
+                                data-toggle="modal" data-target="#edit-pendidikan">
+                                <?php echo $dt3->kegiatan.'<br /><span class="text text-danger">('.$dt3->sub_kegiatan.')</span>'; ?>
+                            </a>
+                          </td>
+                          <td><?php echo $dt3->sks_subkegiatan; ?></td>
+                          <td><?php echo $dt3->poin_subkegiatan; ?></td>
+                          <td><?php echo $dt3->app_ketuaprodi; ?></td>
+                          <td><?php echo $dt3->app_assesor1; ?></td>
+                          <td><?php echo $dt3->app_assesor2; ?></td>
+                          <td>
+                            <?php echo anchor('RencanaKerja/HapusSubkegiatan/'.$dt3->id_subkegiatan,'<span class="glyphicon glyphicon-remove" title="Hapus Data" Onclick="return ConfirmDelete()"></span>'); ?>
+                          </td>
+                        </tr>
+                        <?php } ?>
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                            <th colspan="2" style="text-align:right">Total:</th>
+                            <th><?php echo @array_sum($total3); ?></th>
+                            <th><?php echo @array_sum($poin3); ?></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                    </table>
+                  </div>
+                  <div class="clearfix"></div>
                 </div>
 
               </div>
           </div>
+
+          <!-- MODAL PENDIDIKAN -->
+                            <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="edit-pendidikan" class="modal fade">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                                            <h4 class="modal-title">Ubah Data</h4>
+                                        </div>
+                                        <form class="form form-horizontal" role="form" method="post" action="<?php echo base_url(); ?>RencanaKerja/UpdateRencana">
+                                          <input type="hidden" class="form-control" id="id_kegiatan" name="id_kegiatan" />
+                                          <input type="hidden" class="form-control" id="id_subkegiatan" name="id_subkegiatan" />
+                                          <div class="modal-body">
+                                                  <div class="form-group">
+                                                      <label class="col-lg-2 col-sm-2 control-label">Kegiatan</label>
+                                                      <div class="col-lg-10">
+                                                          <input type="text" class="form-control" id="kegiatan" name="kegiatan" disabled />
+                                                      </div>
+                                                  </div>
+                            	                    <div class="form-group">
+                            	                        <label class="col-lg-2 col-sm-2 control-label">Sub Kegiatan</label>
+                            	                        <div class="col-lg-10">
+                            	                            <input type="text" class="form-control" id="subkegiatan" name="subkegiatan" />
+                            	                        </div>
+                            	                    </div>
+                            	                    <div class="form-group">
+                            	                        <label class="col-lg-2 col-sm-2 control-label">SKS</label>
+                            	                        <div class="col-lg-10">
+                            	                        	<input type="text" class="form-control" id="sks" name="sks" />
+                            	                        </div>
+                            	                    </div>
+                            	                </div>
+                            	                <div class="modal-footer">
+                            	                    <button class="btn btn-info" type="submit"> Simpan&nbsp;</button>
+                            	                    <button type="button" class="btn btn-warning" data-dismiss="modal"> Batal</button>
+                            	                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                          </div>
    </div>

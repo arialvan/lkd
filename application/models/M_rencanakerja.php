@@ -20,6 +20,32 @@ function show_bkdkegiatan()
     return $query;
 }
 
+function show_syarat_bkd()
+{
+    $this->db->select('SUM(bkd_remun_dosen.sks_bkd)AS sks')
+                    ->from('bkd_remun_dosen')
+                    ->join('periode_lkd','bkd_remun_dosen.id_periode = periode_lkd.id_periode', 'LEFT')
+                    ->where('bkd_remun_dosen.id_kat_dosen=', $this->session->userdata('kat_dosen'))
+                    ->where('periode_lkd.status=',1);
+    $query=$this->db->get()->result();
+    return $query;
+}
+
+function show_syarat_subbkd()
+{
+    $this->db->select('SUM(sks_subkegiatan) AS subsks, SUM(poin_subkegiatan) AS Poin')
+                    ->from('bkd_subkegiatan')
+                    ->where('nip=', $this->session->userdata('nipp'));
+    $query=$this->db->get()->result();
+    return $query;
+}
+
+function show_file()
+{
+    $query = $this->db->get('bkd_buktifisik')->result();
+    return $query;
+}
+
 //insert
 function insert_rencanakerja($data,$table)
 {
@@ -44,6 +70,9 @@ function update_bkdsubkegiatan($where,$data,$table)
     $this->db->update($table,$data);
 }
 
+function cek_kegiatan($where,$table){
+    return $this->db->get_where($table,$where);
+}
 //update
 function update_rencana($where,$data,$table)
 {

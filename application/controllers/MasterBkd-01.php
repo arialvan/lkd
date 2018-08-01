@@ -118,8 +118,8 @@ function InsertSubBkd()
 			$files[]=$value;
 		}
 		$x=implode('#',$files);
-		// var_dump($files).'<br />';
-		// print_r($x);
+		//var_dump($files).'<br />';
+		//echo $x;
 			$data = array(
 											'id_bkd' => $this->input->post('id_bkd'),
 											'id_periode' => $this->input->post('id_periode'),

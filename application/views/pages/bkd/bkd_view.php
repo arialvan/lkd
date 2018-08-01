@@ -19,8 +19,35 @@
                             echo'<li><h5>Assesor 2  = '.$d->assesor2.'</h5></li></ul>';
                           }
                       ?>
+                      <br />
+                      <?php
+                        foreach($syaratbkd as $v);
+                        foreach($syaratsubbkd as $k);
+                        //echo $v->sks;
+                        //echo $this->session->userdata('kat_dosen');
+                        if($k->subsks >= $v->sks){ $sks='Memenuhi'; }else{ $sks='Belum Memenuhi'; }
+                        $poins = $k->Poin;
+                      ?>
+                      <fieldset>
+                        <legend></legend>
+
+                          <div class="col-sm-3">
+                            <label>Syarat BKD<span class="required">  : </span></label>
+                            <span><strong><?php echo $sks; ?></strong> </span>
+                          </div>
+
+                          <div class="col-sm-3">
+                            <label>Poin Remunerasi<span class="required">  : </span></label>
+                              <?php if($k->subsks < $v->sks){ ?>
+                                <span><strong><?php echo $sks; ?></strong> </span>
+                              <?php }else{ ?>
+                                <span><strong><?php echo number_format($poins,2); ?></strong> </span>
+                              <?php } ?>
+                          </div>
+
+                      </fieldset>
               </div>
-              <a href="<?php echo base_url() ?>RencanaKerja/FormRencana" class="btn btn-primary"> + Form Pengisian BKD</a>
+              <a href="<?php echo base_url() ?>RencanaKerja/FormRencana" class="btn btn-primary"> + Pengisian BKD</a>
 <!--
 =========================
 PENDIDIKAN
@@ -118,6 +145,7 @@ PENDIDIKAN
                           <th>App Ketua Prodi</th>
                           <th>App Assesor 1</th>
                           <th>App Assesor 2</th>
+                          <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -125,36 +153,41 @@ PENDIDIKAN
                         $no = 1;
                         foreach($penelitian as $dt1){
                           $total1[]=$dt1->sks_subkegiatan;
-                          $poin1[]=$dt->poin_subkegiatan;
+                          $poin1[]=$dt1->poin_subkegiatan;
                         ?>
                         <tr>
                           <th scope="row"><?php echo $no++; ?></th>
                           <td>
                             <a href="javascript:;"
-                              data-id_kegiatan="<?php echo $dt1->id_kegiatan ?>"
-                              data-id_subkegiatan="<?php echo $dt1->id_subkegiatan ?>"
-                              data-kegiatan="<?php echo $dt1->kegiatan ?>"
-                              data-subkegiatan="<?php echo $dt1->sub_kegiatan ?>"
-                              data-sks="<?php echo $dt1->sks_subkegiatan ?>"
-                              data-toggle="modal" data-target="#edit-pendidikan">
-                              <?php echo $dt1->kegiatan.'<br /><span class="text text-danger">('.$dt1->sub_kegiatan.')</span>'; ?>
+                                data-id_kegiatan="<?php echo $dt1->id_kegiatan ?>"
+                                data-id_subkegiatan="<?php echo $dt1->id_subkegiatan ?>"
+                                data-kegiatan="<?php echo $dt1->kegiatan ?>"
+                                data-subkegiatan="<?php echo $dt1->sub_kegiatan ?>"
+                                data-sks="<?php echo $dt1->sks_subkegiatan ?>"
+                                data-toggle="modal" data-target="#edit-pendidikan">
+                                <?php echo $dt1->kegiatan.'<br /><span class="text text-danger">('.$dt1->sub_kegiatan.')</span>'; ?>
                             </a>
                           </td>
                           <td><?php echo $dt1->sks_subkegiatan; ?></td>
+                          <td><?php echo $dt1->poin_subkegiatan; ?></td>
                           <td><?php echo $dt1->app_ketuaprodi; ?></td>
                           <td><?php echo $dt1->app_assesor1; ?></td>
                           <td><?php echo $dt1->app_assesor2; ?></td>
+                          <td>
+                            <?php echo anchor('RencanaKerja/HapusSubkegiatan/'.$dt1->id_subkegiatan,'<span class="glyphicon glyphicon-remove" title="Hapus Data" Onclick="return ConfirmDelete()"></span>'); ?>
+                          </td>
                         </tr>
                         <?php } ?>
                       </tbody>
                       <tfoot>
                         <tr>
-                          <th colspan="2" style="text-align:right">Total:</th>
-                          <th><?php echo @array_sum($total1); ?></th>
-                          <th><?php echo @array_sum($poin1); ?></th>
-                          <th></th>
-                          <th></th>
-                          <th></th>
+                            <th colspan="2" style="text-align:right">Total:</th>
+                            <th><?php echo @array_sum($total1); ?></th>
+                            <th><?php echo @array_sum($poin1); ?></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
                         </tr>
                     </tfoot>
                     </table>
@@ -181,6 +214,7 @@ PENDIDIKAN
                           <th>App Ketua Prodi</th>
                           <th>App Assesor 1</th>
                           <th>App Assesor 2</th>
+                          <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -188,7 +222,7 @@ PENDIDIKAN
                         $no = 1;
                         foreach($pengabdian as $dt2){
                           $total2[]=$dt2->sks_subkegiatan;
-                          $poin2[]=$dt->poin_subkegiatan;
+                          $poin2[]=$dt2->poin_subkegiatan;
                         ?>
                         <tr>
                           <th scope="row"><?php echo $no++; ?></th>
@@ -204,20 +238,25 @@ PENDIDIKAN
                             </a>
                           </td>
                           <td><?php echo $dt2->sks_subkegiatan; ?></td>
+                          <td><?php echo $dt2->poin_subkegiatan; ?></td>
                           <td><?php echo $dt2->app_ketuaprodi; ?></td>
                           <td><?php echo $dt2->app_assesor1; ?></td>
                           <td><?php echo $dt2->app_assesor2; ?></td>
+                          <td>
+                            <?php echo anchor('RencanaKerja/HapusSubkegiatan/'.$dt2->id_subkegiatan,'<span class="glyphicon glyphicon-remove" title="Hapus Data" Onclick="return ConfirmDelete()"></span>'); ?>
+                          </td>
                         </tr>
                         <?php } ?>
                       </tbody>
                       <tfoot>
                         <tr>
-                          <th colspan="2" style="text-align:right">Total:</th>
-                          <th><?php echo @array_sum($total2); ?></th>
-                          <th><?php echo @array_sum($poin2); ?></th>
-                          <th></th>
-                          <th></th>
-                          <th></th>
+                            <th colspan="2" style="text-align:right">Total:</th>
+                            <th><?php echo @array_sum($total2); ?></th>
+                            <th><?php echo @array_sum($poin2); ?></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
                         </tr>
                     </tfoot>
                     </table>
@@ -245,6 +284,7 @@ PENDIDIKAN
                           <th>App Ketua Prodi</th>
                           <th>App Assesor 1</th>
                           <th>App Assesor 2</th>
+                          <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -268,20 +308,25 @@ PENDIDIKAN
                             </a>
                           </td>
                           <td><?php echo $dt3->sks_subkegiatan; ?></td>
+                          <td><?php echo $dt3->poin_subkegiatan; ?></td>
                           <td><?php echo $dt3->app_ketuaprodi; ?></td>
                           <td><?php echo $dt3->app_assesor1; ?></td>
                           <td><?php echo $dt3->app_assesor2; ?></td>
+                          <td>
+                            <?php echo anchor('RencanaKerja/HapusSubkegiatan/'.$dt3->id_subkegiatan,'<span class="glyphicon glyphicon-remove" title="Hapus Data" Onclick="return ConfirmDelete()"></span>'); ?>
+                          </td>
                         </tr>
                         <?php } ?>
                       </tbody>
                       <tfoot>
                         <tr>
-                          <th colspan="2" style="text-align:right">Total:</th>
-                          <th><?php echo @array_sum($total3); ?></th>
-                          <th><?php echo @array_sum($poin3); ?></th>
-                          <th></th>
-                          <th></th>
-                          <th></th>
+                            <th colspan="2" style="text-align:right">Total:</th>
+                            <th><?php echo @array_sum($total3); ?></th>
+                            <th><?php echo @array_sum($poin3); ?></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
                         </tr>
                     </tfoot>
                     </table>

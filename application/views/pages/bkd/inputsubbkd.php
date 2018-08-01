@@ -110,7 +110,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                                 <?php foreach($bukti as $dts){ ?>
-                                <input type="checkbox" class="largerCheckbox" name="syarat_file[]" value="<?php echo $dts->id; ?>" /><?php echo $dts->nama_file; ?> <br />
+                                <input type="checkbox" class="largerCheckbox" name="syarat_file[]" value="<?php echo $dts->id.".".$dts->nama_file; ?>" /><?php echo $dts->nama_file; ?> <br />
                                 <?php } ?>
                         </div>
                       </div>

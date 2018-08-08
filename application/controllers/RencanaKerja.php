@@ -9,6 +9,7 @@ class RencanaKerja extends CI_Controller {
             $this->load->model('M_rencanakerja');
 						$this->load->model('M_pegawai');
             $this->load->helper(array('form', 'url'));
+						$this->load->library('session');
             $this->acl = $this->session->userdata('acl');
 
         }
@@ -93,7 +94,7 @@ foreach ($this->input->post('bkd_kegiatan') as $key => $value) {
 
     foreach($this->input->post('bkd_kegiatan') as $bkd => $key)
         {
-						//SKS
+						//SKS dan POIN
 						$sks_post = $this->input->post('sks_subkegiatan')[$bkd];
 						$sks_db   = $sks[$bkd];
 						if($bkdhitung[$bkd]==1){
@@ -103,10 +104,10 @@ foreach ($this->input->post('bkd_kegiatan') as $key => $value) {
 						}
 
 						//POIN
-						$poin_post = $this->input->post('sks_subkegiatan')[$bkd];
+						// $poin_post = $this->input->post('sks_subkegiatan')[$bkd];
 						$poin_db   = $poin[$bkd];
 						if($remunhitung[$bkd]==1){
-								$poin_kali = $poin_post * $poin_db;
+								$poin_kali = $sks_post * $poin_db;
 						}else{
 								$poin_kali = 0;
 						}
@@ -128,6 +129,150 @@ foreach ($this->input->post('bkd_kegiatan') as $key => $value) {
             redirect('RencanaKerja');
 }
 
+// EDIT
+public function EditLaporan($id)
+{
+        $data['name'] = $this->session->userdata('username');
+        $data['nipp'] = $this->session->userdata('nipp');
+        $data['subkegiatan'] = $this->M_rencanakerja->edit_subkegiatan($id);
+        $data['title'] = 'Upload Laporan';
+        $this->load->view('layout/header',$data);
+        $this->load->view('layout/side_menu');
+        $this->load->view('pages/bkd/subkegiatan_laporan');
+        $this->load->view('layout/footer');
+}
+
+public function EditLaporan2($id)
+{
+        $data['name'] = $this->session->userdata('username');
+        $data['nipp'] = $this->session->userdata('nipp');
+        $data['subkegiatan'] = $this->M_rencanakerja->edit_subkegiatan2($id);
+        $data['title'] = 'Update Laporan';
+        $this->load->view('layout/header_datatables',$data);
+        $this->load->view('layout/side_menu');
+        $this->load->view('pages/bkd/subkegiatan_laporan2');
+        $this->load->view('layout/footer_datatables');
+}
+
+function UpdateFile()
+{
+		// If file upload form submitted
+        if(!empty($_FILES['files']['name'])){
+
+								$filenames = $this->input->post('nama_file');
+								$namafile = $filenames;
+                // $_FILES['file']['name']     = $_FILES['files']['name'][$i];
+								$_FILES['file']['name']     = $filenames;
+                $_FILES['file']['type']     = $_FILES['files']['type'];
+                $_FILES['file']['tmp_name'] = $_FILES['files']['tmp_name'];
+                $_FILES['file']['error']     = $_FILES['files']['error'];
+                $_FILES['file']['size']     = $_FILES['files']['size'];
+
+								//Check Directory
+									$directoryname = $this->session->userdata('nipp');
+									if (!is_dir('uploads/'.$directoryname)) {
+										  mkdir('./uploads/' . $this->session->userdata('nipp'), 0777, TRUE);
+									}
+								// File upload configuration
+	                $uploadPath = 'uploads/'.$this->session->userdata('nipp').'/';
+	                $config['upload_path'] = $uploadPath;
+	                $config['allowed_types'] = 'pdf';
+									unlink($uploadPath.$filenames);
+	                // Load and initialize upload library
+	                $this->load->library('upload', $config);
+	                $this->upload->initialize($config);
+
+                // Upload file to server
+                if($this->upload->do_upload('file')){
+                    // Uploaded file data
+                    $fileData = $this->upload->data();
+                    $uploadData['nama_file'] = $namafile;
+                    $uploadData['uploaded_on'] = date("Y-m-d H:i:s");
+                }
+                // Update files data into the database
+										$data = array('file' => $namafile);
+										$where = array('id' => $this->input->post('id_file'));
+									  $this->M_rencanakerja->update_file($where, $data, 'bkd_subkegiatan_file');
+								// var_dump($data);
+                //Upload status message
+                $statusMsg = 'Files uploaded successfully.';
+                $this->session->set_flashdata('statusMsg',$statusMsg);
+								redirect("RencanaKerja/EditLaporan2/".$this->input->post('id_subkegiatan'));
+        }else{
+								$statusMsg = 'Upload File Gagal.';
+								$this->session->set_flashdata('statusMsg',$statusMsg);
+								redirect("RencanaKerja/EditLaporan2/".$this->input->post('id_subkegiatan'));
+				}
+
+}
+
+function InsertLaporan()
+{
+			$data = array();
+        // If file upload form submitted
+        if(!empty($_FILES['files']['name'])){
+            $filesCount = count($_FILES['files']['name']);
+            for($i = 0; $i < $filesCount; $i++){
+
+								$filenames = $this->session->userdata('nipp').'_'.date('Y-m-d').'_'.rand(1, 100).'.pdf';
+								$namafile[] = $filenames;
+                // $_FILES['file']['name']     = $_FILES['files']['name'][$i];
+								$_FILES['file']['name']     = $filenames;
+                $_FILES['file']['type']     = $_FILES['files']['type'][$i];
+                $_FILES['file']['tmp_name'] = $_FILES['files']['tmp_name'][$i];
+                $_FILES['file']['error']     = $_FILES['files']['error'][$i];
+                $_FILES['file']['size']     = $_FILES['files']['size'][$i];
+
+                // File upload configuration
+								//Check Directory
+									$directoryname = $this->session->userdata('nipp');
+									if (!is_dir('uploads/'.$directoryname)) {
+										  mkdir('./uploads/' . $this->session->userdata('nipp'), 0777, TRUE);
+									}
+	                $uploadPath = 'uploads/'.$this->session->userdata('nipp').'/';
+	                $config['upload_path'] = $uploadPath;
+	                $config['allowed_types'] = 'pdf';
+
+	                // Load and initialize upload library
+	                $this->load->library('upload', $config);
+	                $this->upload->initialize($config);
+
+                // Upload file to server
+                if($this->upload->do_upload('file')){
+                    // Uploaded file data
+                    $fileData = $this->upload->data();
+                    $uploadData[$i]['file_name'] = $this->session->userdata('nipp').'_'.time();
+                    $uploadData[$i]['uploaded_on'] = date("Y-m-d H:i:s");
+                }
+            }
+
+                // Insert files data into the database
+								foreach ($this->input->post('nama_file') as $keys => $a) {
+										$data = array(
+															'id_subkegiatan' => $this->input->post('id_subkegiatan'),
+															'nama_file' => $a,
+															'file' => $namafile[$keys]
+										);
+										$this->M_rencanakerja->insert_file($data, 'bkd_subkegiatan_file');
+								}
+
+								//Update Sub Kegiatan
+								$data = array(
+															'status' => 1,
+															'status_laporan' => 1
+														 );
+							  $where = array('id_subkegiatan' => $this->input->post('id_subkegiatan'));
+							  $this->M_rencanakerja->update_rencana($where, $data, 'bkd_subkegiatan');
+
+                //Upload status message
+                $statusMsg = $insert?'Files uploaded successfully.':'Some problem occurred, please try again.';
+                $this->session->set_flashdata('statusMsg',$statusMsg);
+
+        }
+redirect('RencanaKerja/Laporan');
+}
+
+//UPDATE
 function UpdateRencana()
 {
 	$data = array('sub_kegiatan' => $this->input->post('subkegiatan'),

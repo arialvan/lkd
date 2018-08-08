@@ -122,6 +122,39 @@ function HapusVerifikator($id) {
     redirect('Verifikator');
 }
 
+//PENILAIAN
+public function PeriksaRencana()
+{
+  $data['name'] = $this->session->userdata('username');
+  $data['nipp'] = $this->session->userdata('nipp');
+  $data['level'] = $this->session->userdata('user_level');
+  $data['pegawai'] = $this->M_verifikator->show_viewpages();
+  $data['title'] = 'Data Dosen';
+  $this->load->view('layout/header_datatables',$data);
+  $this->load->view('layout/side_menu');
+  $this->load->view('pages/Verifikator/periksa_rencanakerja');
+  $this->load->view('layout/footer_datatables');
+}
+
+public function PeriksaRencanaDetail($id)
+{
+	$this->load->library('Pustaka');
+	$data['name'] = $this->session->userdata('username');
+	$data['nipp'] = $this->session->userdata('nipp');
+	$data['level'] = $this->session->userdata('user_level');
+	$data['pendidikan'] = $this->M_verifikator->show_pendidikan($id);
+	$data['penelitian'] = $this->M_verifikator->show_rencana_penelitian($id);
+	$data['pengabdian'] = $this->M_verifikator->show_rencana_pengabdian($id);
+	$data['penunjang'] = $this->M_verifikator->show_rencana_penunjang($id);
+	$data['files'] = $this->M_verifikator->show_file($id);
+	$data['title'] = 'Rekap Laporan Kerja Dosen';
+	$this->load->view('layout/header_datatables',$data);
+	$this->load->view('layout/side_menu');
+	$this->load->view('pages/Verifikator/periksa_rencanakerja_detail');
+	$this->load->view('layout/footer_datatables');
+	//return $a;
+}
+
 //LOGOUT
     public function is_logged_in() {
         $is_logged_in = $this->session->userdata('is_login');

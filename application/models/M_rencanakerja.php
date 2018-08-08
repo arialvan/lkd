@@ -47,6 +47,17 @@ function show_file()
 }
 
 //insert
+// function insert_rencanakerja($data,$table)
+// {
+//     $msg = '<i class="fa fa-check text-success"></i> Simpan Data Berhasil';
+//     $this->db->insert($table, $data);
+//     if($this->db->affected_rows() < 1 )
+//         {
+//             $msg = '<i class="fa fa-close text-danger"></i> Simpan data gagal.';
+//         }
+//         return $msg;
+// }
+
 function insert_rencanakerja($data,$table)
 {
     $msg = '<i class="fa fa-check text-success"></i> Simpan Data Berhasil';
@@ -62,6 +73,28 @@ function insert_rencanakerja($data,$table)
 function edit_bkdsubkegiatan($where,$table)
 {
     return $this->db->get_where($table,$where);
+}
+
+function edit_subkegiatan($id)
+{
+    $this->db->select('*')
+                    ->from('bkd_subkegiatan')
+                    ->join('bkd_kegiatan','bkd_subkegiatan.id_kegiatan = bkd_kegiatan.id_kegiatan')
+                    ->where('bkd_subkegiatan.id_subkegiatan=', $id);
+    $query=$this->db->get()->result();
+    return $query;
+
+}
+
+  function edit_subkegiatan2($id)
+{
+    $this->db->select('*')
+                    ->from('bkd_subkegiatan_file')
+                    ->join('bkd_subkegiatan','bkd_subkegiatan_file.id_subkegiatan = bkd_subkegiatan.id_subkegiatan')
+                    ->where('bkd_subkegiatan_file.id_subkegiatan=', $id);
+    $query=$this->db->get()->result();
+    return $query;
+
 }
 
 function update_bkdsubkegiatan($where,$data,$table)
@@ -184,6 +217,12 @@ function edit_bkdkegiatan($where,$table)
 }
 
 function update_bkdkegiatan($where,$data,$table)
+{
+    $this->db->where($where);
+    $this->db->update($table,$data);
+}
+
+function update_file($where,$data,$table)
 {
     $this->db->where($where);
     $this->db->update($table,$data);

@@ -108,6 +108,81 @@ function show_ketprodi()
         return $query;
 }
 
+//PENILAIAN
+function show_viewpages(){
+  $this->db->select('*')
+                  ->from('verifikasi')
+                  ->join('periode_lkd','verifikasi.id_periode=periode_lkd.id_periode')
+                  ->where('periode_lkd.status=', 1)
+                  ->where('verifikasi.assesor_1=', $this->session->userdata('nipp'))
+                  ->or_where('verifikasi.assesor_2=', $this->session->userdata('nipp'))
+                  ->or_where('verifikasi.ketua_prodi=', $this->session->userdata('nipp'))
+                  ->order_by('verifikasi.pegawai ASC');
+  $query=$this->db->get()->result();
+  return $query;
+}
+
+function show_file($id)
+{
+  $this->db->select('*')
+                  ->from('bkd_subkegiatan')
+                  ->join('bkd_subkegiatan_file','bkd_subkegiatan.id_subkegiatan = bkd_subkegiatan_file.id_subkegiatan')
+                  ->where('bkd_subkegiatan.nip=', $id)
+                  ->order_by('bkd_subkegiatan_file.id_subkegiatan');
+  $query=$this->db->get()->result();
+  return $query;
+}
+
+function show_pendidikan($id)
+{
+  $this->db->select('*')
+                  ->from('bkd_subkegiatan')
+                  ->join('bkd_kegiatan','bkd_subkegiatan.id_kegiatan = bkd_kegiatan.id_kegiatan')
+                  ->where('bkd_subkegiatan.id_bkd=', 1)
+                  ->where('bkd_subkegiatan.nip=', $id)
+                  ->order_by('bkd_subkegiatan.id_subkegiatan');
+  //$this->db->select_sum('sks_subkegiatan');
+  $query=$this->db->get()->result();
+  return $query;
+}
+
+function show_rencana_penelitian($id)
+{
+  $this->db->select('*')
+                  ->from('bkd_subkegiatan')
+                  ->join('bkd_kegiatan','bkd_subkegiatan.id_kegiatan = bkd_kegiatan.id_kegiatan')
+                  ->where('bkd_subkegiatan.id_bkd=', 2)
+                  ->where('bkd_subkegiatan.nip=', $id)
+                  ->order_by('bkd_subkegiatan.id_subkegiatan');
+  $query=$this->db->get()->result();
+  return $query;
+}
+
+function show_rencana_pengabdian($id)
+{
+  $this->db->select('*')
+                  ->from('bkd_subkegiatan')
+                  ->join('bkd_kegiatan','bkd_subkegiatan.id_kegiatan = bkd_kegiatan.id_kegiatan')
+                  ->where('bkd_subkegiatan.id_bkd=', 3)
+                  ->where('bkd_subkegiatan.nip=', $id)
+                  ->order_by('bkd_subkegiatan.id_subkegiatan');
+  $query=$this->db->get()->result();
+  return $query;
+}
+
+function show_rencana_penunjang($id)
+{
+  $this->db->select('*')
+                  ->from('bkd_subkegiatan')
+                  ->join('bkd_kegiatan','bkd_subkegiatan.id_kegiatan = bkd_kegiatan.id_kegiatan')
+                  ->where('bkd_subkegiatan.id_bkd=', 4)
+                  ->where('bkd_subkegiatan.nip=', $id)
+                  ->order_by('bkd_subkegiatan.id_subkegiatan');
+  $query=$this->db->get()->result();
+  return $query;
+}
+
+//Update
 function update_pegawai($where,$data,$table)
 {
     $this->db->where($where);

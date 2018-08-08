@@ -42,6 +42,15 @@
                   <li><a href="<?php echo base_url() ?>RencanaKerja/Laporan"><i class="fa fa-calculator"></i>Laporan</a></li>
                 </ul>
               </div>
+
+              <div class="menu_section">
+              <h3><u>Penilaian</u></h3>
+                <ul class="nav side-menu">
+                  <li><a href="<?php echo base_url() ?>Verifikator/PeriksaRencana"><i class="fa fa-calendar"></i>Rencana Kerja Dosen</a></li>
+                  <li><a href="<?php echo base_url() ?>Verifikator/PeriksaLaporan"><i class="fa fa-user-md"></i>Laporan Kerja Dosen</a></li>
+                </ul>
+              </div>
+
               <?php } ?>
 
             </div>

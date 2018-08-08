@@ -7,7 +7,6 @@
             </div>
             <div class="clearfix"></div>
             <div class="col-md-12 col-sm-12 col-xs-12">
-              <a href="<?php echo base_url() ?>RencanaKerja/FormRencana" class="btn btn-primary"> + Tambah Kegiatan</a>
 <!--
 =========================
 PENDIDIKAN
@@ -27,20 +26,15 @@ PENDIDIKAN
                         <tr>
                           <th>#</th>
                           <th>Kegiatan</th>
-                          <th>BKD SKS</th>
-                          <th>Poin Remunerasi</th>
-                          <th>Bukti Fisik</th>
+                          <th>SKS</th>
+                          <th>Status</th>
                           <th>Laporan</th>
                         </tr>
                       </thead>
                       <tbody>
                         <?php
                         $no = 1;
-                        foreach($rencanakerja as $dt){
-                          $total[]=$dt->sks_subkegiatan;
-                          $poin[]=$dt->poin_subkegiatan;
-                          // $x=explode('#',$dt->syarat_file);
-                          // echo $x[0];
+                        foreach($pendidikan as $dt){
                         ?>
                         <tr>
                           <th scope="row"><?php echo $no++; ?></th>
@@ -56,38 +50,41 @@ PENDIDIKAN
                             </a>
                           </td>
                           <td><?php echo $dt->sks_subkegiatan; ?></td>
-                          <td><?php echo $dt->poin_subkegiatan; ?></td>
                           <td>
+                            <u><?php echo $this->pustaka->status($dt->status); ?></u><br />
                             <?php
+                            if($dt->status==0){
+                                echo"-";
+                            }else{
                                 $file = $dt->syarat_file;
                                 $file=explode('#',$dt->syarat_file);
                                 foreach ($file as $key => $value) {
-                                          echo $value."<br />";
+                            ?>
+                                    <a href="javascript:;"
+                                        data-id_subkegiatan="<?php echo $dt->id_subkegiatan; ?>"
+                                        data-syarat_file1="<?php echo $value ?>"
+                                        data-toggle="modal" data-target="#cek_file">
+                                        <?php echo $value.'<br />'; ?>
+                                    </a>
+                            <?php
                                 }
-                                // echo $namafile;
+                            }
                             ?>
                           </td>
                           <td>
                               <?php
                                 if($dt->status_laporan==0){
-                                  echo anchor('RencanaKerja/EditLaporan/'.$dt->id_subkegiatan,'<span>Buat Laporan</span>');
+                                  echo "-";
+                                }elseif($dt->status_laporan==1){
+                                  echo anchor('Verifikator/PeriksaApproved/'.$dt->id_subkegiatan,'<span class="btn btn-primary">Approve</span>');
                                 }else{
-                                  echo anchor('RencanaKerja/EditLaporan2/'.$dt->id_subkegiatan,'<span>Lihat</span>');
+                                  echo '<span class="btn btn-primary">OK</span>';
                                 }
                               ?>
                           </td>
                         </tr>
                         <?php } ?>
                       </tbody>
-                      <tfoot>
-                        <tr>
-                            <th colspan="2" style="text-align:right">Total:</th>
-                            <th><?php echo @array_sum($total); ?></th>
-                            <th><?php echo @array_sum($poin); ?></th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </tfoot>
                     </table>
                   </div>
                   <div class="clearfix"></div>
@@ -312,7 +309,7 @@ PENDIDIKAN
           </div>
 
           <!-- MODAL PENDIDIKAN -->
-                            <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="edit-pendidikan" class="modal fade">
+                            <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="cek_file" class="modal fade">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -320,8 +317,8 @@ PENDIDIKAN
                                             <h4 class="modal-title">Ubah Data</h4>
                                         </div>
                                         <form class="form form-horizontal" role="form" method="post" action="<?php echo base_url(); ?>RencanaKerja/UpdateRencana">
-                                          <input type="hidden" class="form-control" id="id_kegiatan" name="id_kegiatan" />
-                                          <input type="hidden" class="form-control" id="id_subkegiatan" name="id_subkegiatan" />
+                                          <input type="text" class="form-control" id="id_subkegiatan" name="id_subkegiatan" />
+                                          <input type="text" class="form-control" id="syarat_file1" name="id_subkegiatan" />
                                           <div class="modal-body">
                                                   <div class="form-group">
                                                       <label class="col-lg-2 col-sm-2 control-label">Kegiatan</label>
@@ -329,18 +326,6 @@ PENDIDIKAN
                                                           <input type="text" class="form-control" id="kegiatan" name="kegiatan" disabled />
                                                       </div>
                                                   </div>
-                            	                    <div class="form-group">
-                            	                        <label class="col-lg-2 col-sm-2 control-label">Sub Kegiatan</label>
-                            	                        <div class="col-lg-10">
-                            	                            <input type="text" class="form-control" id="subkegiatan" name="subkegiatan" />
-                            	                        </div>
-                            	                    </div>
-                            	                    <div class="form-group">
-                            	                        <label class="col-lg-2 col-sm-2 control-label">SKS</label>
-                            	                        <div class="col-lg-10">
-                            	                        	<input type="text" class="form-control" id="sks" name="sks" />
-                            	                        </div>
-                            	                    </div>
                             	                </div>
                             	                <div class="modal-footer">
                             	                    <button class="btn btn-info" type="submit"> Simpan&nbsp;</button>

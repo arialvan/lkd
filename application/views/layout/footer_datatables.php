@@ -60,6 +60,31 @@ $(document).ready(function() {
             });
         });
 
+        $(document).ready(function() {
+                // Untuk sunting
+                $('#cek_file').on('show.bs.modal', function (event) {
+                    var div   = $(event.relatedTarget) // Tombol dimana modal di tampilkan
+                    var modal = $(this)
+
+                    // Isi nilai pada field
+                    modal.find('#id_subkegiatan').attr("value",div.data('id_subkegiatan'));
+                    modal.find('#syarat_file1').attr("value",div.data('syarat_file1'));
+                });
+            });
+
+//Modal Update Sub kegiatan dosen
+            $(document).ready(function() {
+                    // Untuk sunting
+                    $('#edits').on('show.bs.modal', function (event) {
+                        var div   = $(event.relatedTarget) // Tombol dimana modal di tampilkan
+                        var modal = $(this)
+                        // Isi nilai pada field
+                        modal.find('#id_file').attr("value",div.data('id_file'));
+                        modal.find('#id_subkegiatan').attr("value",div.data('id_subkegiatan'));
+                        modal.find('#nama_file').attr("value",div.data('nama_file'));
+                    });
+                });
+
 function ConfirmDelete() {
   return confirm("Anda yakin ingin menghapus data ini?");
 }

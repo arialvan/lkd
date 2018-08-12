@@ -58,16 +58,12 @@ PENDIDIKAN
                             }else{
                                 $file = $dt->syarat_file;
                                 $file=explode('#',$dt->syarat_file);
-                                foreach ($file as $key => $value) {
-                            ?>
-                                    <a href="javascript:;"
-                                        data-id_subkegiatan="<?php echo $dt->id_subkegiatan; ?>"
-                                        data-syarat_file1="<?php echo $value ?>"
-                                        data-toggle="modal" data-target="#cek_file">
-                                        <?php echo $value.'<br />'; ?>
-                                    </a>
-                            <?php
-                                }
+                                $atts = array('width'=> 800,'height'=> 600,'scrollbars'=>'yes','status'=>'yes',
+                                              'resizable'=>'yes','screenx'=>0,'screeny'=>0,'window_name' =>'_blank');
+                                  foreach ($file as $key => $value) {
+                                    //  $string_url = $dt->id_subkegiatan."#".$value;
+                                      echo anchor_popup('Verifikator/PeriksaRencanaDetailPDF/'.$dt->id_subkegiatan,'<span>'.$value.'</span><br />',$atts);
+                                  }
                             }
                             ?>
                           </td>

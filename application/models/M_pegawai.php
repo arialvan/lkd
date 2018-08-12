@@ -8,6 +8,16 @@ var $tabless = 'pegview';
         parent::__construct();
     }
 
+//SHOW
+function show_golongan($id)
+{
+  $this->db->select('profil_dosen.nip,profil_dosen.id_gol,tb_golongan.id_gol,tb_golongan.nama_golongan,tb_golongan.nama_jabatan')
+                  ->from('profil_dosen')
+                  ->join('tb_golongan','profil_dosen.id_gol = tb_golongan.id_gol')
+                  ->where('profil_dosen.nip=', $id);
+  $query=$this->db->get()->result();
+  return $query;
+}
 // WEB SERVICE
     function show_pegawai_service(){
       $this->db->select('nip,nama_peg,alamat')
@@ -61,6 +71,11 @@ var $tabless = 'pegview';
         $query = $this->db->get('tb_pegawai_profil')->result();
         return $query;
     }
+//show_golongan_select
+function show_golongan_select(){
+    $query = $this->db->get('tb_golongan')->result();
+    return $query;
+}
 /*PEGAWAI*/
     function show_pegawai_stprof(){
         $this->db->select('*')
@@ -83,8 +98,12 @@ var $tabless = 'pegview';
       return $query;
     }
 
-    function show_viewpages_edit($where,$table){
-        return $this->db->get_where($table,$where);
+    function show_viewpages_edit($id){
+      $this->db->select('*')
+                      ->from('pegview')
+                      ->where('nip=', $id);
+      $query=$this->db->get()->result();
+      return $query;
     }
 
 
@@ -107,8 +126,13 @@ var $tabless = 'pegview';
         $this->db->insert($table, $data);
     }
 /*EDIT PEGAWAI*/
-    function edit_pegawai($where,$table){
-        return $this->db->get_where($table,$where);
+    function edit_pegawai($id){
+      $this->db->select('*')
+                      ->from('tb_pegawai')
+                      ->join('profil_dosen','tb_pegawai.nip = profil_dosen.nip')
+                      ->where('profil_dosen.nip=', $id);
+      $query=$this->db->get()->result();
+      return $query;
     }
 /*UPDATE PEGAWAI*/
     function update_pegawai($where,$data,$table){

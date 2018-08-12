@@ -37,6 +37,35 @@
                       </div>
                     </form>
                   </div>
+
+<!-- IMPORT DATA ASSESOR -->
+                  <div class="x_content">
+                    <br />
+                    <form class="form form-horizontal" role="form" method="post" action="<?php echo base_url(); ?>Import/ExcelDataAssesor" enctype="multipart/form-data">
+
+                        <div class="form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <a href="<?php echo base_url() ?>uploads/excel/Verifikator.xlsx" class="btn btn-primary">Format Tabel Assesor</a>
+                                </div>
+                        </div>
+
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Import Excel Data Assesor dan Ketua Prodi</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type='file' name="userfile" class="form-control" />
+                                </div>
+                        </div>
+                      <div class="ln_solid"></div>
+                      <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                          <button class="btn btn-primary" type="reset">Reset</button>
+                          <button type="submit" class="btn btn-success" >Submit</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+
                 </div>
               </div>
             </div>

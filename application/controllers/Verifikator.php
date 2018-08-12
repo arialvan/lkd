@@ -7,7 +7,7 @@ class Verifikator extends CI_Controller {
             parent::__construct();
             $this->is_logged_in();
             $this->load->model('M_verifikator');
-            $this->load->helper(array('form', 'url'));
+            $this->load->helper(array('form','url','file','directory'));
             $this->acl = $this->session->userdata('acl');
 
         }
@@ -85,13 +85,15 @@ public function EditVerifikator($id)
   {
         $data['name'] = $this->session->userdata('username');
 				$data['nipp'] = $this->session->userdata('nipp');
-        $where = array('id_verifikator' => $id);
-        $data['verifikator'] = $this->M_verifikator->edit_verifikator($where, 'verifikator')->result();
+        // $where = array('id_verifikator' => $id);
+        // $data['verifikator'] = $this->M_verifikator->edit_verifikator($where, 'verifikator')->result();
+        $data['verifikator'] = $this->M_verifikator->edit_verifikator($id);
+				$data['pegawai'] = $this->M_verifikator->show_pegawai();
         $data['title'] = 'Edit Verifikator';
-        $this->load->view('layout/header',$data);
+        $this->load->view('layout/header_datatables',$data);
         $this->load->view('layout/side_menu');
-        $this->load->view('pages/master/verifikator_edit');
-        $this->load->view('layout/footer');
+        $this->load->view('pages/verifikator/verifikator_edit');
+        $this->load->view('layout/footer_datatables');
   }else
   {
         $data['name'] = $this->session->userdata('username');
@@ -116,6 +118,19 @@ function UpdateVerifikator()
         $this->M_master->update_verifikator($where, $data, 'verifikator');
         echo "Update Succes"; redirect('Verifikator','refresh');
 }
+
+function UpdateVerifikators()
+{
+	$data = array(
+                        'assesor_1' => $this->input->post('assesor_1'),
+                        'assesor_2' => $this->input->post('assesor_2'),
+                        'ketua_prodi' => $this->input->post('ketua_prodi'),
+                        'user_create' => $this->session->userdata('username')
+                     );
+        $where = array('id_verifikator' => $this->input->post('id_verifikator'));
+        $this->M_verifikator->update_verifikator($where, $data, 'verifikator');
+        echo "Update Succes"; redirect('Verifikator','refresh');
+}
 function HapusVerifikator($id) {
     $where = array('id_verifikator' => $id);
     $this->M_master->hapus_verifikator($where, 'verifikator');
@@ -132,7 +147,7 @@ public function PeriksaRencana()
   $data['title'] = 'Data Dosen';
   $this->load->view('layout/header_datatables',$data);
   $this->load->view('layout/side_menu');
-  $this->load->view('pages/Verifikator/periksa_rencanakerja');
+  $this->load->view('pages/verifikator/periksa_rencanakerja');
   $this->load->view('layout/footer_datatables');
 }
 
@@ -150,9 +165,37 @@ public function PeriksaRencanaDetail($id)
 	$data['title'] = 'Rekap Laporan Kerja Dosen';
 	$this->load->view('layout/header_datatables',$data);
 	$this->load->view('layout/side_menu');
-	$this->load->view('pages/Verifikator/periksa_rencanakerja_detail');
+	$this->load->view('pages/verifikator/periksa_rencanakerja_detail');
 	$this->load->view('layout/footer_datatables');
 	//return $a;
+}
+
+public function PeriksaRencanaDetailPDF($id)
+{
+	$where = array('id_subkegiatan' => $id);
+	$data = $this->M_verifikator->show_file($id);
+	foreach ($data as $keys){
+			$p = explode('_',$keys->file);
+			$nip = $p[0];
+			$filename = "./uploads/".$nip."/".$keys->file;
+
+			// New Tabbrowser
+			header("Content-type: application/pdf");
+			header("Content-Length: " . filesize($filename));
+			readfile($filename);
+			exit();
+	}
+	//var_dump($data);
+	// $this->load->library('CustomFPDF');
+  //   $pdf = $this->customfpdf->getInstance($data[0]);
+	//
+  //   $pdf->AliasNbPages();
+  //   $pdf->AddPage();
+  //   $pdf->header('Arial');
+  //   $pdf->SetFont('Times','',12);
+  //   // for($i=1;$i<=40;$i++)
+  //   $pdf->Cell(0,10,0,1);
+  //   $pdf->Output();
 }
 
 //LOGOUT

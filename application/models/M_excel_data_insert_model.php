@@ -18,6 +18,10 @@ class M_excel_data_insert_model extends CI_Model {
         $this->db->insert('tb_pegawai_profil', $data_user);
     }
 
+    public function Add_Assesor($data_user){
+        $this->db->insert('verifikator', $data_user);
+    }
+
     function update_pegawai($where,$data,$table){
       	$this->db->where($where);
       	$this->db->update($table,$data);

@@ -21,12 +21,13 @@
                       ?>
                       <br />
                       <?php
-                        foreach($syaratbkd as $v);
-                        foreach($syaratsubbkd as $k);
-                        //echo $v->sks;
-                        //echo $this->session->userdata('kat_dosen');
-                        if($k->subsks >= $v->sks){ $sks='Memenuhi'; }else{ $sks='Belum Memenuhi'; }
-                        $poins = $k->Poin;
+                    //  echo $this->session->userdata('kat_dosen');
+                        foreach($syaratbkd as $v); //sks bkd_remundosen
+                        foreach($syaratsubbkd as $k); //sks sub_bkdkegiatan
+                        $poinremun = $k->subsks - $v->sks; //
+
+                        if($poinremun >= $v->sks){ $sks='Memenuhi'; }else{ $sks='Belum Memenuhi'; }
+                        $poins = $poinremun;
                       ?>
                       <fieldset>
                         <legend></legend>
@@ -292,7 +293,7 @@ PENDIDIKAN
                         $no = 1;
                         foreach($penunjang as $dt3){
                           $total3[]=$dt3->sks_subkegiatan;
-                          $poin3[]=$dt->poin_subkegiatan;
+                          $poin3[]=$dt3->poin_subkegiatan;
                         ?>
                         <tr>
                           <th scope="row"><?php echo $no++; ?></th>

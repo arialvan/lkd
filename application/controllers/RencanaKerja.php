@@ -253,7 +253,7 @@ function InsertLaporan()
 															'nama_file' => $a,
 															'file' => $namafile[$keys]
 										);
-										$this->M_rencanakerja->insert_file($data, 'bkd_subkegiatan_file');
+										$this->M_rencanakerja->insert_rencanakerja($data, 'bkd_subkegiatan_file');
 								}
 
 								//Update Sub Kegiatan

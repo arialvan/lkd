@@ -16,10 +16,18 @@ function show_bkd()
 
 function show_bkdkegiatan()
 {
-    $query = $this->db->get('bkd_kegiatan')->result();
+    // $query = $this->db->get('bkd_kegiatan')->result();
+    // return $query;
+    $this->db->select('*')
+                    ->from('bkd_kegiatan')
+                    ->join('bkd', 'bkd_kegiatan.id_bkd = bkd.id_bkd')
+                    ->join('periode_lkd', 'bkd_kegiatan.id_periode = periode_lkd.id_periode')
+                    ->where('periode_lkd.status=', 1);
+    $query=$this->db->get()->result();
     return $query;
 }
 
+// QUERY PERHITUNGAN
 function show_syarat_bkd()
 {
     $this->db->select('SUM(bkd_remun_dosen.sks_bkd)AS sks')
@@ -33,12 +41,19 @@ function show_syarat_bkd()
 
 function show_syarat_subbkd()
 {
-    $this->db->select('SUM(sks_subkegiatan) AS subsks, SUM(poin_subkegiatan) AS Poin')
-                    ->from('bkd_subkegiatan')
-                    ->where('nip=', $this->session->userdata('nipp'));
+    $this->db->select('SUM(a.sks_subkegiatan) AS subsks, SUM(a.poin_subkegiatan) AS Poin')
+                    ->from('bkd_subkegiatan a')
+                    ->join('bkd_kegiatan b','a.id_kegiatan = b.id_kegiatan')
+                    ->join('periode_lkd c','b.id_periode = c.id_periode')
+                    ->where('a.nip=', $this->session->userdata('nipp'))
+                    ->where('c.status=',1)
+                    ->where('a.id_bkd=',1)
+                    ->or_where('a.id_bkd=',4);
     $query=$this->db->get()->result();
     return $query;
 }
+
+//CLOSE QUERY PERHITUNGAN
 
 function show_file()
 {
@@ -191,8 +206,9 @@ function show_rencana_penunjang()
 function show_verifikator()
 {
   $this->db->select('*')
-                  ->from('verifikasi')
-                  ->join('periode_lkd','verifikasi.id_periode = periode_lkd.id_periode')
+                  ->from('verifikator')
+                  ->join('periode_lkd','verifikator.id_periode = periode_lkd.id_periode')
+                  ->join('verifikasi','verifikasi.id_verifikator = verifikator.id_verifikator')
                   ->where('verifikasi.nip',$this->session->userdata('nipp'))
                   ->where('periode_lkd.status',1)
                   ->order_by('verifikasi.id_verifikator');

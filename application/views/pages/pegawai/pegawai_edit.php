@@ -17,52 +17,16 @@
                   </div>
                   <div class="x_content">
                     <br />
-                    <?php 
-                        foreach($pegawai as $key); 
-                        foreach($views as $v);
-                        //Jenis Kelamin dan Status Pegawai
-                        if($key->jenis_kel==1){
-                           $jk='Laki-Laki'; $sp='PNS';
-                        }else{
-                           $jk='Perempuan'; $sp='Pegawai Kontrak';
-                        }
-                        if($key->status_peg==1){
-                           $sp='PNS';
-                        }else{
-                           $sp='Pegawai Kontrak';
-                        }
-                        //Status Menikah
-                        if($key->status_nikah==1){
-                           $sn='Menikah'; 
-                        }elseif($key->status_nikah==2){
-                           $sn='Belum Menikah';
-                        }elseif($key->status_nikah==3){
-                           $sn='Duda';
-                        }elseif($key->status_nikah==4){
-                           $sn='Janda';
-                        }else{
-                           $sn='N/A';
-                        }
-                        
-                        //Status Profesi
-                        if($key->status_profesi==1){
-                           $pf='JFU'; 
-                        }elseif($key->status_profesi==2){
-                           $pf='Dosen';
-                        }elseif($key->status_profesi==3){
-                           $pf='JFT';
-                        }elseif($key->status_profesi==4){
-                           $pf='Kontrak';
-                        }else{
-                           $pf='N/A';
-                        }
+                    <?php
+                        foreach($pegawai as $key);
+                        foreach($golongan as $vs);
                     ?>
                     <form class="form form-horizontal" role="form" method="post" action="<?php echo base_url(); ?>Pegawai/UpdatePegawai" enctype="multipart/form-data">
                        <input type="hidden" name="nip" id="nip" value="<?php echo $key->nip; ?>">
                        <div class="form-group">
                        <div class="profile clearfix">
                             <div class="profile_pic">
-                                <img src="<?php echo $key->foto; ?>" alt="<?php echo $key->nama_peg; ?>" class="img-thumbnail profile_img" width="200">
+                                <img src="<?php echo $key->foto; ?>" alt="<?php echo $key->nip; ?>" class="img-thumbnail profile_img" width="200">
                             <div class="col-md-6 ">
                                 Ganti Foto<input type='file' name="foto" class="form-control" />
                             </div>
@@ -86,8 +50,8 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Golongan<span class="required">*</span></label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select id="id_gol" name="id_gol" class="form-control" required>
-                                <option value="<?php echo $key->id_gol; ?>"><?php echo $v->nama_golongan.' - '.$v->jabatan_struktural; ?></option>
-                                <?php foreach($golongan as $gol){ ?>
+                                <option value="<?php echo $vs->id_gol; ?>"><?php echo $vs->id_gol; ?></option>
+                                <?php foreach($golongan_select as $gol){ ?>
                                 <option value="<?php echo $gol->id_gol; ?>"><?php echo $gol->nama_golongan.' - '.$gol->nama_jabatan; ?></option>
                                 <?php } ?>
                             </select>
@@ -148,7 +112,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Jenis Kelamin<span class="required">*</span></label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select id="jenis_kel" name="jenis_kel" class="form-control" required>
-                            <option value="<?php echo $key->jenis_kel; ?>"><?php echo $jk; ?></option>
+                            <option value="<?php echo $key->jenis_kel; ?>"><?php echo $this->pustaka->jk($key->jenis_kel); ?></option>
                             <option value="1">Laki-Laki</option>
                             <option value="2">Perempuan</option>
                           </select>
@@ -170,7 +134,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Status Nikah<span class="required">*</span></label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select id="status_nikah" name="status_nikah" class="form-control" required>
-                            <option value="<?php echo $key->status_nikah; ?>"><?php echo $sn; ?></option>
+                            <option value="<?php echo $key->status_nikah; ?>"><?php echo $this->pustaka->nikah($key->status_nikah); ?></option>
                             <option value="1">Menikah</option>
                             <option value="2">Belum Menikah</option>
                             <option value="3">Duda</option>
@@ -199,7 +163,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Status Profesi<span class="required">*</span></label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select id="status_profesi" name="status_profesi" class="form-control" required>
-                            <option value="<?php echo $key->status_profesi; ?>"><?php echo $pf; ?></option>
+                            <option value="<?php echo $key->status_profesi; ?>"><?php echo $this->pustaka->sp($key->status_profesi); ?></option>
                             <option value="1">JFU</option>
                             <option value="2">Dosen</option>
                             <option value="3">JFT</option>
@@ -263,8 +227,6 @@
                 </div>
               </div>
             </div>
-            
+
           </div>
    </div>
-
-   

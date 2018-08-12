@@ -10,8 +10,15 @@ class M_verifikator extends CI_Model{
 /*VERIFIKATOR*/
 function show_verifikator()
 {
-    $query = $this->db->get('verifikasi')->result();
-    return $query;
+  $this->db->select('*')
+           ->from('verifikasi')
+           ->join('tb_pegawai','verifikasi.nip = tb_pegawai.nip')
+           ->where('verifikasi.nip!=007')
+           ->order_by('verifikasi.nip ASC');
+  $query = $this->db->get()->result();
+  return $query;
+    // $query = $this->db->get('verifikasi')->result();
+    // return $query;
 }
 function insert_verifikator($data,$table)
 {
@@ -23,10 +30,23 @@ function insert_verifikator($data,$table)
         }
         return $msg;
 }
-function edit_verifikator($where,$table)
+
+function edit_verifikator($id)
 {
-    return $this->db->get_where($table,$where);
+  $this->db->select('verifikasi.*,tb_pegawai.nip,tb_pegawai.nama_peg')
+                  ->from('verifikasi')
+                  ->join('tb_pegawai','verifikasi.nip = tb_pegawai.nip')
+                  ->where('verifikasi.id_verifikator=', $id);
+  $query=$this->db->get()->result();
+  return $query;
 }
+
+function show_pegawai()
+{
+    $query = $this->db->get('tb_pegawai')->result();
+    return $query;
+}
+
 function update_verifikator($where,$data,$table)
 {
     $this->db->where($where);
@@ -110,24 +130,38 @@ function show_ketprodi()
 
 //PENILAIAN
 function show_viewpages(){
+  // $this->db->select('*')
+  //                 ->from('verifikasi')
+  //                 ->join('periode_lkd','verifikasi.id_periode=periode_lkd.id_periode')
+  //                 ->where('periode_lkd.status=', 1)
+  //                 ->where('verifikasi.assesor_1=', $this->session->userdata('nipp'))
+  //                 ->or_where('verifikasi.assesor_2=', $this->session->userdata('nipp'))
+  //                 ->or_where('verifikasi.ketua_prodi=', $this->session->userdata('nipp'))
+  //                 ->order_by('verifikasi.pegawai ASC');
   $this->db->select('*')
-                  ->from('verifikasi')
-                  ->join('periode_lkd','verifikasi.id_periode=periode_lkd.id_periode')
+                  ->from('verifikator')
+                  ->join('periode_lkd','verifikator.id_periode=periode_lkd.id_periode')
+                  ->join('verifikasi','verifikator.id_verifikator=verifikasi.id_verifikator')
                   ->where('periode_lkd.status=', 1)
-                  ->where('verifikasi.assesor_1=', $this->session->userdata('nipp'))
-                  ->or_where('verifikasi.assesor_2=', $this->session->userdata('nipp'))
-                  ->or_where('verifikasi.ketua_prodi=', $this->session->userdata('nipp'))
-                  ->order_by('verifikasi.pegawai ASC');
+                  ->where('verifikator.assesor_1=', $this->session->userdata('nipp'))
+                  ->or_where('verifikator.assesor_2=', $this->session->userdata('nipp'))
+                  ->or_where('verifikator.ketua_prodi=', $this->session->userdata('nipp'))
+                  ->order_by('verifikator.nip ASC');
   $query=$this->db->get()->result();
   return $query;
 }
 
 function show_file($id)
 {
+  // $ex = explode('#',$id);
+	// @$id_kegiatan = $ex[0];
+	// @$nama_file   = $ex[1];
+
   $this->db->select('*')
                   ->from('bkd_subkegiatan')
                   ->join('bkd_subkegiatan_file','bkd_subkegiatan.id_subkegiatan = bkd_subkegiatan_file.id_subkegiatan')
-                  ->where('bkd_subkegiatan.nip=', $id)
+                  ->where('bkd_subkegiatan_file.id_subkegiatan=', $id)
+                  // ->where('bkd_subkegiatan_file.nama_file=', $nama_file)
                   ->order_by('bkd_subkegiatan_file.id_subkegiatan');
   $query=$this->db->get()->result();
   return $query;

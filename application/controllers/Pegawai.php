@@ -8,6 +8,7 @@ public function __construct() {
   $this->is_logged_in();
   $this->load->model('M_pegawai');
   $this->load->model('M_master');
+  $this->load->model('M_dosen');
   $this->load->helper(array('form','url'));
   $this->acl = $this->session->userdata('acl');
 
@@ -21,6 +22,9 @@ function ceklink($url)
 
 public function index()
 {
+  $ids = $this->session->userdata('nipp');
+	$data['filter'] = $this->M_dosen->filter($ids);
+	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
   $data['name'] = $this->session->userdata('username');
   $data['nipp'] = $this->session->userdata('nipp');
   $data['level'] = $this->session->userdata('user_level');
@@ -38,7 +42,9 @@ public function resetPassword($id){
 }
 public function PegawaiAll()
 {
-  $this->output->cache(1);
+  $ids = $this->session->userdata('nipp');
+	$data['filter'] = $this->M_dosen->filter($ids);
+	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
   $data['name'] = $this->session->userdata('username');
   $data['nipp'] = $this->session->userdata('nipp');
   $data['level'] = $this->session->userdata('user_level');
@@ -53,6 +59,9 @@ public function PegawaiAll()
 public function FormPegawai()
 {
     if($this->session->userdata('user_level')==1){
+      $ids = $this->session->userdata('nipp');
+      $data['filter'] = $this->M_dosen->filter($ids);
+      $data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
         $data['name'] = $this->session->userdata('username');
         $data['nipp'] = $this->session->userdata('nipp');
         $data['golongan'] = $this->M_master->show_golongan();
@@ -64,6 +73,9 @@ public function FormPegawai()
         $this->load->view('pages/pegawai/pegawai_input');
         $this->load->view('layout/footer');
     }else {
+      $ids = $this->session->userdata('nipp');
+      $data['filter'] = $this->M_dosen->filter($ids);
+      $data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
         $data['name'] = $this->session->userdata('username');
         $data['nipp'] = $this->session->userdata('nipp');
         $this->load->view('layout/header',$data);
@@ -126,6 +138,9 @@ public function EditPegawai($id)
 {
   if($this->session->userdata('user_level')==1)
   {
+    $ids = $this->session->userdata('nipp');
+  	$data['filter'] = $this->M_dosen->filter($ids);
+  	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
         $data['name'] = $this->session->userdata('username');
         $data['nipp'] = $this->session->userdata('nipp');
         $where = array('nip' => $id);
@@ -141,6 +156,9 @@ public function EditPegawai($id)
         $this->load->view('layout/footer');
   }else
   {
+    $ids = $this->session->userdata('nipp');
+  	$data['filter'] = $this->M_dosen->filter($ids);
+  	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
         $data['name'] = $this->session->userdata('username');
         $data['nipp'] = $this->session->userdata('nipp');
         $this->load->view('layout/header',$data);
@@ -232,6 +250,9 @@ public function InputProfilPegawai()
 {
   if($this->session->userdata('user_level')==1)
   {
+    $ids = $this->session->userdata('nipp');
+  	$data['filter'] = $this->M_dosen->filter($ids);
+  	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
       $data['name'] = $this->session->userdata('username');
       $data['nipp'] = $this->session->userdata('nipp');
       $data['pegawai'] = $this->M_pegawai->show_pegawai_setting();
@@ -249,6 +270,9 @@ public function InputProfilPegawai()
       $this->load->view('pages/pegawai/pegawai_input_profil');
       $this->load->view('layout/footer_datatables');
   }else {
+    $ids = $this->session->userdata('nipp');
+  	$data['filter'] = $this->M_dosen->filter($ids);
+  	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
       $data['name'] = $this->session->userdata('username');
       $data['nipp'] = $this->session->userdata('nipp');
       $this->load->view('layout/header',$data);
@@ -432,6 +456,9 @@ $data = array(
 
 /*RIWAYAT PEGAWAI*/
 public function ProfilPegawai($id) {
+  $ids = $this->session->userdata('nipp');
+	$data['filter'] = $this->M_dosen->filter($ids);
+	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
         $data['name'] = $this->session->userdata('username');
         $data['nipp'] = $this->session->userdata('nipp');
         $where = array('nip' => $id);
@@ -452,6 +479,9 @@ public function SetOrganisasi()
 {
   if($this->session->userdata('user_level')==1)
   {
+    $ids = $this->session->userdata('nipp');
+  	$data['filter'] = $this->M_dosen->filter($ids);
+  	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
       $data['name'] = $this->session->userdata('username');
       $data['nipp'] = $this->session->userdata('nipp');
       $data['organisasi'] = $this->M_pegawai->show_organisasi();
@@ -466,6 +496,9 @@ public function SetOrganisasi()
       $this->load->view('pages/pegawai/pegawai_organisasi');
       $this->load->view('layout/footer_datatables');
   }else {
+    $ids = $this->session->userdata('nipp');
+  	$data['filter'] = $this->M_dosen->filter($ids);
+  	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
       $data['name'] = $this->session->userdata('username');
       $data['nipp'] = $this->session->userdata('nipp');
       $this->load->view('layout/header',$data);
@@ -497,10 +530,13 @@ function InsertSetOrganisasi() {
 
 /*EDIT PASSWORD */
 public function PegawaiPassword($id) {
+  $ids = $this->session->userdata('nipp');
+	$data['filter'] = $this->M_dosen->filter($ids);
+	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
 			$data['name'] = $this->session->userdata('username');
       $data['nipp'] = $this->session->userdata('nipp');
 			$where = array('nip' => $id);
-			$data['password'] = $this->M_pegawai->edit_password($where, 'tb_pegawai_profil')->result();
+			$data['password'] = $this->M_pegawai->edit_password($where, 'profil_dosen')->result();
 			$data['title'] = 'Edit Jabatan';
 			$this->load->view('layout/header',$data);
 			$this->load->view('layout/side_menu');
@@ -510,7 +546,7 @@ public function PegawaiPassword($id) {
 function UpdatePassword() {
 			$data = array('password' => md5($this->input->post('password')));
       $where = array('nip' => $this->input->post('nip'));
-      $this->M_pegawai->update_password($where, $data, 'tb_pegawai_profil');
+      $this->M_pegawai->update_password($where, $data, 'profil_dosen');
       echo "Update Succes"; redirect('Dashboard','refresh');
 }
 
@@ -521,6 +557,9 @@ function Success() {
 
 /*EDIT PROFIL */
 public function EditProfil($id) {
+  $ids = $this->session->userdata('nipp');
+	$data['filter'] = $this->M_dosen->filter($ids);
+	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
 			$data['name'] = $this->session->userdata('username');
       $data['nipp'] = $this->session->userdata('nipp');
 			$where = array('nip' => $id);
@@ -542,6 +581,9 @@ public function InputProfilDosen()
 {
   if($this->session->userdata('user_level')==1)
   {
+    $ids = $this->session->userdata('nipp');
+  	$data['filter'] = $this->M_dosen->filter($ids);
+  	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
       $data['name'] = $this->session->userdata('username');
       $data['nipp'] = $this->session->userdata('nipp');
       $data['pegawai'] = $this->M_pegawai->show_dosen_setting();
@@ -561,6 +603,9 @@ public function InputProfilDosen()
       $this->load->view('pages/pegawai/dosen_input_profil');
       $this->load->view('layout/footer_datatables');
   }else {
+    $ids = $this->session->userdata('nipp');
+  	$data['filter'] = $this->M_dosen->filter($ids);
+  	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
       $data['name'] = $this->session->userdata('username');
       $data['nipp'] = $this->session->userdata('nipp');
       $this->load->view('layout/header',$data);

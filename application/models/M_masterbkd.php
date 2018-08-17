@@ -285,6 +285,17 @@ function insert_bkd($data,$table)
         return $msg;
 }
 
+function insert_syarat($data,$table)
+{
+    $msg = '<i class="fa fa-check text-success"></i> Simpan Data Berhasil';
+    $this->db->insert($table, $data);
+    if($this->db->affected_rows() < 1 )
+        {
+            $msg = '<i class="fa fa-close text-danger"></i> Simpan data gagal.';
+        }
+        return $msg;
+}
+
 function insert_subbkd($data,$table)
 {
     $msg = '<i class="fa fa-check text-success"></i> Simpan Data Berhasil';

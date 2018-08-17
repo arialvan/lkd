@@ -50,7 +50,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Golongan<span class="required">*</span></label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select id="id_gol" name="id_gol" class="form-control" required>
-                                <option value="<?php echo $vs->id_gol; ?>"><?php echo $vs->id_gol; ?></option>
+                                <option value="<?php echo $vs->id_gol; ?>"><?php echo $vs->nama_golongan.' - '.$vs->nama_jabatan; ?></option>
                                 <?php foreach($golongan_select as $gol){ ?>
                                 <option value="<?php echo $gol->id_gol; ?>"><?php echo $gol->nama_golongan.' - '.$gol->nama_jabatan; ?></option>
                                 <?php } ?>
@@ -61,7 +61,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Agama<span class="required">*</span></label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select id="id_agama" name="id_agama" class="form-control" required>
-                                <option value="<?php echo $key->id_agama; ?>"><?php echo $key->id_agama; ?></option>
+                                <option value="<?php echo $key->id_agama; ?>"><?php echo $key->agama; ?></option>
                                 <?php foreach($agama as $ag){ ?>
                                 <option value="<?php echo $ag->id_agama; ?>"><?php echo $ag->agama; ?></option>
                                 <?php } ?>

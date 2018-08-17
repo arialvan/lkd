@@ -7,6 +7,7 @@ class Master extends CI_Controller {
             parent::__construct();
             $this->is_logged_in();
             $this->load->model('M_master');
+						$this->load->model('M_dosen');
             $this->load->helper(array('form', 'url'));
             $this->acl = $this->session->userdata('acl');
 
@@ -21,18 +22,24 @@ class Master extends CI_Controller {
 /*PERIODE*/
 public function Periode()
 {
+	$ids = $this->session->userdata('nipp');
+	$data['filter'] = $this->M_dosen->filter($ids);
+	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
     $data['name'] = $this->session->userdata('username');
 		$data['nipp'] = $this->session->userdata('nipp');
     $data['periodelkd'] = $this->M_master->show_periode();
     $data['title'] = 'Periode';
-    $this->load->view('layout/header',$data);
+    $this->load->view('layout/header_datatables',$data);
     $this->load->view('layout/side_menu');
     $this->load->view('pages/master/periode_view');
-    $this->load->view('layout/footer');
+    $this->load->view('layout/footer_datatables');
 }
 public function FormPeriode()
 {
     if($this->session->userdata('user_level')==1){
+			$id = $this->session->userdata('nipp');
+			$data['filter'] = $this->M_dosen->filter($id);
+			$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($id);
         $data['name'] = $this->session->userdata('username');
 				$data['nipp'] = $this->session->userdata('nipp');
         $data['title'] = 'Form Tambah Periode';
@@ -41,6 +48,9 @@ public function FormPeriode()
         $this->load->view('pages/master/periode_input');
         $this->load->view('layout/footer');
     }else {
+			$id = $this->session->userdata('nipp');
+			$data['filter'] = $this->M_dosen->filter($id);
+			$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($id);
         $data['name'] = $this->session->userdata('username');
 				$data['nipp'] = $this->session->userdata('nipp');
         $this->load->view('layout/header',$data);
@@ -65,6 +75,9 @@ public function EditPeriode($id)
 {
   if($this->session->userdata('user_level')==1)
   {
+		$ids = $this->session->userdata('nipp');
+		$data['filter'] = $this->M_dosen->filter($ids);
+		$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
         $data['name'] = $this->session->userdata('username');
 				$data['nipp'] = $this->session->userdata('nipp');
         $where = array('id_periode' => $id);
@@ -76,6 +89,9 @@ public function EditPeriode($id)
         $this->load->view('layout/footer');
   }else
   {
+		$ids = $this->session->userdata('nipp');
+		$data['filter'] = $this->M_dosen->filter($ids);
+		$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
         $data['name'] = $this->session->userdata('username');
 				$data['nipp'] = $this->session->userdata('nipp');
         $this->load->view('layout/header',$data);

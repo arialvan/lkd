@@ -8,6 +8,7 @@
             <div class="clearfix"></div>
             <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
+                <a href="<?php echo base_url() ?>RencanaKerja/Laporan" class="btn btn-primary">Kembali</a>
                   <div class="x_panel" style="">
                   <div class="x_title">
                     <ul class="nav navbar-right panel_toolbox">

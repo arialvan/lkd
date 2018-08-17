@@ -19,7 +19,7 @@
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
-                    <table id="datatable-buttons" class="table table-striped table-bordered">
+                    <table class="table table-striped table-bordered myTable display nowrap" style="width:100%">
                       <thead>
                         <tr>
                           <th>#</th>

@@ -3,7 +3,7 @@
             <div class="page-title">
               <div class="title_left">
               </div>
-              <?php //echo $this->uri->segment(3); ?>
+
             </div>
             <div class="clearfix"></div>
             <div class="col-md-12 col-sm-12 col-xs-12">
@@ -28,7 +28,7 @@ PENDIDIKAN
                           <th>Kegiatan</th>
                           <th>SKS</th>
                           <th>Status</th>
-                          <th>Action</th>
+                          <th>Laporan</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -44,13 +44,42 @@ PENDIDIKAN
                             </a>
                           </td>
                           <td><?php echo $dt->sks_subkegiatan; ?></td>
-                          <td><u><?php echo $this->pustaka->periksa($dt->app_ketuaprodi); ?></u></td>
+                          <td>
+                            <u><?php echo $this->pustaka->status($dt->status); ?></u><br />
+                            <?php
+                            if($dt->statusapp==0){
+                                echo"-";
+                            }else{
+                                $file = $dt->syarat_file;
+                                $file=explode('#',$dt->syarat_file);
+                                $atts = array('width'=> 800,'height'=> 600,'scrollbars'=>'yes','status'=>'yes',
+                                              'resizable'=>'yes','screenx'=>0,'screeny'=>0,'window_name' =>'_blank');
+                                  foreach ($file as $key => $value) {
+                                    //  $string_url = $dt->id_subkegiatan."#".$value;
+                                      echo anchor_popup('Verifikator/PeriksaLaporanDetailPDF/'.$dt->id_subkegiatan,'<span>'.$value.'</span><br />',$atts);
+                                  }
+                            }
+                            ?>
+                          </td>
                           <td>
                               <?php
-                                if($dt->app_ketuaprodi==1){
-                                  echo '<span class="btn btn-success">OK</span>';
+                              foreach($filter as $fl);
+                              //Assesor I
+                                if($fl->assesor_1==$this->session->userdata('nipp') && $dt->statusapp==1){
+                                  echo anchor('Verifikator/LaporanApproved/'.$dt->id_subkegiatan."-".$this->uri->segment(3)."-"."4",'<span class="btn btn-sm btn-danger">Tolak</span>');
+                                  echo anchor('Verifikator/LaporanApproved/'.$dt->id_subkegiatan."-".$this->uri->segment(3)."-"."2",'<span class="btn btn-sm btn-primary">Terima</span>');
+                                  echo '<br />'.$this->pustaka->p_laporan($dt->statusapp);
+                              //Assesor II
+                                }elseif($fl->assesor_2==$this->session->userdata('nipp') && $dt->statusapp==2){
+                                  echo anchor('Verifikator/LaporanApproved/'.$dt->id_subkegiatan."-".$this->uri->segment(3)."-"."5",'<span class="btn btn-sm btn-danger">Tolak</span>');
+                                  echo anchor('Verifikator/LaporanApproved/'.$dt->id_subkegiatan."-".$this->uri->segment(3)."-"."3",'<span class="btn btn-sm btn-primary">Terima</span>');
+                                  echo '<br />'.$this->pustaka->p_laporan($dt->statusapp);
+                              //Assesor II
+                                }elseif($fl->assesor_2==$this->session->userdata('nipp') && $dt->statusapp==3){
+                                  echo anchor('Verifikator/LaporanApproved/'.$dt->id_subkegiatan."-".$this->uri->segment(3)."-"."6",'<span class="btn btn-sm btn-danger">Perbaiki</span>');
+                                  echo '<br />'.$this->pustaka->p_laporan($dt->statusapp);
                                 }else{
-                                  echo anchor('Verifikator/RencanaApprove/'.$dt->id_subkegiatan."-".$this->uri->segment(3),'<span class="btn btn-primary">Approve</span>');
+                                  echo $this->pustaka->p_laporan($dt->statusapp);
                                 }
                               ?>
                           </td>
@@ -60,7 +89,7 @@ PENDIDIKAN
                     </table>
                   </div>
                   <div class="clearfix"></div>
-
+              </div>
 <!--
   =========================
   PENELTIAN
@@ -82,7 +111,7 @@ PENDIDIKAN
                           <th>Kegiatan</th>
                           <th>SKS</th>
                           <th>Status</th>
-                          <th>Action</th>
+                          <th>Laporan</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -104,13 +133,31 @@ PENDIDIKAN
                             </a>
                           </td>
                           <td><?php echo $dt1->sks_subkegiatan; ?></td>
-                          <td><u><?php echo $this->pustaka->periksa($dt1->app_ketuaprodi); ?></u></td>
+                          <td>
+                            <u><?php echo $this->pustaka->status($dt1->status); ?></u><br />
+                            <?php
+                            if($dt1->status==0){
+                                echo"-";
+                            }else{
+                                $file = $dt1->syarat_file;
+                                $file=explode('#',$dt1->syarat_file);
+                                $atts = array('width'=> 800,'height'=> 600,'scrollbars'=>'yes','status'=>'yes',
+                                              'resizable'=>'yes','screenx'=>0,'screeny'=>0,'window_name' =>'_blank');
+                                  foreach ($file as $key => $value) {
+                                    //  $string_url = $dt->id_subkegiatan."#".$value;
+                                      echo anchor_popup('Verifikator/PeriksaLaporanDetailPDF/'.$dt1->id_subkegiatan,'<span>'.$value.'</span><br />',$atts);
+                                  }
+                            }
+                            ?>
+                          </td>
                           <td>
                               <?php
-                                if($dt1->app_ketuaprodi==1){
-                                  echo '<span class="btn btn-success">OK</span>';
+                                if($dt1->status_laporan==0){
+                                  echo "-";
+                                }elseif($dt1->status_laporan==1){
+                                  echo anchor('Verifikator/PeriksaApproved/'.$dt1->id_subkegiatan,'<span class="btn btn-primary">Approve</span>');
                                 }else{
-                                  echo anchor('Verifikator/RencanaApprove/'.$dt1->id_subkegiatan."-".$this->uri->segment(3),'<span class="btn btn-primary">Approve</span>');
+                                  echo '<span class="btn btn-primary">OK</span>';
                                 }
                               ?>
                           </td>
@@ -134,11 +181,13 @@ PENDIDIKAN
                     <table id="datatable-buttons" class="table table-striped table-bordered">
                       <thead>
                         <tr>
-                          <th>#</th>
-                          <th>Kegiatan</th>
-                          <th>SKS</th>
-                          <th>Status</th>
-                          <th>Action</th>
+                          <tr>
+                            <th>#</th>
+                            <th>Kegiatan</th>
+                            <th>SKS</th>
+                            <th>Status</th>
+                            <th>Laporan</th>
+                          </tr>
                         </tr>
                       </thead>
                       <tbody>
@@ -160,13 +209,31 @@ PENDIDIKAN
                             </a>
                           </td>
                           <td><?php echo $dt2->sks_subkegiatan; ?></td>
-                          <td><u><?php echo $this->pustaka->periksa($dt2->app_ketuaprodi); ?></u></td>
+                          <td>
+                            <u><?php echo $this->pustaka->status($dt2->status); ?></u><br />
+                            <?php
+                            if($dt2->status==0){
+                                echo"-";
+                            }else{
+                                $file = $dt2->syarat_file;
+                                $file=explode('#',$dt2->syarat_file);
+                                $atts = array('width'=> 800,'height'=> 600,'scrollbars'=>'yes','status'=>'yes',
+                                              'resizable'=>'yes','screenx'=>0,'screeny'=>0,'window_name' =>'_blank');
+                                  foreach ($file as $key => $values) {
+                                    //  $string_url = $dt->id_subkegiatan."#".$value;
+                                      echo anchor_popup('Verifikator/PeriksaLaporanDetailPDF/'.$dt2->id_subkegiatan,'<span>'.$values.'</span><br />',$atts);
+                                  }
+                            }
+                            ?>
+                          </td>
                           <td>
                               <?php
-                                if($dt2->app_ketuaprodi==1){
-                                  echo '<span class="btn btn-success">OK</span>';
+                                if($dt2->status_laporan==0){
+                                  echo "-";
+                                }elseif($dt2->status_laporan==1){
+                                  echo anchor('Verifikator/PeriksaApproved/'.$dt2->id_subkegiatan,'<span class="btn btn-primary">Approve</span>');
                                 }else{
-                                  echo anchor('Verifikator/RencanaApprove/'.$dt2->id_subkegiatan."-".$this->uri->segment(3),'<span class="btn btn-primary">Approve</span>');
+                                  echo '<span class="btn btn-primary">OK</span>';
                                 }
                               ?>
                           </td>
@@ -195,7 +262,7 @@ PENDIDIKAN
                           <th>Kegiatan</th>
                           <th>SKS</th>
                           <th>Status</th>
-                          <th>Action</th>
+                          <th>Laporan</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -217,13 +284,31 @@ PENDIDIKAN
                             </a>
                           </td>
                           <td><?php echo $dt3->sks_subkegiatan; ?></td>
-                          <td><u><?php echo $this->pustaka->periksa($dt3->app_ketuaprodi); ?></u></td>
+                          <td>
+                            <u><?php echo $this->pustaka->status($dt3->status); ?></u><br />
+                            <?php
+                            if($dt3->status==0){
+                                echo"-";
+                            }else{
+                                $file = $dt3->syarat_file;
+                                $file=explode('#',$dt3->syarat_file);
+                                $atts = array('width'=> 800,'height'=> 600,'scrollbars'=>'yes','status'=>'yes',
+                                              'resizable'=>'yes','screenx'=>0,'screeny'=>0,'window_name' =>'_blank');
+                                  foreach ($file as $key => $valuess) {
+                                    //  $string_url = $dt->id_subkegiatan."#".$value;
+                                      echo anchor_popup('Verifikator/PeriksaLaporanDetailPDF/'.$dt3->id_subkegiatan,'<span>'.$valuess.'</span><br />',$atts);
+                                  }
+                            }
+                            ?>
+                          </td>
                           <td>
                               <?php
-                                if($dt3->app_ketuaprodi==1){
-                                  echo '<span class="btn btn-success">OK</span>';
+                                if($dt3->status_laporan==0){
+                                  echo "-";
+                                }elseif($dt3->status_laporan==1){
+                                  echo anchor('Verifikator/PeriksaApproved/'.$dt3->id_subkegiatan,'<span class="btn btn-primary">Approve</span>');
                                 }else{
-                                  echo anchor('Verifikator/RencanaApprove/'.$dt3->id_subkegiatan."-".$this->uri->segment(3),'<span class="btn btn-primary">Approve</span>');
+                                  echo '<span class="btn btn-primary">OK</span>';
                                 }
                               ?>
                           </td>
@@ -235,35 +320,6 @@ PENDIDIKAN
                   <div class="clearfix"></div>
                 </div>
 
-              </div>
           </div>
-
-          <!-- MODAL PENDIDIKAN -->
-                            <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="cek_file" class="modal fade">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
-                                            <h4 class="modal-title">Ubah Data</h4>
-                                        </div>
-                                        <form class="form form-horizontal" role="form" method="post" action="<?php echo base_url(); ?>RencanaKerja/UpdateRencana">
-                                          <input type="text" class="form-control" id="id_subkegiatan" name="id_subkegiatan" />
-                                          <input type="text" class="form-control" id="syarat_file1" name="id_subkegiatan" />
-                                          <div class="modal-body">
-                                                  <div class="form-group">
-                                                      <label class="col-lg-2 col-sm-2 control-label">Kegiatan</label>
-                                                      <div class="col-lg-10">
-                                                          <input type="text" class="form-control" id="kegiatan" name="kegiatan" disabled />
-                                                      </div>
-                                                  </div>
-                            	                </div>
-                            	                <div class="modal-footer">
-                            	                    <button class="btn btn-info" type="submit"> Simpan&nbsp;</button>
-                            	                    <button type="button" class="btn btn-warning" data-dismiss="modal"> Batal</button>
-                            	                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
                           </div>
    </div>

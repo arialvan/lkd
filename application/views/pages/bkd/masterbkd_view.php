@@ -16,7 +16,7 @@
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
-                    <table id="datatable-buttons" class="table table-striped table-bordered">
+                    <table class="table table-striped table-bordered myTable display nowrap" style="width:100%">
                       <thead>
                         <tr>
                           <th>#</th>
@@ -52,14 +52,13 @@
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                     </ul>
                     <div class="clearfix"></div>
+                    <h5>PENDIDIKAN</h5>
                   </div>
                   <div class="x_content">
-
-                    <h5>Pendidikan</h5>
                     <div class="warning kotak">
                       Tanda centang <span class='glyphicon glyphicon-check' title='Di hitung BKD'></span> menandakan kegiatan tersebut di hitung dalam perhitungan skema BKD
                     </div> <br />
-                    <table id="datatable-buttons" class="table table-striped table-bordered">
+                    <table class="table table-striped table-bordered myTable display nowrap" style="width:100%">
                       <thead>
                         <tr>
                           <th>#</th>
@@ -75,17 +74,17 @@
                         <?php
                         $no = 1;
                         foreach($pendidikan as $dt1){
-                        if($dt1->syarat=='1'){ $s="<span class='glyphicon glyphicon-check' title='Di hitung BKD'></span>";}else{ $s="<span></span>"; }
-                        if($dt1->bkd_hitung=='1'){ $bkd="<span class='glyphicon glyphicon-ok' title='Ya'></span>";}else{ $bkd="<span class='glyphicon glyphicon-remove' title='Tidak'></span>"; }
-                        if($dt1->renum_hitung=='1'){ $remun="<span class='glyphicon glyphicon-ok' title='Ya'></span>";}else{ $remun="<span class='glyphicon glyphicon-remove' title='Tidak'></span>"; }
+                          if($dt1->bkd_hitung=='1' && $dt1->renum_hitung=='1'){ $kegiatans="<b><span class='text text-success'>".$dt1->kegiatan."</span></b>";}
+                          if($dt1->bkd_hitung=='1' && $dt1->renum_hitung=='0'){ $kegiatans="<b><span class='text text-warning'>".$dt1->kegiatan."</span></b>";}
+                          if($dt1->bkd_hitung=='0' && $dt1->renum_hitung=='1'){ $kegiatans="<b><span class='text text-danger'>".$dt1->kegiatan."</span></b>";}
 
                         ?>
                         <tr>
-                          <th scope="row"><?php echo $no++.'&nbsp;&nbsp;'.$s; ?></th>
-                          <td><?php echo $dt1->kegiatan; ?></td>
-                          <td><?php echo $bkd; ?></td>
+                          <th scope="row"><?php echo $no++.'&nbsp;&nbsp;'.$this->pustaka->syarat($dt1->syarat); ?></th>
+                          <td><?php echo $kegiatans; ?></td>
+                          <td><?php echo $this->pustaka->syarat1($dt1->bkd_hitung); ?></td>
                           <td><?php echo $dt1->bkd_sks; ?></td>
-                          <td><?php echo $remun; ?></td>
+                          <td><?php echo $this->pustaka->syarat1($dt1->renum_hitung); ?></td>
                           <td><?php echo $dt1->poin; ?></td>
                           <td>
                               <?php echo anchor('MasterBkd/EditSubBkd/'.$dt1->id_kegiatan,'<span class="btn-sm btn-success">Edit</span>'); ?>
@@ -95,9 +94,21 @@
                         <?php } ?>
                       </tbody>
                     </table>
+                  </div>
+              <div class="clearfix"></div>
+            </div>
 
-                    <h5>Penelitian</h5>
-                    <table class="table table-striped table-bordered">
+
+            <div class="x_panel">
+              <div class="x_title">
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+                <h5>PENELITIAN</h5>
+              </div>
+              <div class="x_content">
+                    <table class="table table-striped table-bordered myTable display nowrap" style="width:100%">
                       <thead>
                         <tr>
                           <th>#</th>
@@ -113,17 +124,17 @@
                         <?php
                         $no = 1;
                         foreach($penelitian as $dt2){
-                        if($dt2->syarat=='1'){ $s="<span class='glyphicon glyphicon-check' title='Di hitung BKD'></span>";}else{ $s="<span></span>"; }
-                        if($dt2->bkd_hitung=='1'){ $bkd="<span class='glyphicon glyphicon-ok' title='Ya'></span>";}else{ $bkd="<span class='glyphicon glyphicon-remove' title='Tidak'></span>"; }
-                        if($dt2->renum_hitung=='1'){ $remun="<span class='glyphicon glyphicon-ok' title='Ya'></span>";}else{ $remun="<span class='glyphicon glyphicon-remove' title='Tidak'></span>"; }
+                          if($dt2->bkd_hitung=='1' && $dt2->renum_hitung=='1'){ $kegiatans="<b><span class='text text-success'>".$dt2->kegiatan."</span></b>";}
+                          if($dt2->bkd_hitung=='1' && $dt2->renum_hitung=='0'){ $kegiatans="<b><span class='text text-warning'>".$dt2->kegiatan."</span></b>";}
+                          if($dt2->bkd_hitung=='0' && $dt2->renum_hitung=='1'){ $kegiatans="<b><span class='text text-danger'>".$dt2->kegiatan."</span></b>";}
 
                         ?>
                         <tr>
-                          <th scope="row"><?php echo $no++.'&nbsp;&nbsp;'.$s; ?></th>
-                          <td><?php echo $dt2->kegiatan; ?></td>
-                          <td><?php echo $bkd; ?></td>
+                          <th scope="row"><?php echo $no++.'&nbsp;&nbsp;'.$this->pustaka->syarat($dt2->syarat); ?></th>
+                          <td><?php echo $kegiatans; ?></td>
+                          <td><?php echo $this->pustaka->syarat1($dt2->bkd_hitung); ?></td>
                           <td><?php echo $dt2->bkd_sks; ?></td>
-                          <td><?php echo $remun; ?></td>
+                          <td><?php echo $this->pustaka->syarat1($dt2->renum_hitung); ?></td>
                           <td><?php echo $dt2->poin; ?></td>
                           <td>
                               <?php echo anchor('MasterBkd/EditSubBkd/'.$dt2->id_kegiatan,'<span class="btn-sm btn-success">Edit</span>'); ?>
@@ -133,10 +144,21 @@
                         <?php } ?>
                       </tbody>
                     </table>
+                  </div>
+              <div class="clearfix"></div>
+            </div>
 
 
-                    <h5>Pengabdian</h5>
-                    <table class="table table-striped table-bordered">
+            <div class="x_panel">
+              <div class="x_title">
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+                <h5>PENGABDIAN</h5>
+              </div>
+              <div class="x_content">
+                    <table class="table table-striped table-bordered myTable display nowrap" style="width:100%">
                       <thead>
                         <tr>
                           <th>#</th>
@@ -152,17 +174,17 @@
                         <?php
                         $no = 1;
                         foreach($pengabdian as $dt3){
-                        if($dt3->syarat=='1'){ $s="<span class='glyphicon glyphicon-check' title='Di hitung BKD'></span>";}else{ $s="<span></span>"; }
-                        if($dt3->bkd_hitung=='1'){ $bkd="<span class='glyphicon glyphicon-ok' title='Ya'></span>";}else{ $bkd="<span class='glyphicon glyphicon-remove' title='Tidak'></span>"; }
-                        if($dt3->renum_hitung=='1'){ $remun="<span class='glyphicon glyphicon-ok' title='Ya'></span>";}else{ $remun="<span class='glyphicon glyphicon-remove' title='Tidak'></span>"; }
+                          if($dt3->bkd_hitung=='1' && $dt3->renum_hitung=='1'){ $kegiatans="<b><span class='text text-success'>".$dt3->kegiatan."</span></b>";}
+                          if($dt3->bkd_hitung=='1' && $dt3->renum_hitung=='0'){ $kegiatans="<b><span class='text text-warning'>".$dt3->kegiatan."</span></b>";}
+                          if($dt3->bkd_hitung=='0' && $dt3->renum_hitung=='1'){ $kegiatans="<b><span class='text text-danger'>".$dt3->kegiatan."</span></b>";}
 
                         ?>
                         <tr>
-                          <th scope="row"><?php echo $no++.'&nbsp;&nbsp;'.$s; ?></th>
-                          <td><?php echo $dt3->kegiatan; ?></td>
-                          <td><?php echo $bkd; ?></td>
+                          <th scope="row"><?php echo $no++.'&nbsp;&nbsp;'.$this->pustaka->syarat($dt3->syarat); ?></th>
+                          <td><?php echo $kegiatans; ?></td>
+                          <td><?php echo $this->pustaka->syarat1($dt3->bkd_hitung); ?></td>
                           <td><?php echo $dt3->bkd_sks; ?></td>
-                          <td><?php echo $remun; ?></td>
+                          <td><?php echo $this->pustaka->syarat1($dt3->renum_hitung); ?></td>
                           <td><?php echo $dt3->poin; ?></td>
                           <td>
                               <?php echo anchor('MasterBkd/EditSubBkd/'.$dt3->id_kegiatan,'<span class="btn-sm btn-success">Edit</span>'); ?>
@@ -172,9 +194,20 @@
                         <?php } ?>
                       </tbody>
                     </table>
+                  </div>
+              <div class="clearfix"></div>
+            </div>
 
-                    <h5>Penunjang</h5>
-                    <table id="datatable-buttons" class="table table-striped table-bordered">
+            <div class="x_panel">
+              <div class="x_title">
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+                <h5>PENUNJANG</h5>
+              </div>
+              <div class="x_content">
+                    <table class="table table-striped table-bordered myTable display nowrap" style="width:100%">
                       <thead>
                         <tr>
                           <th>#</th>
@@ -190,17 +223,17 @@
                         <?php
                         $no = 1;
                         foreach($penunjang as $dt4){
-                        if($dt4->syarat=='1'){ $s="<span class='glyphicon glyphicon-check' title='Di hitung BKD'></span>";}else{ $s="<span></span>"; }
-                        if($dt4->bkd_hitung=='1'){ $bkd="<span class='glyphicon glyphicon-ok' title='Ya'></span>";}else{ $bkd="<span class='glyphicon glyphicon-remove' title='Tidak'></span>"; }
-                        if($dt4->renum_hitung=='1'){ $remun="<span class='glyphicon glyphicon-ok' title='Ya'></span>";}else{ $remun="<span class='glyphicon glyphicon-remove' title='Tidak'></span>"; }
+                          if($dt4->bkd_hitung=='1' && $dt4->renum_hitung=='1'){ $kegiatans="<b><span class='text text-success'>".$dt4->kegiatan."</span></b>";}
+                          if($dt4->bkd_hitung=='1' && $dt4->renum_hitung=='0'){ $kegiatans="<b><span class='text text-warning'>".$dt4->kegiatan."</span></b>";}
+                          if($dt4->bkd_hitung=='0' && $dt4->renum_hitung=='1'){ $kegiatans="<b><span class='text text-danger'>".$dt4->kegiatan."</span></b>";}
 
                         ?>
                         <tr>
-                          <th scope="row"><?php echo $no++.'&nbsp;&nbsp;'.$s; ?></th>
-                          <td><?php echo $dt4->kegiatan; ?></td>
-                          <td><?php echo $bkd; ?></td>
+                          <th scope="row"><?php echo $no++.'&nbsp;&nbsp;'.$this->pustaka->syarat($dt4->syarat); ?></th>
+                          <td><?php echo $kegiatans; ?></td>
+                          <td><?php echo $this->pustaka->syarat1($dt4->bkd_hitung); ?></td>
                           <td><?php echo $dt4->bkd_sks; ?></td>
-                          <td><?php echo $remun; ?></td>
+                          <td><?php echo $this->pustaka->syarat1($dt4->renum_hitung); ?></td>
                           <td><?php echo $dt4->poin; ?></td>
                           <td>
                               <?php echo anchor('MasterBkd/EditSubBkd/'.$dt4->id_kegiatan,'<span class="btn-sm btn-success">Edit</span>'); ?>

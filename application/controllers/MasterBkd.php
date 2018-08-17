@@ -9,6 +9,7 @@ class MasterBkd extends CI_Controller {
             $this->load->model('M_masterbkd');
 						$this->load->model('M_verifikator');
 						$this->load->model('M_pegawai');
+						$this->load->model('M_dosen');
             $this->load->helper(array('form', 'url'));
             $this->acl = $this->session->userdata('acl');
 
@@ -23,6 +24,9 @@ class MasterBkd extends CI_Controller {
 /*INDEX*/
 public function index()
 	{
+		$ids = $this->session->userdata('nipp');
+		$data['filter'] = $this->M_dosen->filter($ids);
+		$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
 	 	$data['name'] = $this->session->userdata('username');
 		$data['nipp'] = $this->session->userdata('nipp');
 		$data['bkd'] = $this->M_masterbkd->show_bkd();
@@ -40,6 +44,9 @@ public function index()
 /*BKD*/
 public function FormBkd()
 {
+	$ids = $this->session->userdata('nipp');
+	$data['filter'] = $this->M_dosen->filter($ids);
+	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
       $data['name'] = $this->session->userdata('username');
 			$data['nipp'] = $this->session->userdata('nipp');
 			//$data['periode'] = $this->M_masterbkd->show_periode();
@@ -49,7 +56,6 @@ public function FormBkd()
       $this->load->view('pages/bkd/inputbkd');
       $this->load->view('layout/footer');
 }
-
 
 function InsertBkd()
 {
@@ -64,6 +70,9 @@ function InsertBkd()
 
 public function EditBkd($id)
 {
+	$ids = $this->session->userdata('nipp');
+	$data['filter'] = $this->M_dosen->filter($ids);
+	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
         $data['name'] = $this->session->userdata('username');
 				$data['nipp'] = $this->session->userdata('nipp');
         $where = array('id_bkd' => $id);
@@ -93,9 +102,35 @@ function HapusBkd($id) {
     redirect('MasterBkd','refresh');
 }
 
+/* SYARAT FILE */
+public function SyaratFile()
+{
+	$ids = $this->session->userdata('nipp');
+	$data['filter'] = $this->M_dosen->filter($ids);
+	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
+      $data['name'] = $this->session->userdata('username');
+			$data['nipp'] = $this->session->userdata('nipp');
+			//$data['periode'] = $this->M_masterbkd->show_periode();
+      $data['title'] = 'Input Syarat File';
+      $this->load->view('layout/header',$data);
+      $this->load->view('layout/side_menu');
+      $this->load->view('pages/bkd/inputsyarat');
+      $this->load->view('layout/footer');
+}
+
+function InsertSyarat()
+{
+			$data = array('nama_file' => $this->input->post('nama_file'));
+      $this->M_masterbkd->insert_syarat($data, 'bkd_buktifisik');
+			redirect('MasterBkd/SyaratFile');
+}
+
 /*SUB BKD*/
 public function FormSubBkd()
 {
+	$ids = $this->session->userdata('nipp');
+	$data['filter'] = $this->M_dosen->filter($ids);
+	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
       $data['name'] = $this->session->userdata('username');
 			$data['nipp'] = $this->session->userdata('nipp');
 			$data['bkd'] = $this->M_masterbkd->show_bkd();
@@ -159,6 +194,9 @@ function InsertSubBkd()
 
 public function EditSubBkd($id)
 {
+	$ids = $this->session->userdata('nipp');
+	$data['filter'] = $this->M_dosen->filter($ids);
+	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
         $data['name'] = $this->session->userdata('username');
 				$data['nipp'] = $this->session->userdata('nipp');
         $where = array('id_kegiatan' => $id);
@@ -174,7 +212,7 @@ public function EditSubBkd($id)
 
 function UpdateSubBkd()
 {
-	if($this->input->post('syarat_file')!=null) {
+	if($this->input->post('syarat_file')!==null) {
 		$file = $this->input->post('syarat_file');
 		foreach ($file as $key => $value) {
 			$files[]=$value;
@@ -217,6 +255,9 @@ function HapusSubBkd($id) {
 /* RENUMERASI */
 public function Renumerasi()
 	{
+		$ids = $this->session->userdata('nipp');
+		$data['filter'] = $this->M_dosen->filter($ids);
+		$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
 	 	$data['name'] = $this->session->userdata('username');
 		$data['nipp'] = $this->session->userdata('nipp');
 		$data['remun'] = $this->M_masterbkd->show_bkd_kegiatan();
@@ -229,6 +270,9 @@ public function Renumerasi()
 
 public function FormRenumerasi()
 {
+	$ids = $this->session->userdata('nipp');
+	$data['filter'] = $this->M_dosen->filter($ids);
+	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
       $data['name'] = $this->session->userdata('username');
 			$data['nipp'] = $this->session->userdata('nipp');
 			$data['remun'] = $this->M_masterbkd->show_bkd();
@@ -255,6 +299,9 @@ function InsertRenumerasi()
 
 public function EditRenumerasi($id)
 {
+	$ids = $this->session->userdata('nipp');
+	$data['filter'] = $this->M_dosen->filter($ids);
+	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
         $data['name'] = $this->session->userdata('username');
 				$data['nipp'] = $this->session->userdata('nipp');
         $where = array('id_kegiatan' => $id);
@@ -386,6 +433,9 @@ function EditTable3()
 /*PROFIL DOSEN*/
 public function ProfilDosen()
 	{
+		$ids = $this->session->userdata('nipp');
+		$data['filter'] = $this->M_dosen->filter($ids);
+		$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
 	 	$data['name'] = $this->session->userdata('username');
 		$data['nipp'] = $this->session->userdata('nipp');
 		$data['dosen'] = $this->M_masterbkd->show_katdosen();
@@ -400,6 +450,9 @@ public function ProfilDosen()
 
 	public function FormKatDosen()
 	{
+		$ids = $this->session->userdata('nipp');
+		$data['filter'] = $this->M_dosen->filter($ids);
+		$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
 	      $data['name'] = $this->session->userdata('username');
 				$data['nipp'] = $this->session->userdata('nipp');
 	      $data['title'] = 'Input Kategori Dosen';
@@ -422,6 +475,9 @@ public function ProfilDosen()
 	/* Edit Skema Renumerasi */
 	public function EditSkema($id)
 	{
+		$ids = $this->session->userdata('nipp');
+		$data['filter'] = $this->M_dosen->filter($ids);
+		$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
 		$data['name'] = $this->session->userdata('username');
 		$data['nipp'] = $this->session->userdata('nipp');
 		$data['dosen'] = $this->M_masterbkd->edit_bkd_remun($id)->result();
@@ -452,6 +508,9 @@ public function ProfilDosen()
 
 	public function EditKatDosen($id)
 	{
+		$ids = $this->session->userdata('nipp');
+		$data['filter'] = $this->M_dosen->filter($ids);
+		$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
 	        $data['name'] = $this->session->userdata('username');
 					$data['nipp'] = $this->session->userdata('nipp');
 	        $where = array('id_kat_dosen' => $id);
@@ -484,6 +543,9 @@ public function ProfilDosen()
 /* INSERT SKEMA BKD DAN REMUNERASI */
 public function FormSkema()
 {
+	$ids = $this->session->userdata('nipp');
+	$data['filter'] = $this->M_dosen->filter($ids);
+	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
       $data['name']  = $this->session->userdata('username');
 			$data['nipp'] = $this->session->userdata('nipp');
 			$data['dosen'] = $this->M_masterbkd->show_katdosen();

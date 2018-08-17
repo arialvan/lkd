@@ -9,6 +9,7 @@ class Import extends CI_Controller
                     $this->load->library('excel');//load PHPExcel library
                     //$this->load->model('upload_model');//To Upload file in a directory
                     $this->load->model('M_excel_data_insert_model');
+                    $this->load->model('M_dosen');
                     $this->acl = $this->session->userdata('acl');
         }
 
@@ -23,6 +24,9 @@ public function index()
 {
     if($this->session->userdata('user_level')==1)
     {
+      $id = $this->session->userdata('nipp');
+      $data['filter'] = $this->M_dosen->filter($id);
+      $data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($id);
         $data['name'] = $this->session->userdata('username');
         $data['nipp'] = $this->session->userdata('nipp');
         $data['title'] = 'Import Data Pegawai';
@@ -31,6 +35,9 @@ public function index()
         $this->load->view('pages/pegawai/pegawai_import');
         $this->load->view('layout/footer');
     }else{
+      $id = $this->session->userdata('nipp');
+      $data['filter'] = $this->M_dosen->filter($id);
+      $data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($id);
         $data['name'] = $this->session->userdata('username');
         $data['nipp'] = $this->session->userdata('nipp');
         $this->load->view('layout/header',$data);

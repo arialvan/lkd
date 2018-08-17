@@ -17,30 +17,30 @@
                   </div>
                   <div class="x_content">
                     <br />
-                    <?php 
-                        foreach($periode as $key); 
-                        if($key->status==1){$status="Aktif";}else {$status="Tidak Aktif";}
+                    <?php
+                        foreach($periode as $keys);
+                        if($keys->status==1){$status="Aktif";}else {$status="Tidak Aktif";}
                     ?>
                     <form class="form form-horizontal" role="form" method="post" action="<?php echo base_url(); ?>Master/UpdatePeriode">
-                       <input type="hidden" name="id_periode" id="id_periode" value="<?php echo $key->id_periode; ?>">
+                       <input type="hidden" name="id_periode" id="id_periode" value="<?php echo $keys->id_periode; ?>">
                        <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Periode<span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="text" name="periode" id="periode" class="form-control col-md-7 col-xs-12" value="<?php echo $key->periode; ?>">
+                          <input type="text" name="periode" id="periode" class="form-control col-md-7 col-xs-12" value="<?php echo $keys->periode; ?>">
                         </div>
                         </div>
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Status<span class="required">*</span></label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <select id="id_gol" name="status" class="form-control" required>
-                                <option value="<?php echo $key->status; ?>"><?php echo $status; ?></option>
+                                <option value="<?php echo $keys->status; ?>"><?php echo $status; ?></option>
                                 <option value="1">Aktif</option>
                                 <option value="2">Tidak Aktif</option>
                             </select>
                         </div>
                       </div>
-                                           
+
                       <div class="ln_solid"></div>
                       <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
@@ -52,8 +52,6 @@
                 </div>
               </div>
             </div>
-            
+
           </div>
    </div>
-
-   

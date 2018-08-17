@@ -21,6 +21,9 @@ class Dosen extends CI_Controller {
 /*VERIFIKATOR*/
 public function index()
 {
+	$id = $this->session->userdata('nipp');
+	$data['filter'] = $this->M_dosen->filter($id);
+	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($id);
   $data['name'] = $this->session->userdata('username');
 	$data['nipp'] = $this->session->userdata('nipp');
   $data['dosen'] = $this->M_dosen->show_dosen();
@@ -35,6 +38,9 @@ public function index()
 public function FormDosen()
 {
     if($this->session->userdata('user_level')==1){
+			$id = $this->session->userdata('nipp');
+			$data['filter'] = $this->M_dosen->filter($id);
+			$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($id);
         $data['name']    = $this->session->userdata('username');
 				$data['nipp'] = $this->session->userdata('nipp');
         $data['dosen']   = $this->M_dosen->show_dosen_profil();
@@ -46,6 +52,9 @@ public function FormDosen()
         $this->load->view('pages/dosen/dosen_input');
         $this->load->view('layout/footer_datatables');
     }else {
+			$id = $this->session->userdata('nipp');
+			$data['filter'] = $this->M_dosen->filter($id);
+			$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($id);
         $data['name'] = $this->session->userdata('username');
 				$data['nipp'] = $this->session->userdata('nipp');
         $this->load->view('layout/header',$data);
@@ -80,6 +89,9 @@ public function EditVerifikator($id)
 {
   if($this->session->userdata('user_level')==1)
   {
+		$id = $this->session->userdata('nipp');
+		$data['filter'] = $this->M_dosen->filter($id);
+		$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($id);
         $data['name'] = $this->session->userdata('username');
 				$data['nipp'] = $this->session->userdata('nipp');
         $where = array('id_verifikator' => $id);
@@ -91,6 +103,9 @@ public function EditVerifikator($id)
         $this->load->view('layout/footer');
   }else
   {
+		$id = $this->session->userdata('nipp');
+		$data['filter'] = $this->M_dosen->filter($id);
+		$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($id);
         $data['name'] = $this->session->userdata('username');
 				$data['nipp'] = $this->session->userdata('nipp');
         $this->load->view('layout/header',$data);

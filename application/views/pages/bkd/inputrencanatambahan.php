@@ -17,7 +17,7 @@
                   </div>
                   <div class="x_content">
                     <br />
-                    <form class="form form-horizontal" role="form" method="post" action="<?php echo base_url(); ?>RencanaKerja/InsertRencana">
+                    <form class="form form-horizontal" role="form" method="post" action="<?php echo base_url(); ?>RencanaKerja/InsertRencanaTambahan">
 
                       <div id="field">
                       <div id="field0">

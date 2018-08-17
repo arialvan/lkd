@@ -18,7 +18,7 @@
     <link href="<?php echo base_url(); ?>assets/vendors/nprogress/nprogress.css" rel="stylesheet">
    <!-- bootstrap-datetimepicker -->
     <link href="<?php echo base_url(); ?>assets/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
-
+    <link href="<?php echo base_url(); ?>assets/vendors/bootstrap-select/bootstrap-select.min.css" rel="stylesheet">
     <!-- Custom Theme Style -->
     <link href="<?php echo base_url(); ?>assets/build/css/custom.min.css" rel="stylesheet">
     <style type="text/css">

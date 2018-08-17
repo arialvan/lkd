@@ -2,11 +2,18 @@
           <div class="">
             <div class="page-title">
               <div class="title_left">
-                <h3><?php echo $title; ?></h3>
+                <h3><?php //echo $title; ?></h3>
               </div>
             </div>
             <div class="clearfix"></div>
             <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="alert alert-success fade in">
+                  <a href="#" class="close" data-dismiss="alert">&times;</a>
+                      <fieldset>
+                        <legend></legend>
+                          <span><strong>HALAMAN ASSESOR</strong></span>
+                      </fieldset>
+              </div>
                 <div class="x_panel">
                   <div class="x_title">
                     <ul class="nav navbar-right panel_toolbox">
@@ -15,14 +22,12 @@
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
-                    <table class="table table-striped table-bordered myTable display nowrap" style="width:100%">
+                    <table id="datatable-buttons" class="table table-striped table-bordered">
                       <thead>
                         <tr>
                           <th>#</th>
                           <th>Nip</th>
                           <th>Nama</th>
-                          <th>Kategori Dosen</th>
-                          <th>Pendidikan Terakhir</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -34,15 +39,9 @@
                         <tr>
                           <th scope="row"><?php echo $no++; ?></th>
                           <td><?php echo $dt->nip; ?></td>
-                          <td><?php echo $dt->nama_peg; ?></td>
-                          <td><?php echo $dt->kategori_dosen; ?></td>
-                          <td><?php echo $dt->s3; ?></td>
+                          <td><?php echo $dt->pegawai; ?></td>
                           <td>
-                              <?php echo anchor('Pegawai/ProfilPegawai/'.$dt->nip,'<span class="glyphicon glyphicon-arrow-right" title="Detil Data"></span>'); ?>&nbsp;&nbsp;
-                              <?php if($level==1){ ?>
-                              <?php echo anchor('Pegawai/EditPegawai/'.$dt->nip,'<span class="glyphicon glyphicon-pencil" title="Edit Data"></span>'); ?>
-                              <?php echo anchor('Pegawai/resetPassword/'.$dt->nip,'<span class="glyphicon glyphicon-refresh" title="Reset Password"></span>'); ?>
-                              <?php } ?>
+                              <?php echo anchor('Verifikator/RekapRencanaDetail/'.$dt->nip,'<span class="glyphicon glyphicon-arrow-right" title="Detil Data"></span>'); ?>
                           </td>
                         </tr>
                         <?php } ?>

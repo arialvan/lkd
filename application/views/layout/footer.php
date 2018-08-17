@@ -22,7 +22,7 @@
     <script src="<?php echo base_url(); ?>assets/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
     <!-- bootstrap-datetimepicker -->
     <script src="<?php echo base_url(); ?>assets/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
-
+    <script src="<?php echo base_url(); ?>assets/vendors/bootstrap-select/bootstrap-select.min.js"></script>
     <!-- Custom Theme Scripts -->
     <script src="<?php echo base_url(); ?>assets/build/js/custom.min.js"></script>
 
@@ -52,39 +52,71 @@
         var hash = window.location.hash;
         $('#myTab a[href="' + hash + '"]').tab('show');
 
-
 // Add Multiple field Rencana Kerja
-            $(document).ready(function () {
-                //@naresh action dynamic childs
-                var next = 0;
-                $("#add-more").click(function(e){
-                    e.preventDefault();
-                    var addto = "#field" + next;
-                    var addRemove = "#field" + (next);
-                    next = next + 1;
-                    var newIn = ' <div id="field'+ next +'" name="field'+ next +'"><div class="form-group"> <div class="col-sm-3"><label>BKD<span class="required">*</span></label> <select id="bkd" name="bkd[]" class="form-control" required><option value="">Pilih</option><?php foreach($bkd as $b){ ?><option value="<?php echo $b->id_bkd; ?>"><?php echo $b->ket_bkd; ?></option><?php } ?></select> </div> <div class="col-sm-3"> <label>SUB BKD<span class="required">*</span></label> <select id="bkd_kegiatan" name="bkd_kegiatan[]" class="form-control" required><option value="">Pilih</option><?php foreach($bkdkegiatan as $bk){ ?><option value="<?php echo $bk->id_kegiatan; ?>"><?php echo $bk->kegiatan; ?></option><?php } ?></select> </div> <div class="col-sm-2"> <label>SKS<span class="required">*</span></label> <input id="sks_subkegiatan" class="form-control" name="sks_subkegiatan[]" /></div> <div class="col-sm-4"><label>Keterangan<span class="required">*</span></label><input id="sub_kegiatan" class="form-control" name="sub_kegiatan[]" /> </div></div></div></div>';
-                    var newInput = $(newIn);
-                    var removeBtn = '<button id="remove' + (next - 1) + '" class="btn btn-danger remove-me" >Remove</button></div></div><div id="field">';
-                    var removeButton = $(removeBtn);
-                    $(addto).after(newInput);
-                    $(addRemove).after(removeButton);
-                    $("#field" + next).attr('data-source',$(addto).attr('data-source'));
-                    $("#count").val(next);
+$(document).ready(function () {
+//@naresh action dynamic childs
+var next = 0;
+$("#add-more").click(function(e){
+e.preventDefault();
+var addto = "#field" + next;
+var addRemove = "#field" + (next);
+next = next + 1;
+var newIn = ' <div id="field'+ next +'" name="field'+ next +'"><div class="form-group"> <div class="col-sm-3"><label>BKD<span class="required">*</span></label> <select id="bkd" name="bkd[]" class="form-control bkd" onchange="kegiatan2()" required><option value="">Pilih</option><?php foreach($bkd as $b){ ?><option value="<?php echo $b->id_bkd; ?>"><?php echo $b->ket_bkd; ?></option><?php } ?></select> </div> <div class="col-sm-3"> <label>SUB BKD<span class="required">*</span></label><select name="bkd_kegiatan[]" class="form-control col-md-7 col-xs-12 types bkd_kegiatan"><option value="">- Pilih - </option></select> </div> <div class="col-sm-2"> <label>SKS<span class="required">*</span></label> <input id="sks_subkegiatan" class="form-control" name="sks_subkegiatan[]" /></div> <div class="col-sm-4"><label>Keterangan<span class="required">*</span></label><input id="sub_kegiatan" class="form-control" name="sub_kegiatan[]" /> </div></div></div></div>';
+var newInput = $(newIn);
+var removeBtn = '<button id="remove' + (next - 1) + '" class="btn btn-danger remove-me" >Remove</button></div></div><div id="field">';
+var removeButton = $(removeBtn);
+$(addto).after(newInput);
+$(addRemove).after(removeButton);
+$("#field" + next).attr('data-source',$(addto).attr('data-source'));
+$("#count").val(next);
+$('.remove-me').click(function(e){
+e.preventDefault();
+var fieldNum = this.id.charAt(this.id.length-1);
+var fieldID = "#field" + fieldNum;
+$(this).remove();
+$(fieldID).remove();
+});
+});
+});
 
-                        $('.remove-me').click(function(e){
-                            e.preventDefault();
-                            var fieldNum = this.id.charAt(this.id.length-1);
-                            var fieldID = "#field" + fieldNum;
-                            $(this).remove();
-                            $(fieldID).remove();
-                        });
-                });
+// Dropdown Insert
+function kegiatan()
+{
+    var state=$('#bkd').val();
+    $.post('<?php echo base_url();?>RencanaKerja/ambil_kegiatan/',
+    {
+      state:state
+    },
+    function(data)
+    {
+      $('#bkd_kegiatan').html(data);
+      //$('#id_unit_kerja').html(data);
+    });
+}
 
-            });
-
+function kegiatan2()
+{
+    var state=$('.bkd').val();
+    $.post('<?php echo base_url();?>RencanaKerja/ambil_kegiatan/',
+    {
+      state:state
+    },
+    function(data)
+    {
+      $('.bkd_kegiatan').html(data);
+      //$('#id_unit_kerja').html(data);
+    });
+}
 //multiple select
-            $(document).ready(function() {
-                $('.mdb-select').material_select();
+            // $(document).ready(function() {
+            //     $('.mdb-select').material_select();
+            // });
+            //Select Search
+            $(document).ready(function(){
+              $('.selectpicker').selectpicker({
+                  style: 'btn-info',
+                  size: 4
+              });
             });
     </script>
 

@@ -26,6 +26,7 @@
                     <ul class="nav child_menu">
                         <li><a href="<?php echo base_url() ?>MasterBkd">BKD</a></li>
                         <li><a href="<?php echo base_url() ?>MasterBkd/ProfilDosen">Skema Profil</a></li>
+                        <li><a href="<?php echo base_url() ?>MasterBkd/SyaratFile">Input Syarat File</a></li>
                     </ul>
                   </li>
                 </ul>
@@ -42,15 +43,39 @@
                   <li><a href="<?php echo base_url() ?>RencanaKerja/Laporan"><i class="fa fa-calculator"></i>Laporan</a></li>
                 </ul>
               </div>
+              <?php } ?>
 
-              <div class="menu_section">
-              <h3><u>Penilaian</u></h3>
-                <ul class="nav side-menu">
-                  <li><a href="<?php echo base_url() ?>Verifikator/PeriksaRencana"><i class="fa fa-calendar"></i>Rencana Kerja Dosen</a></li>
-                  <li><a href="<?php echo base_url() ?>Verifikator/PeriksaLaporan"><i class="fa fa-user-md"></i>Laporan Kerja Dosen</a></li>
-                </ul>
-              </div>
+              <?php
+                foreach ($ketuaprodi as $kp);
+                if(@$kp->ketua_prodi == $this->session->userdata('nipp')){
+              ?>
+                <div class="menu_section">
+                <h3><u>Penilaian Ketua Prodi</u></h3>
+                  <ul class="nav side-menu">
+                    <li><a><i class="fa fa-users"></i> Rencana Kerja <span class="fa fa-chevron-down"></span></a>
+                      <ul class="nav child_menu">
+                          <li><a href="<?php echo base_url() ?>Verifikator/PeriksaRencana">List Rencana</a></li>
+                          <li><a href="<?php echo base_url() ?>Verifikator/RekapRencana">Rekap</a></li>
+                      </ul>
+                    </li>
+                </div>
+                <?php } ?>
 
+              <?php
+                foreach ($filter as $f);
+                if(@$f->assesor_1 == $this->session->userdata('nipp') || @$f->assesor_2 == $this->session->userdata('nipp') ){
+              ?>
+                <div class="menu_section">
+                <h3><u>Penilaian Tim Assesor</u></h3>
+                  <ul class="nav side-menu">
+                    <li><a><i class="fa fa-users"></i> Laporan Kerja <span class="fa fa-chevron-down"></span></a>
+                      <ul class="nav child_menu">
+                          <li><a href="<?php echo base_url() ?>Verifikator/PeriksaLaporan">List Laporan</a></li>
+                          <li><a href="<?php echo base_url() ?>Verifikator/RekapLaporan">Rekap</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
               <?php } ?>
 
             </div>

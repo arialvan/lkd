@@ -82,4 +82,76 @@ class Pustaka {
                     }
                     return $n;
                 }
+
+//Status Pemeriksaan Ketua Prodi
+    public function periksa($p)
+      {
+      if($p=='1')
+      {
+        $p='Di Setujui Kaprodi';
+      }
+      else
+      {
+        $p='Belum Diperiksa';
+      }
+return $p;
+      }
+
+//Status Pemeriksaan Laporan
+          public function p_laporan($pl)
+            {
+              if($pl=='0') {
+                $pl='<span class="text text-danger">Masih di Periksa Prodi</span>';
+              }elseif($pl=='1'){
+                $pl='<span class="text text-danger">Di Setujui Prodi</span>';
+              }elseif($pl=='2'){
+                $pl='<span class="text text-success">APP Assesor I</span>';
+              }elseif($pl=='3'){
+                $pl='<span class="text text-success">APP Assesor II</span>';
+              }elseif($pl=='4'){
+                $pl='<span class="text text-danger">Di Tolak Assesor I</span>';
+              }elseif($pl=='5'){
+                $pl='<span class="text text-danger">Di Tolak Assesor II</span>';
+              }elseif($pl=='6'){
+                $pl='<span class="text text-danger">Perbaikan</span>';
+              }else{
+                $pl='<span class="text text-danger">Selesai</span>';
+              }
+
+      return $pl;
+            }
+
+//Status Hitung / Tidak
+  public function syarat($syt)
+    {
+      if($syt=='1') {
+          $syt="<span class='glyphicon glyphicon-check' title='Di hitung BKD'></span>";
+      }else{
+          $syt="<span></span>";
+      }
+
+  return $syt;
+  }
+
+  public function syarat1($syt1)
+      {
+        if($syt1=='1') {
+            $syt1="<span class='glyphicon glyphicon-ok' title='Ya'></span>";
+        }else{
+            $syt1="<span class='glyphicon glyphicon-remove' title='Tidak'></span>";
+        }
+
+    return $syt1;
+    }
+
+    public function syarat2($syt2)
+        {
+          if($syt2=='1') {
+              $syt2="<span class='glyphicon glyphicon-ok' title='Ya'></span>";
+          }else{
+              $syt2="<span class='glyphicon glyphicon-remove' title='Tidak'></span>";
+          }
+
+      return $syt2;
+      }
 }

@@ -44,6 +44,33 @@ function hapus_verifikator($where,$table)
         }
 }
 
+/* FILTER */
+function filter($id)
+{
+        $this->db->select('*')
+                 ->from('verifikator')
+                 ->join('periode_lkd','verifikator.id_periode = periode_lkd.id_periode')
+                 ->where('periode_lkd.status=',1)
+                 ->where('verifikator.assesor_1=',$id)
+                 ->or_where('verifikator.assesor_2=',$id)
+                 // ->or_where('verifikator.ketua_prodi=',$id)
+                 ->order_by('verifikator.id_verifikator');
+        $query = $this->db->get()->result();
+        return $query;
+}
+
+function filterketuaprodi($id)
+{
+        $this->db->select('*')
+                 ->from('verifikator')
+                 ->join('periode_lkd','verifikator.id_periode = periode_lkd.id_periode')
+                 ->where('periode_lkd.status=',1)
+                 ->where('verifikator.ketua_prodi=',$id)
+                 ->order_by('verifikator.id_verifikator');
+        $query = $this->db->get()->result();
+        return $query;
+}
+
 /*DOSEN*/
 function show_dosen()
 {

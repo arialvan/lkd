@@ -7,6 +7,7 @@ var $acl;
             parent::__construct();
             $this->is_logged_in();
             $this->load->model('M_counting');
+						$this->load->model('M_dosen');
             $this->load->helper(array('form','url'));
             $this->acl = $this->session->userdata('acl');
         }
@@ -18,6 +19,7 @@ var $acl;
         }
 	public function index()
 	{
+						$id = $this->session->userdata('nipp');
             $data['name'] = $this->session->userdata('username');
 						$data['nipp'] = $this->session->userdata('nipp');
 						$data['all'] = $this->M_counting->all_pegawai();
@@ -26,6 +28,8 @@ var $acl;
 						$data['kontrak'] = $this->M_counting->all_kontrak();
 						$data['unitorg'] = $this->M_counting->all_unit();
 						$data['unitkerja'] = $this->M_counting->all_unitkerja();
+						$data['filter'] = $this->M_dosen->filter($id);
+						$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($id);
             $this->load->view('layout/header_one',$data);
             $this->load->view('layout/side_menu');
             $this->load->view('dashboard');

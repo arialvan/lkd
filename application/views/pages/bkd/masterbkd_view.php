@@ -81,7 +81,7 @@
                         ?>
                         <tr>
                           <th scope="row"><?php echo $no++.'&nbsp;&nbsp;'.$this->pustaka->syarat($dt1->syarat); ?></th>
-                          <td><?php echo $kegiatans; ?></td>
+                          <td><?php echo wordwrap($kegiatans, 75, "<br />\n"); ?></td>
                           <td><?php echo $this->pustaka->syarat1($dt1->bkd_hitung); ?></td>
                           <td><?php echo $dt1->bkd_sks; ?></td>
                           <td><?php echo $this->pustaka->syarat1($dt1->renum_hitung); ?></td>
@@ -131,7 +131,7 @@
                         ?>
                         <tr>
                           <th scope="row"><?php echo $no++.'&nbsp;&nbsp;'.$this->pustaka->syarat($dt2->syarat); ?></th>
-                          <td><?php echo $kegiatans; ?></td>
+                          <td><?php echo wordwrap($kegiatans, 75, "<br />\n"); ?></td>
                           <td><?php echo $this->pustaka->syarat1($dt2->bkd_hitung); ?></td>
                           <td><?php echo $dt2->bkd_sks; ?></td>
                           <td><?php echo $this->pustaka->syarat1($dt2->renum_hitung); ?></td>
@@ -181,7 +181,7 @@
                         ?>
                         <tr>
                           <th scope="row"><?php echo $no++.'&nbsp;&nbsp;'.$this->pustaka->syarat($dt3->syarat); ?></th>
-                          <td><?php echo $kegiatans; ?></td>
+                          <td><?php echo wordwrap($kegiatans, 75, "<br />\n"); ?></td>
                           <td><?php echo $this->pustaka->syarat1($dt3->bkd_hitung); ?></td>
                           <td><?php echo $dt3->bkd_sks; ?></td>
                           <td><?php echo $this->pustaka->syarat1($dt3->renum_hitung); ?></td>
@@ -230,7 +230,7 @@
                         ?>
                         <tr>
                           <th scope="row"><?php echo $no++.'&nbsp;&nbsp;'.$this->pustaka->syarat($dt4->syarat); ?></th>
-                          <td><?php echo $kegiatans; ?></td>
+                          <td><?php echo wordwrap($kegiatans, 75, "<br />\n"); ?></td>
                           <td><?php echo $this->pustaka->syarat1($dt4->bkd_hitung); ?></td>
                           <td><?php echo $dt4->bkd_sks; ?></td>
                           <td><?php echo $this->pustaka->syarat1($dt4->renum_hitung); ?></td>
@@ -250,4 +250,3 @@
 
               </div>
           </div>
-   </div>

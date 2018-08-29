@@ -23,6 +23,7 @@
                       <thead>
                         <tr>
                           <th>#</th>
+                          <th>NIP</th>
                           <th>NAMA</th>
                           <th>KATEGORI DOSEN</th>
                         </tr>
@@ -34,6 +35,7 @@
                         ?>
                         <tr>
                           <th scope="row"><?php echo $no++; ?></th>
+                          <td><?php echo $dt->nip; ?></td>
                           <td><?php echo $dt->nama_peg; ?></td>
                           <td>
                             <a href="javascript:;"

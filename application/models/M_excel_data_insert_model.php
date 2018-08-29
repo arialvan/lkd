@@ -6,6 +6,10 @@ class M_excel_data_insert_model extends CI_Model {
 
     }
 
+    public function Add_tbpegawai($data_user){
+        $this->db->insert('tb_pegawai', $data_user);
+    }
+
     public function Add_User($data_user){
         $this->db->insert('profil_dosen', $data_user);
     }

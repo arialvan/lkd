@@ -2,7 +2,7 @@
           <div class="">
             <div class="page-title">
               <div class="title_left">
-                <h3><?php echo $title; ?></h3>
+                <h3><?php //echo $title; ?></h3>
               </div>
             </div>
             <div class="clearfix"></div>
@@ -10,6 +10,7 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
                   <div class="x_panel" style="">
                   <div class="x_title">
+                    <h3>Upload File PDF (Max 2Mb)</h3>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                     </ul>
@@ -32,7 +33,7 @@
                                    </label>
                                    <div class="col-md-6 col-sm-6 col-xs-12">
                                        <input type="hidden" name="nama_file[]" id="nama_file[]" value="<?php echo $value; ?>" class="form-control col-md-7 col-xs-12">
-                                       <input type="file" name="files[]" class="form-control col-md-7 col-xs-12">
+                                       <input type="file" name="files[]" class="form-control col-md-7 col-xs-12" required="required">
                                    </div>
                                </div>
                       <?php } ?>

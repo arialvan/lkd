@@ -38,6 +38,7 @@
                           <td>
                             <a href="javascript:;"
                                 data-id_file="<?php echo $dt->id ?>"
+                                data-nama="<?php echo $dt->nama_file ?>"
                                 data-id_subkegiatan="<?php echo $dt->id_subkegiatan ?>"
                                 data-nama_file="<?php echo $dt->file ?>"
                                 data-toggle="modal" data-target="#edits">
@@ -65,11 +66,12 @@
                           <input type="hidden" class="form-control" id="id_file" name="id_file" />
                           <input type="hidden" class="form-control" id="id_subkegiatan" name="id_subkegiatan" />
                           <input type="hidden" class="form-control" id="nama_file" name="nama_file" />
+                          <input type="text" class="form-control" id="nama" name="nama" />
                           <div class="modal-body">
                                   <div class="form-group">
                                       <label class="col-lg-2 col-sm-2 control-label">Upload File</label>
                                       <div class="col-lg-10">
-                                          <input type="file" name="files" id="files" class="form-control" required/>
+                                          <input type="file" name="files" id="files" class="form-control" required="required" />
                                       </div>
                                   </div>
                               </div>

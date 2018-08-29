@@ -7,7 +7,22 @@
             </div>
             <div class="clearfix"></div>
             <div class="col-md-12 col-sm-12 col-xs-12">
-              <a href="<?php echo base_url() ?>RencanaKerja/FormRencanaTambahan" class="btn btn-lg btn-primary"> + Tambah Kegiatan Baru</a>
+              <div class="alert alert-success fade in">
+                  <a href="#" class="close" data-dismiss="alert">&times;</a>
+                      <fieldset>
+                        <legend></legend>
+                          <marquee scrollamount="15"><span><h3>Apabila sudah selesai melakukan seluruh Pelaporan(Upload File) atau selesai melakukan perbaikan laporan, Silahkan Tekan tombol <b>"Selesai Laporan"</b> di bawah ini.</h3></span></marquee><br /><br />
+                          <?php foreach($verifikator as $vr); ?>
+                              <?php if ($vr->statuslaporan==0) { ?>
+                                  <a href="<?php echo base_url() ?>RencanaKerja/SelesaiLaporan" class="btn btn-sm btn-warning" onClick="return confirm('Apakah anda sudah selesai input laporan?')"> <b>Selesai Laporan</b> </a>
+                              <?php }elseif ($vr->p_assesor1==2) { ?>
+                                  <a href="<?php echo base_url() ?>RencanaKerja/SelesaiLaporan_1" class="btn btn-sm btn-warning" onClick="return confirm('Apakah anda sudah selesai memperbaiki laporan?')"> <b>Selesai Perbaikan Laporan</b> </a>
+                              <?php }elseif ($vr->p_assesor2==2) { ?>
+                                  <a href="<?php echo base_url() ?>RencanaKerja/SelesaiLaporan_2" class="btn btn-sm btn-warning" onClick="return confirm('Apakah anda sudah selesai memperbaiki laporan?')"> <b>Selesai Perbaikan Laporan</b> </a>
+                              <?php }else{ echo ''; } ?>
+                      </fieldset>
+              </div>
+              <!-- <a href="<?php echo base_url() ?>RencanaKerja/FormRencanaTambahan" class="btn btn-md btn-primary"> + Tambah Kegiatan Baru</a> -->
 <!--
 =========================
 PENDIDIKAN
@@ -31,6 +46,7 @@ PENDIDIKAN
                           <th>Poin Remunerasi</th>
                           <th>Bukti Fisik</th>
                           <th>Laporan</th>
+                          <th>Verifikator</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -42,34 +58,71 @@ PENDIDIKAN
                           if($dt->bkd_hitung=='0' && $dt->renum_hitung=='1'){ $kegiatans="<b><span class='text text-danger'>".$dt->kegiatan."</span></b>";}
                           $total[]=$dt->sks_subkegiatan;
                           $poin[]=$dt->poin_subkegiatan;
+                          $subkegiatan = wordwrap($dt->sub_kegiatan, 65, "<br />\n");
                         ?>
                         <tr>
                           <th scope="row"><?php echo $no++; ?></th>
                           <td>
-                            <a href="#"><?php echo $kegiatans.'<br /><span>- '.$dt->sub_kegiatan.'</span>'; ?></a>
+                            <a href="#"><?php echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan).'</span>'; ?></a>
                           </td>
                           <td><?php echo $dt->sks_subkegiatan; ?></td>
                           <td><?php echo $dt->poin_subkegiatan; ?></td>
                           <td>
                             <?php
-                                $file = $dt->syarat_file;
+                            if($dt->status_laporan==0){
+                                echo"- Belum Buat Laporan";
+                            }else{
+                                //$file = $dt->syarat_file;
                                 $file=explode('#',$dt->syarat_file);
-                                foreach ($file as $key => $value) {
-                                          echo $value."<br />";
-                                }
+                                $atts = array('width'=> 800,'height'=> 600,'scrollbars'=>'yes','status'=>'yes',
+                                              'resizable'=>'yes','screenx'=>0,'screeny'=>0,'window_name' =>'_blank');
+                                  foreach ($file as $key => $value) {
+                                      //echo str_replace("/"," ",$value)
+                                      echo anchor_popup('Verifikator/PeriksaLaporanDetailPDF/'.$dt->id_subkegiatan.'-'.str_replace("/","_",$value),'<span>'.$value.'</span><br />',$atts);
+                                  }
+                            }
                             ?>
                           </td>
                           <td>
                               <?php
-                                //if($dt->status_laporan==0 || $dt->status_laporan==4 || $dt->status_laporan==5){
-                                if($dt->status_laporan==4 || $dt->status_laporan==5){
+                              //Jika salah satu assesor menolak laporan
+                                if($dt->app_assesor1==2){
+                                  echo anchor('RencanaKerja/EditLaporan2/'.$dt->id_subkegiatan,'<span class="btn btn-sm btn-danger">Perbaiki</span>');
+                                  echo anchor('RencanaKerja/UpdatePerbaikan/'.$dt->id_subkegiatan."-".$dt->app_assesor1,'<span class="btn btn-sm btn-primary">Selesai</span>');
+                                  echo '<br /><span class="text text-danger">Ditolak Assesor 1</span>';
+                                  echo '<br />('.wordwrap($dt->komentar, 75, "<br />\n").')';
+                                }elseif($dt->app_assesor2==2){
+                                  echo anchor('RencanaKerja/EditLaporan2/'.$dt->id_subkegiatan,'<span class="btn btn-sm btn-danger">Perbaiki</span>');
+                                  echo anchor('RencanaKerja/UpdatePerbaikan/'.$dt->id_subkegiatan."-".$dt->app_assesor2,'<span class="btn btn-sm btn-primary">Selesai</span>');
+                                  echo '<br /><span class="text text-danger">Ditolak Assesor 2</span>';
+                                  echo '<br />('.wordwrap($dt->komentar, 75, "<br />\n").')';
+                            //Jika assesor 1 setuju dan assesor 2 menolak/belum memeriksa dan sebaliknya
+                                }elseif($dt->app_assesor1==1 && $dt->app_assesor2 !=1){
+                                  echo '<br /><span class="text text-danger">Diterima Assesor 1</span>';
+                                  echo '<br />('.wordwrap($dt->komentar, 75, "<br />\n").')';
+                                }elseif($dt->app_assesor2==1 && $dt->app_assesor1 !=1){
+                                  echo '<br /><span class="text text-danger">Diterima Assesor 2</span>';
+                                  echo '<br />('.wordwrap($dt->komentar, 75, "<br />\n").')';
+                            //Jika assesor 1 belum periksa dan assesor 2 belum periksa dan laporan belum upload
+                                }elseif($dt->app_assesor1==0 && $dt->app_assesor2==0 && $dt->status_laporan==0){
                                   echo anchor('RencanaKerja/EditLaporan/'.$dt->id_subkegiatan,'<span class="btn btn-sm btn-primary">Upload File</span>');
-                                }elseif($dt->status_laporan==1){
-                                  echo anchor('RencanaKerja/EditLaporan2/'.$dt->id_subkegiatan,'<span>Lihat File</span>');
+                            //Jika assesor 1 belum periksa dan assesor 2 belum periksa dan laporan sudah upload
+                                }elseif($dt->app_assesor1==0 && $dt->app_assesor2==0 && $dt->status_laporan==1){
+                                  echo anchor('RencanaKerja/EditLaporan2/'.$dt->id_subkegiatan,'<span>Edit File</span>');
+                            //Jika assesor 1 dan 2 menyetujui
+                                }elseif($dt->app_assesor1==1 && $dt->app_assesor2==1){
+                                  echo '<span class="text text-danger">Diterima <br /> Assesor 1 & Assesor 2</span>';
                                 }else{
-                                  echo '<span class="text text-danger">'.$this->pustaka->p_laporan($dt->statuslaporan).'</span>';
+                                  echo '<span class="text text-danger">'-'</span>';
                                 }
                               ?>
+                          </td>
+                          <td>
+                            <?php
+                                  if($dt->app_ketuaprodi==1){echo 'Ketua Prodi <span class="glyphicon glyphicon-ok"></span><br />';}else{echo 'Ketua Prodi <span class="glyphicon glyphicon-remove"></span><br />';}
+                                  if($dt->app_assesor1==1){echo 'Assesor I <span class="glyphicon glyphicon-ok"></span><br />';}else{echo 'Assesor I <span class="glyphicon glyphicon-remove"></span><br />';}
+                                  if($dt->app_assesor2==1){echo 'Assesor II <span class="glyphicon glyphicon-ok"></span><br />';}else{echo 'Assesor II <span class="glyphicon glyphicon-remove"></span><br />';}
+                            ?>
                           </td>
                         </tr>
                         <?php } ?>
@@ -79,6 +132,7 @@ PENDIDIKAN
                             <th colspan="2" style="text-align:right">Total:</th>
                             <th><?php echo @array_sum($total); ?></th>
                             <th><?php echo @array_sum($poin); ?></th>
+                            <th></th>
                             <th></th>
                             <th></th>
                         </tr>
@@ -110,6 +164,7 @@ PENDIDIKAN
                           <th>Poin Remunerasi</th>
                           <th>Bukti Fisik</th>
                           <th>Laporan</th>
+                          <th>Verifikator</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -121,35 +176,70 @@ PENDIDIKAN
                           if($dt1->bkd_hitung=='0' && $dt1->renum_hitung=='1'){ $kegiatans="<b><span class='text text-danger'>".$dt1->kegiatan."</span></b>";}
                           $total1[]=$dt1->sks_subkegiatan;
                           $poin1[]=$dt1->poin_subkegiatan;
+                          $subkegiatan1 = wordwrap($dt1->sub_kegiatan, 65, "<br />\n");
                         ?>
                         <tr>
                           <th scope="row"><?php echo $no++; ?></th>
                           <td>
-                            <?php echo $kegiatans.'<br /><span class="text text-danger">- '.$dt1->sub_kegiatan.'</span>'; ?>
+                            <a href="#"><?php echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan1).'</span>'; ?></a>
                           </td>
                           <td><?php echo $dt1->sks_subkegiatan; ?></td>
                           <td><?php echo $dt1->poin_subkegiatan; ?></td>
                           <td>
                             <?php
-                                $file = $dt1->syarat_file;
+                            if($dt1->status_laporan==0){
+                                echo"- Belum Buat Laporan";
+                            }else{
+                                //$file = $dt->syarat_file;
                                 $file=explode('#',$dt1->syarat_file);
-                                foreach ($file as $key => $value) {
-                                          echo $value."<br />";
-                                }
-                                // echo $namafile;
+                                $atts = array('width'=> 800,'height'=> 600,'scrollbars'=>'yes','status'=>'yes',
+                                              'resizable'=>'yes','screenx'=>0,'screeny'=>0,'window_name' =>'_blank');
+                                  foreach ($file as $key => $value) {
+                                      echo anchor_popup('Verifikator/PeriksaLaporanDetailPDF/'.$dt1->id_subkegiatan.'-'.str_replace("/","_",$value),'<span>'.$value.'</span><br />',$atts);
+                                  }
+                            }
                             ?>
                           </td>
                           <td>
                               <?php
-                                //if($dt->status_laporan==0 || $dt->status_laporan==4 || $dt->status_laporan==5){
-                                if($dt1->status_laporan==4 || $dt1->status_laporan==5){
+                              //Jika salah satu assesor menolak laporan
+                                if($dt1->app_assesor1==2){
+                                  echo anchor('RencanaKerja/EditLaporan2/'.$dt1->id_subkegiatan,'<span class="btn btn-sm btn-danger">Perbaiki</span>');
+                                  echo anchor('RencanaKerja/UpdatePerbaikan/'.$dt1->id_subkegiatan."-".$dt1->app_assesor1,'<span class="btn btn-sm btn-primary">Selesai</span>');
+                                  echo '<br /><span class="text text-danger">Ditolak Assesor 1</span>';
+                                  echo '<br />('.wordwrap($dt1->komentar, 75, "<br />\n").')';
+                                }elseif($dt1->app_assesor2==2){
+                                  echo anchor('RencanaKerja/EditLaporan2/'.$dt1->id_subkegiatan,'<span class="btn btn-sm btn-danger">Perbaiki</span>');
+                                  echo anchor('RencanaKerja/UpdatePerbaikan/'.$dt1->id_subkegiatan."-".$dt1->app_assesor2,'<span class="btn btn-sm btn-primary">Selesai</span>');
+                                  echo '<br /><span class="text text-danger">Ditolak Assesor 2</span>';
+                                  echo '<br />('.wordwrap($dt1->komentar, 75, "<br />\n").')';
+                            //Jika assesor 1 setuju dan assesor 2 menolak/belum memeriksa dan sebaliknya
+                                }elseif($dt1->app_assesor1==1 && $dt1->app_assesor2 !=1){
+                                  echo '<br /><span class="text text-danger">Diterima Assesor 1</span>';
+                                  echo '<br />('.wordwrap($dt1->komentar, 75, "<br />\n").')';
+                                }elseif($dt1->app_assesor2==1 && $dt1->app_assesor1 !=1){
+                                  echo '<br /><span class="text text-danger">Diterima Assesor 2</span>';
+                                  echo '<br />('.wordwrap($dt1->komentar, 75, "<br />\n").')';
+                            //Jika assesor 1 belum periksa dan assesor 2 belum periksa dan laporan belum upload
+                                }elseif($dt1->app_assesor1==0 && $dt1->app_assesor2==0 && $dt1->status_laporan==0){
                                   echo anchor('RencanaKerja/EditLaporan/'.$dt1->id_subkegiatan,'<span class="btn btn-sm btn-primary">Upload File</span>');
-                                }elseif($dt1->status_laporan==1){
-                                  echo anchor('RencanaKerja/EditLaporan2/'.$dt1->id_subkegiatan,'<span>Lihat File</span>');
+                            //Jika assesor 1 belum periksa dan assesor 2 belum periksa dan laporan sudah upload
+                                }elseif($dt1->app_assesor1==0 && $dt1->app_assesor2==0 && $dt1->status_laporan==1){
+                                  echo anchor('RencanaKerja/EditLaporan2/'.$dt1->id_subkegiatan,'<span>Edit File</span>');
+                            //Jika assesor 1 dan 2 menyetujui
+                                }elseif($dt1->app_assesor1==1 && $dt1->app_assesor2==1){
+                                  echo '<span class="text text-danger">Diterima <br /> Assesor 1 & Assesor 2</span>';
                                 }else{
-                                  echo '<span class="text text-danger">'.$this->pustaka->p_laporan($dt1->statuslaporan).'</span>';
+                                  echo '<span class="text text-danger">'-'</span>';
                                 }
                               ?>
+                          </td>
+                          <td>
+                            <?php
+                                  if($dt1->app_ketuaprodi==1){echo 'Ketua Prodi <span class="glyphicon glyphicon-ok"></span><br />';}else{echo 'Ketua Prodi <span class="glyphicon glyphicon-remove"></span><br />';}
+                                  if($dt1->app_assesor1==1){echo 'Assesor I <span class="glyphicon glyphicon-ok"></span><br />';}else{echo 'Assesor I <span class="glyphicon glyphicon-remove"></span><br />';}
+                                  if($dt1->app_assesor2==1){echo 'Assesor II <span class="glyphicon glyphicon-ok"></span><br />';}else{echo 'Assesor II <span class="glyphicon glyphicon-remove"></span><br />';}
+                            ?>
                           </td>
                         </tr>
                         <?php } ?>
@@ -159,6 +249,7 @@ PENDIDIKAN
                             <th colspan="2" style="text-align:right">Total:</th>
                             <th><?php echo @array_sum($total1); ?></th>
                             <th><?php echo @array_sum($poin1); ?></th>
+                            <th></th>
                             <th></th>
                             <th></th>
                         </tr>
@@ -186,6 +277,7 @@ PENDIDIKAN
                           <th>Poin Remunerasi</th>
                           <th>Bukti Fisik</th>
                           <th>Laporan</th>
+                          <th>Verifikator</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -197,37 +289,72 @@ PENDIDIKAN
                           if($dt2->bkd_hitung=='0' && $dt2->renum_hitung=='1'){ $kegiatans="<b><span class='text text-danger'>".$dt2->kegiatan."</span></b>";}
                           $total2[]=$dt2->sks_subkegiatan;
                           $poin2[]=$dt2->poin_subkegiatan;
+                          $subkegiatan2 = wordwrap($dt2->sub_kegiatan, 65, "<br />\n");
                         ?>
                         <tr>
                           <th scope="row"><?php echo $no++; ?></th>
                           <td>
                             <a href="#">
-                                <?php echo $kegiatans.'<br /><span>- '.$dt2->sub_kegiatan.'</span>'; ?>
+                                <a href="#"><?php echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan2).'</span>'; ?></a>
                             </a>
                           </td>
                           <td><?php echo $dt2->sks_subkegiatan; ?></td>
                           <td><?php echo $dt2->poin_subkegiatan; ?></td>
                           <td>
                             <?php
-                                $file = $dt2->syarat_file;
+                            if($dt2->status_laporan==0){
+                                echo"- Belum Buat Laporan";
+                            }else{
+                                //$file = $dt->syarat_file;
                                 $file=explode('#',$dt2->syarat_file);
-                                foreach ($file as $key => $value) {
-                                          echo $value."<br />";
-                                }
-                                // echo $namafile;
+                                $atts = array('width'=> 800,'height'=> 600,'scrollbars'=>'yes','status'=>'yes',
+                                              'resizable'=>'yes','screenx'=>0,'screeny'=>0,'window_name' =>'_blank');
+                                  foreach ($file as $key => $value) {
+                                      echo anchor_popup('Verifikator/PeriksaLaporanDetailPDF/'.$dt2->id_subkegiatan.'-'.str_replace("/","_",$value),'<span>'.$value.'</span><br />',$atts);
+                                  }
+                            }
                             ?>
                           </td>
                           <td>
                               <?php
-                                //if($dt->status_laporan==0 || $dt->status_laporan==4 || $dt->status_laporan==5){
-                                if($dt2->status_laporan==4 || $dt2->status_laporan==5){
+                              //Jika salah satu assesor menolak laporan
+                                if($dt2->app_assesor1==2){
+                                  echo anchor('RencanaKerja/EditLaporan2/'.$dt2->id_subkegiatan,'<span class="btn btn-sm btn-danger">Perbaiki</span>');
+                                  echo anchor('RencanaKerja/UpdatePerbaikan/'.$dt2->id_subkegiatan."-".$dt2->app_assesor1,'<span class="btn btn-sm btn-primary">Selesai</span>');
+                                  echo '<br /><span class="text text-danger">Ditolak Assesor 1</span>';
+                                  echo '<br />('.wordwrap($dt2->komentar, 75, "<br />\n").')';
+                                }elseif($dt2->app_assesor2==2){
+                                  echo anchor('RencanaKerja/EditLaporan2/'.$dt2->id_subkegiatan,'<span class="btn btn-sm btn-danger">Perbaiki</span>');
+                                  echo anchor('RencanaKerja/UpdatePerbaikan/'.$dt2->id_subkegiatan."-".$dt2->app_assesor2,'<span class="btn btn-sm btn-primary">Selesai</span>');
+                                  echo '<br /><span class="text text-danger">Ditolak Assesor 2</span>';
+                                  echo '<br />('.wordwrap($dt2->komentar, 75, "<br />\n").')';
+                            //Jika assesor 1 setuju dan assesor 2 menolak/belum memeriksa dan sebaliknya
+                                }elseif($dt2->app_assesor1==1 && $dt2->app_assesor2 !=1){
+                                  echo '<br /><span class="text text-danger">Diterima Assesor 1</span>';
+                                  echo '<br />('.wordwrap($dt2->komentar, 75, "<br />\n").')';
+                                }elseif($dt2->app_assesor2==1 && $dt2->app_assesor1 !=1){
+                                  echo '<br /><span class="text text-danger">Diterima Assesor 2</span>';
+                                  echo '<br />('.wordwrap($dt2->komentar, 75, "<br />\n").')';
+                            //Jika assesor 1 belum periksa dan assesor 2 belum periksa dan laporan belum upload
+                                }elseif($dt2->app_assesor1==0 && $dt2->app_assesor2==0 && $dt2->status_laporan==0){
                                   echo anchor('RencanaKerja/EditLaporan/'.$dt2->id_subkegiatan,'<span class="btn btn-sm btn-primary">Upload File</span>');
-                                }elseif($dt2->status_laporan==1){
-                                  echo anchor('RencanaKerja/EditLaporan2/'.$dt2->id_subkegiatan,'<span>Lihat File</span>');
+                            //Jika assesor 1 belum periksa dan assesor 2 belum periksa dan laporan sudah upload
+                                }elseif($dt2->app_assesor1==0 && $dt2->app_assesor2==0 && $dt2->status_laporan==1){
+                                  echo anchor('RencanaKerja/EditLaporan2/'.$dt2->id_subkegiatan,'<span>Edit File</span>');
+                            //Jika assesor 1 dan 2 menyetujui
+                                }elseif($dt2->app_assesor1==1 && $dt2->app_assesor2==1){
+                                  echo '<span class="text text-danger">Diterima <br /> Assesor 1 & Assesor 2</span>';
                                 }else{
-                                  echo '<span class="text text-danger">'.$this->pustaka->p_laporan($dt2->statuslaporan).'</span>';
+                                  echo '<span class="text text-danger">'-'</span>';
                                 }
                               ?>
+                          </td>
+                          <td>
+                            <?php
+                                  if($dt2->app_ketuaprodi==1){echo 'Ketua Prodi <span class="glyphicon glyphicon-ok"></span><br />';}else{echo 'Ketua Prodi <span class="glyphicon glyphicon-remove"></span><br />';}
+                                  if($dt2->app_assesor1==1){echo 'Assesor I <span class="glyphicon glyphicon-ok"></span><br />';}else{echo 'Assesor I <span class="glyphicon glyphicon-remove"></span><br />';}
+                                  if($dt2->app_assesor2==1){echo 'Assesor II <span class="glyphicon glyphicon-ok"></span><br />';}else{echo 'Assesor II <span class="glyphicon glyphicon-remove"></span><br />';}
+                            ?>
                           </td>
                         </tr>
                         <?php } ?>
@@ -237,6 +364,7 @@ PENDIDIKAN
                             <th colspan="2" style="text-align:right">Total:</th>
                             <th><?php echo @array_sum($total2); ?></th>
                             <th><?php echo @array_sum($poin2); ?></th>
+                            <th></th>
                             <th></th>
                             <th></th>
                         </tr>
@@ -265,6 +393,7 @@ PENDIDIKAN
                           <th>Poin Remunerasi</th>
                           <th>Bukti Fisik</th>
                           <th>Laporan</th>
+                          <th>Verifikator</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -276,37 +405,72 @@ PENDIDIKAN
                           if($dt3->bkd_hitung=='0' && $dt3->renum_hitung=='1'){ $kegiatans="<b><span class='text text-danger'>".$dt3->kegiatan."</span></b>";}
                           $total3[]=$dt3->sks_subkegiatan;
                           $poin3[]=$dt3->poin_subkegiatan;
+                          $subkegiatan3 = wordwrap($dt3->sub_kegiatan, 65, "<br />\n");
                         ?>
                         <tr>
                           <th scope="row"><?php echo $no++; ?></th>
                           <td>
                             <a href="#">
-                                <?php echo $kegiatans.'<br /><span class="text text-danger">- '.$dt3->sub_kegiatan.'</span>'; ?>
+                                <a href="#"><?php echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan3).'</span>'; ?></a>
                             </a>
                           </td>
                           <td><?php echo $dt3->sks_subkegiatan; ?></td>
                           <td><?php echo $dt3->poin_subkegiatan; ?></td>
                           <td>
                             <?php
-                                $file = $dt3->syarat_file;
+                            if($dt3->status_laporan==0){
+                                echo"- Belum Buat Laporan";
+                            }else{
+                                //$file = $dt->syarat_file;
                                 $file=explode('#',$dt3->syarat_file);
-                                foreach ($file as $key => $value) {
-                                          echo $value."<br />";
-                                }
-                                // echo $namafile;
+                                $atts = array('width'=> 800,'height'=> 600,'scrollbars'=>'yes','status'=>'yes',
+                                              'resizable'=>'yes','screenx'=>0,'screeny'=>0,'window_name' =>'_blank');
+                                  foreach ($file as $key => $value) {
+                                      echo anchor_popup('Verifikator/PeriksaLaporanDetailPDF/'.$dt3->id_subkegiatan.'-'.str_replace("/","_",$value),'<span>'.$value.'</span><br />',$atts);
+                                  }
+                            }
                             ?>
                           </td>
                           <td>
                               <?php
-                                //if($dt->status_laporan==0 || $dt->status_laporan==4 || $dt->status_laporan==5){
-                                if($dt3->status_laporan==4 || $dt3->status_laporan==5){
+                              //Jika salah satu assesor menolak laporan
+                                if($dt3->app_assesor1==2){
+                                  echo anchor('RencanaKerja/EditLaporan2/'.$dt3->id_subkegiatan,'<span class="btn btn-sm btn-danger">Perbaiki</span>');
+                                  echo anchor('RencanaKerja/UpdatePerbaikan/'.$dt3->id_subkegiatan."-".$dt3->app_assesor1,'<span class="btn btn-sm btn-primary">Selesai</span>');
+                                  echo '<br /><span class="text text-danger">Ditolak Assesor 1</span>';
+                                  echo '<br />('.wordwrap($dt3->komentar, 75, "<br />\n").')';
+                                }elseif($dt3->app_assesor2==2){
+                                  echo anchor('RencanaKerja/EditLaporan2/'.$dt3->id_subkegiatan,'<span class="btn btn-sm btn-danger">Perbaiki</span>');
+                                  echo anchor('RencanaKerja/UpdatePerbaikan/'.$dt3->id_subkegiatan."-".$dt3->app_assesor2,'<span class="btn btn-sm btn-primary">Selesai</span>');
+                                  echo '<br /><span class="text text-danger">Ditolak Assesor 2</span>';
+                                  echo '<br />('.wordwrap($dt3->komentar, 75, "<br />\n").')';
+                            //Jika assesor 1 setuju dan assesor 2 menolak/belum memeriksa dan sebaliknya
+                                }elseif($dt3->app_assesor1==1 && $dt3->app_assesor2 !=1){
+                                  echo '<br /><span class="text text-danger">Diterima Assesor 1</span>';
+                                  echo '<br />('.wordwrap($dt3->komentar, 75, "<br />\n").')';
+                                }elseif($dt3->app_assesor2==1 && $dt3->app_assesor1 !=1){
+                                  echo '<br /><span class="text text-danger">Diterima Assesor 2</span>';
+                                  echo '<br />('.wordwrap($dt3->komentar, 75, "<br />\n").')';
+                            //Jika assesor 1 belum periksa dan assesor 2 belum periksa dan laporan belum upload
+                                }elseif($dt3->app_assesor1==0 && $dt3->app_assesor2==0 && $dt3->status_laporan==0){
                                   echo anchor('RencanaKerja/EditLaporan/'.$dt3->id_subkegiatan,'<span class="btn btn-sm btn-primary">Upload File</span>');
-                                }elseif($dt3->status_laporan==1){
-                                  echo anchor('RencanaKerja/EditLaporan2/'.$dt3->id_subkegiatan,'<span>Lihat File</span>');
+                            //Jika assesor 1 belum periksa dan assesor 2 belum periksa dan laporan sudah upload
+                                }elseif($dt3->app_assesor1==0 && $dt3->app_assesor2==0 && $dt3->status_laporan==1){
+                                  echo anchor('RencanaKerja/EditLaporan2/'.$dt3->id_subkegiatan,'<span>Edit File</span>');
+                            //Jika assesor 1 dan 2 menyetujui
+                                }elseif($dt3->app_assesor1==1 && $dt3->app_assesor2==1){
+                                  echo '<span class="text text-danger">Diterima <br /> Assesor 1 & Assesor 2</span>';
                                 }else{
-                                  echo '<span class="text text-danger">'.$this->pustaka->p_laporan($dt3->statuslaporan).'</span>';
+                                  echo '<span class="text text-danger">'-'</span>';
                                 }
                               ?>
+                          </td>
+                          <td>
+                            <?php
+                                  if($dt3->app_ketuaprodi==1){echo 'Ketua Prodi <span class="glyphicon glyphicon-ok"></span><br />';}else{echo 'Ketua Prodi <span class="glyphicon glyphicon-remove"></span><br />';}
+                                  if($dt3->app_assesor1==1){echo 'Assesor I <span class="glyphicon glyphicon-ok"></span><br />';}else{echo 'Assesor I <span class="glyphicon glyphicon-remove"></span><br />';}
+                                  if($dt3->app_assesor2==1){echo 'Assesor II <span class="glyphicon glyphicon-ok"></span><br />';}else{echo 'Assesor II <span class="glyphicon glyphicon-remove"></span><br />';}
+                            ?>
                           </td>
                         </tr>
                         <?php } ?>
@@ -316,6 +480,7 @@ PENDIDIKAN
                             <th colspan="2" style="text-align:right">Total:</th>
                             <th><?php echo @array_sum($total3); ?></th>
                             <th><?php echo @array_sum($poin3); ?></th>
+                            <th></th>
                             <th></th>
                             <th></th>
                         </tr>

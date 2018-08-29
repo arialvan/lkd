@@ -35,12 +35,6 @@
 
                         <div class="col-sm-3">
                           <label>SUB BKD<span class="required">*</span></label>
-                            <!-- <select id="bkd_kegiatan" name="bkd_kegiatan[]" class="form-control"  required>
-                                <option value="">Pilih</option>
-                                <?php //foreach($bkdkegiatan as $bk){ ?>
-                                <option value="<?php //echo $bk->id_kegiatan; ?>"><?php //echo $bk->kegiatan; ?></option>
-                                <?php //} ?>
-                            </select> -->
                             <select name="bkd_kegiatan[]" id="bkd_kegiatan" class="form-control col-md-7 col-xs-12 types">
                                 <option value="">- Pilih - </option>
                             </select>
@@ -62,7 +56,7 @@
 
                     <div class="form-group">
                       <div class="col-md-4">
-                        <button id="add-more" name="add-more" class="btn btn-primary">+ Tambah Form</button>
+                        <!-- <button id="add-more" name="add-more" class="btn btn-primary">+ Tambah Form</button> -->
                       </div>
                     </div>
 

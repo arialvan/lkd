@@ -29,6 +29,7 @@
 $(document).ready(function() {
     $('.myTable').DataTable( {
         "scrollX": true,
+         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
         buttons: [
             'copy', 'excel', 'pdf'
         ]
@@ -48,6 +49,18 @@ $(document).ready(function() {
             modal.find('#kategori').attr("value",div.data('kategori'));
         });
     });
+
+//Modal Update Sub kegiatan dosen
+        $(document).ready(function() {
+                // Untuk sunting
+                $('#tolak').on('show.bs.modal', function (event) {
+                    var div   = $(event.relatedTarget) // Tombol dimana modal di tampilkan
+                    var modal = $(this)
+
+                    // Isi nilai pada field
+                    modal.find('#id_kegiatan').attr("value",div.data('id_kegiatan'));
+                });
+            });
 
 //Modal Update Sub kegiatan dosen
     $(document).ready(function() {
@@ -87,6 +100,7 @@ $(document).ready(function() {
                         modal.find('#id_file').attr("value",div.data('id_file'));
                         modal.find('#id_subkegiatan').attr("value",div.data('id_subkegiatan'));
                         modal.find('#nama_file').attr("value",div.data('nama_file'));
+                        modal.find('#nama').attr("value",div.data('nama'));
                     });
                 });
 

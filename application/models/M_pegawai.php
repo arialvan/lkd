@@ -93,6 +93,7 @@ function show_golongan_select(){
                       ->join('tb_pegawai','profil_dosen.nip=tb_pegawai.nip')
                       ->join('master_kategori_dosen','profil_dosen.id_kat_dosen=master_kategori_dosen.id_kat_dosen')
                       ->where('profil_dosen.nip !=', 007)
+                      ->where('profil_dosen.id_kat_dosen !=', 0)
                       ->order_by('profil_dosen.nip ASC');
       $query=$this->db->get()->result();
       return $query;

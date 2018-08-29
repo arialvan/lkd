@@ -22,12 +22,14 @@
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
-                    <table id="datatable-buttons" class="table table-striped table-bordered">
+                    <table class="table table-striped table-bordered myTable display nowrap" style="width:100%">
                       <thead>
                         <tr>
                           <th>#</th>
                           <th>Nip</th>
                           <th>Nama</th>
+                          <th>Status Laporan</th>
+                          <th>Assesor</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -39,9 +41,42 @@
                         <tr>
                           <th scope="row"><?php echo $no++; ?></th>
                           <td><?php echo $dt->nip; ?></td>
-                          <td><?php echo $dt->pegawai; ?></td>
                           <td>
-                              <?php echo anchor('Verifikator/PeriksaLaporanDetail/'.$dt->nip,'<span class="glyphicon glyphicon-arrow-right" title="Detil Data"></span>'); ?>
+                              <?php echo $dt->pegawai; ?>
+                              <?php echo '<br /><span class="text text-danger">'.$dt->kategori_dosen.'</span>'; ?>
+                          </td>
+                          <td>
+                            <?php
+                                            if($dt->p_assesor1==1 && $dt->p_assesor2==1){
+                                                echo '<span class="text text-danger"><b>Disetujui Assesor 1</b></span> <br />
+                                                      <span class="text text-danger"><b>Disetujui Assesor 2</b></span>';
+                                            }elseif($dt->p_assesor1==2){
+                                                echo '<span class="text text-danger"><b>Ditolak Assesor 1</b></span>';
+                                            }elseif($dt->p_assesor2==2){
+                                                echo '<span class="text text-danger"><b>Ditolak Assesor 2</b></span>';
+                                            }elseif($dt->p_assesor1==1 && ($dt->p_assesor2==2 || $dt->p_assesor2==0)){
+                                                echo '<span class="text text-danger"><b>Disetujui Assesor 1</b></span><br />
+                                                      <span class="text text-danger"><b>Proses Assesor 2</b></span>';
+                                            }elseif($dt->p_assesor2==1 && ($dt->p_assesor1==2 || $dt->p_assesor1==0)){
+                                              echo '<span class="text text-danger"><b>Disetujui Assesor 2</b></span><br />
+                                                    <span class="text text-danger"><b>Proses Assesor 1</b></span>';
+                                            }elseif($dt->p_assesor1==1){
+                                                echo '<span class="text text-danger"><b>Disetujui Assesor 1</b></span>';
+                                            }elseif($dt->p_assesor2==1){
+                                                echo '<span class="text text-danger"><b>Disetujui Assesor 2</b></span>';
+                                            }elseif($dt->statuslaporan==1){
+                                                echo '<span class="text text-danger"><b>Sudah Upload Laporan</b></span>';
+                                            }else{echo '<span><b>Diperiksa Prodi</b></span>';}
+                            ?>
+                          </td>
+                          <td>
+                            <?php
+                                  if($dt->p_assesor1==1){echo 'Assesor I <span class="glyphicon glyphicon-ok"></span><br />';}else{echo 'Assesor I <span class="glyphicon glyphicon-remove"></span><br />';}
+                                  if($dt->p_assesor2==1){echo 'Assesor II <span class="glyphicon glyphicon-ok"></span><br />';}else{echo 'Assesor II <span class="glyphicon glyphicon-remove"></span><br />';}
+                            ?>
+                          </td>
+                          <td>
+                              <?php echo anchor('Verifikator/PeriksaLaporanDetail/'.$dt->nip,'<span class="btn btn-sm btn-primary" title="Lihat Data">Lihat Data</span>'); ?>
                           </td>
                         </tr>
                         <?php } ?>

@@ -38,7 +38,7 @@
               <div class="menu_section">
               <h3><u>Data</u></h3>
                 <ul class="nav side-menu">
-                  <li><a href="<?php echo base_url() ?>Biodata"><i class="fa fa-calendar"></i>Biodata</a></li>
+                  <!-- <li><a href="<?php echo base_url() ?>Biodata"><i class="fa fa-calendar"></i>Biodata</a></li> -->
                   <li><a href="<?php echo base_url() ?>RencanaKerja"><i class="fa fa-user-md"></i>Rencana Kerja</a></li>
                   <li><a href="<?php echo base_url() ?>RencanaKerja/Laporan"><i class="fa fa-calculator"></i>Laporan</a></li>
                 </ul>
@@ -71,7 +71,7 @@
                     <li><a><i class="fa fa-users"></i> Laporan Kerja <span class="fa fa-chevron-down"></span></a>
                       <ul class="nav child_menu">
                           <li><a href="<?php echo base_url() ?>Verifikator/PeriksaLaporan">List Laporan</a></li>
-                          <li><a href="<?php echo base_url() ?>Verifikator/RekapLaporan">Rekap</a></li>
+                            <li><a href="<?php echo base_url() ?>Verifikator/RekapLaporan">Rekap</a></li>
                       </ul>
                     </li>
                   </ul>

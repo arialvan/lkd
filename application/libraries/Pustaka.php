@@ -125,7 +125,7 @@ return $p;
   public function syarat($syt)
     {
       if($syt=='1') {
-          $syt="<span class='glyphicon glyphicon-check' title='Di hitung BKD'></span>";
+          $syt="<span class='glyphicon glyphicon-check' title='Syarat BKD'></span>";
       }else{
           $syt="<span></span>";
       }
@@ -154,4 +154,24 @@ return $p;
 
       return $syt2;
       }
+
+
+      public function laporan($l)
+        {
+            if($l=='0') {
+              $l='<span>Masih di Periksa Prodi</span>';
+            }elseif($l=='1'){
+              $l='<span class="text text-danger"><b>Sudah Upload Laporan</b></span>';
+            }elseif($l=='4'){
+              $l='<span class="text text-warning"><b>Di Tolak Assesor I</b></span>';
+            }elseif($l=='5'){
+              $l='<span class="text text-warning"><b>Di Tolak Assesor II</b></span>';
+            }elseif($l=='6'){
+              $l='<span class="text text-success"><b>Selesai</b></span>';
+            }else{
+              $l='<span class="text text-success">Selesai</span>';
+            }
+
+        return $l;
+        }
 }

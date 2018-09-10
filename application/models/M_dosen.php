@@ -152,6 +152,35 @@ function update_dosen($where,$data,$table)
 {
     $this->db->where($where);
     $this->db->update($table,$data);
+
+}
+
+function edit_pegawai(){
+  $this->db->select('*')
+                  ->from('tb_pegawai')
+                  ->join('profil_dosen','tb_pegawai.nip = profil_dosen.nip')
+                  ->where('profil_dosen.nip=', $this->session->userdata('nipp'));
+  $query=$this->db->get()->result();
+  return $query;
+}
+
+function fakultas_id($id){
+  $this->db->select('a.nip,a.id_fakultas,a.id_prodi,b.nama_fakultas,c.nama_prodi')
+                  ->from('profil_dosen a')
+                  ->join('tbl_mst_fakultas b','a.id_fakultas = b.id_fakultas')
+                  ->join('tbl_mst_prodi c','a.id_prodi = c.id_prodi')
+                  ->where('a.nip=', $id);
+  $query=$this->db->get()->result();
+  return $query;
+}
+
+function jabatan_id($id){
+  $this->db->select('a.id_jabatan,b.nm_jabatan')
+                  ->from('profil_dosen a')
+                  ->join('jabatan_dosen b','a.id_jabatan = b.id_jabatan')
+                  ->where('a.nip=', $id);
+  $query=$this->db->get()->result();
+  return $query;
 }
 
 }//Close Class

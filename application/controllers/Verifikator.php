@@ -326,7 +326,7 @@ function SelesaiLaporan_1($id)
 	redirect('Verifikator/PeriksaLaporanDetail/'.$id);
 }
 
-function SelesaiLaporan_2()
+function SelesaiLaporan_2($id)
 {
 	$data = array('p_assesor2' => 1);
 
@@ -357,13 +357,14 @@ public function PeriksaLaporan()
 public function PeriksaLaporanDetail($id)
 {
 	$ids = $this->session->userdata('nipp');
-	$data['filter'] = $this->M_dosen->filter($ids);
+	$data['filter'] = $this->M_verifikator->filter($id);
 	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
 	$this->load->library('Pustaka');
 	$data['name'] = $this->session->userdata('username');
 	$data['nipp'] = $this->session->userdata('nipp');
 	$data['level'] = $this->session->userdata('user_level');
 
+	$data['count'] = $this->M_verifikator->count_subkegiatan($id);
 	$data['namadosen'] = $this->M_verifikator->profil_dosen_diperiksa($id);
 	$data['profildosen1'] = $this->M_verifikator->profil2($id);
 	$data['profildosen'] = $this->M_verifikator->profil_remunerasi($id);
@@ -374,7 +375,7 @@ public function PeriksaLaporanDetail($id)
 	$data['penelitian'] = $this->M_rencanakerja->show_rencana_penelitian($id);
 	$data['pengabdian'] = $this->M_rencanakerja->show_rencana_pengabdian($id);
 	$data['penunjang'] = $this->M_rencanakerja->show_rencana_penunjang($id);
-	$data['verifikator'] = $this->M_rencanakerja->show_verifikator();
+	$data['verifikator'] = $this->M_verifikator->show_verifikator_laporandetail($id);
 	$data['bkdkegiatan'] = $this->M_rencanakerja->show_bkdkegiatan();
 	$data['syaratbkd'] = $this->M_rencanakerja->show_syarat_bkd();
 	$data['syaratsubbkd'] = $this->M_rencanakerja->show_syarat_subbkd($id);
@@ -382,13 +383,13 @@ public function PeriksaLaporanDetail($id)
 	$data['syt_penelitian'] = $this->M_rencanakerja->show_syarat_penelitian($id);
 	$data['syt_pengabdian'] = $this->M_rencanakerja->show_syarat_pengabdian($id);
 	$data['syt_penunjang'] = $this->M_rencanakerja->show_syarat_penunjang($id);
-	$data['tanpa_syt_penunjang'] = $this->M_rencanakerja->show_tanpa_syarat_penunjang($id);
+	$data['tanpa_syt_penunjang'] = $this->M_verifikator->show_tanpa_syarat_penunjang($id);
 	$data['syt_penunjang_poin'] = $this->M_rencanakerja->show_syarat_penunjang_poin($id);
 	$data['poinremunerasi'] = $this->M_rencanakerja->show_poin_remunerasi($id);
 	$data['poinmaks'] = $this->M_rencanakerja->poin_terbesar($id);
 	$data['poinmin'] = $this->M_rencanakerja->poin_terendah($id);
 	$data['sksxpoin'] = $this->M_rencanakerja->sksxpoin($id);
-	$data['sum_poin_pendidikan'] = $this->M_rencanakerja->show_syarat_subbkd_poin($id);
+	$data['sum_poin_pendidikan'] = $this->M_verifikator->show_syarat_subbkd_poin($id);
 	$data['pendidikan'] = $this->M_verifikator->show_pendidikan($id);
 	$data['penelitian'] = $this->M_verifikator->show_rencana_penelitian($id);
 	$data['pengabdian'] = $this->M_verifikator->show_rencana_pengabdian($id);
@@ -411,7 +412,7 @@ public function PeriksaLaporanDetailPDF($id)
 
 	$filename = str_replace("_","/",$nama_file);
 
-	$data = $id_kegiatan.'#'.$filename;
+	echo $data = $id_kegiatan.'#'.$filename;
 	$datas=$this->M_verifikator->show_file1($data);
 
 	foreach ($datas as $keys);

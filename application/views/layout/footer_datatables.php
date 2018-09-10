@@ -366,7 +366,86 @@ function ConfirmDelete() {
                              }
                             }
 
+  /* ============================================================== */
+$('input[type="submit"]').prop("disabled", true);
+var a=0;
+//binds to onchange event of your input field
+$('.pdfs').bind('change', function() {
+if ($('input:submit').attr('disabled',false)){
+	$('input:submit').attr('disabled',true);
+	}
+var ext = $('.pdfs').val().split('.').pop().toLowerCase();
+// if ($.inArray(ext, ['pdf','png','jpg','jpeg']) == -1){
+if ($.inArray(ext, ['pdf']) == -1){
+    	$('.error1').slideDown("slow");
+    	$('.error2').slideUp("slow");
+      $('.simpan').slideUp("slow");
+    	a=0;
+	}else{
+    	var picsize = (this.files[0].size);
+      	if (picsize > 5000000){
+          	$('.error2').slideDown("slow");
+            $('.simpan').slideUp("slow");
+          	a=0;
+      	}else{
+          	a=1;
+          	$('.error2').slideUp("slow");
+            $('.simpan').slideDown("slow");
+    	 }
+    	      $('.error1').slideUp("slow");
+              // $('.simpan').slideDown("slow");
+    	if (a==1){
+    		$('input:submit').attr('disabled',false);
+    		}
+}
+});
 
+function selfakultas()
+{
+   var state=$('#id_fakultas').val();
+        $.post('<?php echo base_url();?>Laporan/ambil_fakultas/',
+        {
+            state:state
+        },
+        function(data)
+        {
+          $('#id_prodi').html(data);
+        });
+}
+
+function sel_laporan()
+{
+   var state=$('#id_asesor').val();
+        $.post('<?php echo base_url();?>Laporan/ambil_data_asessor/',
+        {
+            state:state
+        },
+        function(data)
+        {
+          $('#id_data').html(data);
+        });
+}
+
+function saveToDB()
+    {
+        console.log('Saving to the db');
+        form = $('.contact-form');
+            $.ajax({
+                    url: "<?php echo base_url(); ?>Biodata/UpdateBiodata",
+                    type: "POST",
+                    data: form.serialize(),
+                    success: function (response) {
+                        $("#testDIV").html(response);
+                          setTimeout(function(){
+                             window.location.reload(1);
+                          }, 1000);
+                    },
+            });
+    }
+    $('.contact-form').submit(function(e) {
+            saveToDB();
+            e.preventDefault();
+    });
     </script>
   </body>
 </html>

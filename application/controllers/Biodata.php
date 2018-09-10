@@ -6,6 +6,7 @@ var $acl;
 public function __construct() {
   parent::__construct();
   $this->is_logged_in();
+  $this->load->model('M_laporan');
   $this->load->model('M_pegawai');
   $this->load->model('M_master');
   $this->load->model('M_dosen');
@@ -41,6 +42,49 @@ public function index()
         $this->load->view('layout/footer');
 
 }
+
+public function FormBio()
+{
+            $ids = $this->session->userdata('nipp');
+            $data['filter'] = $this->M_laporan->filter($ids);
+            $data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
+            $data['profildosen'] = $this->M_laporan->profil();
+            $data['name'] = $this->session->userdata('username');
+            $data['nipp'] = $this->session->userdata('nipp');
+            $data['pegawai'] = $this->M_dosen->edit_pegawai();
+            $data['fak_id'] = $this->M_dosen->fakultas_id($ids);
+            $data['jab_id'] = $this->M_dosen->jabatan_id($ids);
+            $data['fakultas'] = $this->M_laporan->show_fakultas();
+            $data['jabatan'] = $this->M_laporan->show_jabatan();
+            $data['title'] = 'Edit Pegawai';
+            $this->load->view('layout/header_datatables',$data);
+            $this->load->view('layout/side_menu');
+            $this->load->view('pages/dosen/form_update');
+            $this->load->view('layout/footer_datatables');
+}
+
+function UpdateBiodata() {
+
+$data = array('tempat_lhr' => $this->input->post('tempat_lahir'),
+              'tgl_lahir' => $this->input->post('thn')."-".$this->input->post('bln')."-".$this->input->post('tgl')
+        );
+        $where = array('nip' => $this->input->post('nip'));
+        $this->M_dosen->update_dosen($where, $data, 'tb_pegawai');
+
+  $data1 = array(
+            'no_sertifikat' => $this->input->post('no_sertifikat'),
+            'id_fakultas' => $this->input->post('id_fakultas'),
+            'id_prodi' =>  $this->input->post('id_prodi'),
+            'id_jabatan' =>  $this->input->post('id_jabatan'),
+            'hp' =>  $this->input->post('no_hp'),
+            'email' =>  $this->input->post('email')
+  );
+  //Update Status Profil
+  $where1 = array('nip' => $this->input->post('nip'));
+  $query = $this->M_dosen->update_dosen($where1, $data1, 'profil_dosen');
+  echo "Update Berhasil";
+}
+
 
 public function resetPassword($id){
 	$this->db->query("update tb_pegawai_profil set password=md5(nip) where nip='$id' limit 1");

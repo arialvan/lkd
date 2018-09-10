@@ -265,7 +265,6 @@ function show_tanpa_syarat_penunjang($id)
                     ->where('b.renum_hitung=',1)
                     ->where('c.status=',1)
                     ->where_in('a.id_bkd', 4);
-                    // ->or_where('a.id_bkd=',4);
     $query=$this->db->get()->result();
     return $query;
 }

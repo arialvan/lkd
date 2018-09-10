@@ -32,6 +32,12 @@ function show_mapel()
     return $query;
 }
 
+/*UNIT*/
+function show_unit(){
+    $query = $this->db->get('tb_unit')->result();
+    return $query;
+}
+
 function insert_periode($data,$table)
 {
     $msg = '<i class="fa fa-check text-success"></i> Simpan Data Berhasil';

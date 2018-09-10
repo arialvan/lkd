@@ -244,10 +244,10 @@ public function EditLaporan($id)
         $data['nipp'] = $this->session->userdata('nipp');
         $data['subkegiatan'] = $this->M_rencanakerja->edit_subkegiatan($id);
         $data['title'] = 'Upload Laporan';
-        $this->load->view('layout/header',$data);
+        $this->load->view('layout/header_datatables',$data);
         $this->load->view('layout/side_menu');
         $this->load->view('pages/bkd/subkegiatan_laporan');
-        $this->load->view('layout/footer');
+        $this->load->view('layout/footer_datatables');
 }
 
 public function EditLaporan2($id)
@@ -352,8 +352,10 @@ function InsertLaporan()
             $filesCount = count($_FILES['files']['name']);
             for($i = 0; $i < $filesCount; $i++){
 
-								$filenames = $this->session->userdata('nipp').'_'.date('Y-m-d').'_'.rand(1, 100).'.pdf';
+								//$filenames = $this->session->userdata('nipp').'_'.date('Y-m-d').'_'.rand(1, 100).'.pdf';
+								$filenames = $this->session->userdata('nipp').'_'.date('Y-m-d').'_'.$this->input->post('id_subkegiatan').'_'.$this->input->post('no')[$i].'.pdf';
 								$namafile[] = $filenames;
+
                 // $_FILES['file']['name']     = $_FILES['files']['name'][$i];
 								$_FILES['file']['name']     = $filenames;
                 $_FILES['file']['type']     = $_FILES['files']['type'][$i];
@@ -361,12 +363,14 @@ function InsertLaporan()
                 $_FILES['file']['error']     = $_FILES['files']['error'][$i];
                 $_FILES['file']['size']     = $_FILES['files']['size'][$i];
 
-                // File upload configuration
-								//Check Directory
+                // Konfigurasi Upload File
+								//Cek Direktori
 									$directoryname = $this->session->userdata('nipp');
-									if (!is_dir('uploads/'.$directoryname)) {
-										  mkdir('./uploads/' . $this->session->userdata('nipp'), 0777, TRUE);
+									if (!is_dir('./uploads/'.$directoryname)) { //Jika Folder Belum Ada Maka Buat Folder Baru
+										  mkdir('./uploads/' . $this->session->userdata('nipp'), 0777, TRUE); //Folder Baru
 									}
+
+									// Nama Direktori File
 	                $uploadPath = 'uploads/'.$this->session->userdata('nipp').'/';
 	                $config['upload_path'] = $uploadPath;
 	                $config['allowed_types'] = 'pdf';
@@ -386,25 +390,27 @@ function InsertLaporan()
 
                 // Insert files data into the database
 								foreach ($this->input->post('nama_file') as $keys => $a) {
+										$namafile_db = $namafile[$keys];
 										$data = array(
 															'id_subkegiatan' => $this->input->post('id_subkegiatan'),
 															'nama_file' => $a,
-															'file' => $namafile[$keys]
+															'file' => $namafile_db
 										);
 										$this->M_rencanakerja->insert_rencanakerja($data, 'bkd_subkegiatan_file');
+										//var_dump($data);
 								}
 
-								//Update Sub Kegiatan
+							//	Update Sub Kegiatan
 								$data = array('status_laporan' => 1);
 							  $where = array('id_subkegiatan' => $this->input->post('id_subkegiatan'));
 							  $this->M_rencanakerja->update_rencana($where, $data, 'bkd_subkegiatan');
 
-                //Upload status message
-                $statusMsg = $insert?'Files uploaded successfully.':'Some problem occurred, please try again.';
-                $this->session->set_flashdata('statusMsg',$statusMsg);
+								redirect('RencanaKerja/Laporan');
+        }else{
+								redirect('RencanaKerja/EditLaporan/',$this->input->post('id_subkegiatan'));
+				}
 
-        }
-redirect('RencanaKerja/Laporan');
+
 }
 
 //UPDATE

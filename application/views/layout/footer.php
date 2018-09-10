@@ -27,6 +27,7 @@
     <script src="<?php echo base_url(); ?>assets/build/js/custom.min.js"></script>
 
     <script>
+
         $('#myDatepicker2').datetimepicker({
             format: 'YYYY.MM.DD'
         });
@@ -107,17 +108,17 @@ function kegiatan2()
       //$('#id_unit_kerja').html(data);
     });
 }
-//multiple select
-            // $(document).ready(function() {
-            //     $('.mdb-select').material_select();
-            // });
-            //Select Search
-            $(document).ready(function(){
-              $('.selectpicker').selectpicker({
-                  style: 'btn-info',
-                  size: 4
-              });
-            });
+
+$(document).ready(function(){
+  $('.selectpicker').selectpicker({
+  style: 'btn-info',
+  size: 4
+  });
+});
+
+
+
+
     </script>
 
 

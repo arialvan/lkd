@@ -15,5 +15,6 @@ class CustomFPDF extends FPDF {
     public function getInstance(){
         return new CustomFPDF();
     }
+    
 }
 ?>

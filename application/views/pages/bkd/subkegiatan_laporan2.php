@@ -66,17 +66,23 @@
                           <input type="hidden" class="form-control" id="id_file" name="id_file" />
                           <input type="hidden" class="form-control" id="id_subkegiatan" name="id_subkegiatan" />
                           <input type="hidden" class="form-control" id="nama_file" name="nama_file" />
-                          <input type="text" class="form-control" id="nama" name="nama" />
+                          <input type="hidden" class="form-control" id="nama" name="nama" />
                           <div class="modal-body">
                                   <div class="form-group">
                                       <label class="col-lg-2 col-sm-2 control-label">Upload File</label>
                                       <div class="col-lg-10">
-                                          <input type="file" name="files" id="files" class="form-control" required="required" />
+                                          <input type="file" name="files" id="files" class="form-control pdfs" required="required" />
+                                          <p class="error1" style="display:none; color:#FF0000;">
+                                            Invalid File Format! File Format Harus PDF.
+                                          </p>
+                                          <p class="error2" style="display:none; color:#FF0000;">
+                                            Maximum File Size Limit is 5 MB.
+                                          </p>
                                       </div>
                                   </div>
                               </div>
                               <div class="modal-footer">
-                                  <button class="btn btn-info" type="submit"> Simpan&nbsp;</button>
+                                  <button class="btn btn-info simpan" type="submit"> Simpan&nbsp;</button>
                                   <button type="button" class="btn btn-warning" data-dismiss="modal"> Batal</button>
                               </div>
                             </form>

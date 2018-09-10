@@ -6,7 +6,7 @@
                   <li><a href="<?php echo base_url() ?>Dashboard"><i class="fa fa-dashboard"></i> Dashboard </a></li>
                 </ul>
                 <ul class="nav side-menu">
-                  <li><a><i class="fa fa-users"></i> Data Dosen <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-graduation-cap"></i> Data Dosen <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li><a href="<?php echo base_url() ?>Pegawai">View</a></li>
                         <li><a href="<?php echo base_url() ?>Import">Import</a></li>
@@ -29,6 +29,13 @@
                         <li><a href="<?php echo base_url() ?>MasterBkd/SyaratFile">Input Syarat File</a></li>
                     </ul>
                   </li>
+                  <li><a><i class="fa fa-clipboard"></i> Rekap Laporan <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        <li><a href="<?php echo base_url() ?>Laporan/RekapLaporanAssesor1">Disetuji Assesor 1</a></li>
+                        <li><a href="<?php echo base_url() ?>Laporan/RekapLaporanAssesor2">Disetujui Assesor 2</a></li>
+                        <li><a href="<?php echo base_url() ?>Laporan/RekapAssesor1dan2">Disetujui Assesor 1 dan 2</a></li>
+                    </ul>
+                  </li>
                 </ul>
               </div>
 
@@ -38,9 +45,10 @@
               <div class="menu_section">
               <h3><u>Data</u></h3>
                 <ul class="nav side-menu">
-                  <!-- <li><a href="<?php echo base_url() ?>Biodata"><i class="fa fa-calendar"></i>Biodata</a></li> -->
-                  <li><a href="<?php echo base_url() ?>RencanaKerja"><i class="fa fa-user-md"></i>Rencana Kerja</a></li>
+                  <li><a href="<?php echo base_url() ?>Biodata/FormBio"><i class="fa fa-users"></i>Biodata</a></li>
+                  <li><a href="<?php echo base_url() ?>RencanaKerja"><i class="fa fa-file-word-o"></i></i>Rencana Kerja</a></li>
                   <li><a href="<?php echo base_url() ?>RencanaKerja/Laporan"><i class="fa fa-calculator"></i>Laporan</a></li>
+                  <li><a href="<?php echo base_url() ?>Laporan"><i class="fa fa-clipboard"></i>Rekap BKD</a></li>
                 </ul>
               </div>
               <?php } ?>

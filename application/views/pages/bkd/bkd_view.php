@@ -39,7 +39,7 @@
                       <fieldset>
                         <legend></legend>
 
-                          <div class="col-sm-3">
+                          <div class="col-sm-2">
                             <label><u><span class="required">SYARAT BKD Anda</span></u></label><br />
                               <table border="0" cellpadding="20" cellspacing="2">
                                   <?php
@@ -47,7 +47,7 @@
                                         if($profil->id_kat_dosen==3 || $profil->id_kat_dosen==7 || $profil->id_kat_dosen==9){
                                             $syaratBKD= $x->sks_bkd;
                                         }elseif($profil->id_kat_dosen==1 || $profil->id_kat_dosen==2 || $profil->id_kat_dosen==4){
-                                            $syaratBKD= $x->sks_bkd+$x->sks_remun;
+                                            $syaratBKD= $x->sks_bkd;
                                         }elseif($profil->id_kat_dosen==6 || $profil->id_kat_dosen==8){
                                             $syaratBKD= $x->sks_bkd+$x->sks_remun;
                                         }else{
@@ -64,7 +64,7 @@
                               </table>
                             </div>
 
-                            <div class="col-sm-3">
+                            <div class="col-sm-2">
                               <?php foreach ($syt_pendidikan as $x1); ?>
                               <?php foreach ($syt_penelitian as $x2); ?>
                               <?php foreach ($syt_pengabdian as $x3); ?>
@@ -90,8 +90,49 @@
                                 </table>
                               </div>
 
+                              <div class="col-sm-2">
+                                <label><u><span class="required">BKD</span></u></label><br />
+                                    <?php
+                                    $ntotal = array($x1->skspendidikan,$x2->skspenelitan,$x3->skspengabdian,$x4->skspenunjang);
+                                    $totalbkd = array_sum($ntotal);
+
+                                    //Dosen Biasa (sudah Sertifikasi),Profesor Biasa, Syarat 12 SKS
+                                    if($profil->id_kat_dosen==3 || $profil->id_kat_dosen==7 || $profil->id_kat_dosen==9){
+                                            $Syarat_BKD = $sytbkd[0]; //Tanpa tambah 4
+                                            if($x1->skspendidikan >= $Syarat_BKD && $x2->skspenelitan >= $sytbkd[1] && $x3->skspengabdian >= $sytbkd[2] && $totalbkd >= 12 ){
+                                                $hasilbkd = "Memenuhi";
+                                            }else{
+                                                $hasilbkd = "Belum Memenuhi";
+                                            }
+
+                                    //Calon Dosen, Dosen Biasa (non Sertifikasi), Dosen Tetap Bukan PNS (non Sertifikasi), Syarat 8 SKS
+                                    }elseif(($profil->id_kat_dosen==1 || $profil->id_kat_dosen==2 || $profil->id_kat_dosen==4)){
+                                            $Syarat_BKD = $sytbkd[0]-3; //Tanpa tambah 4
+                                            if($x1->skspendidikan >= $Syarat_BKD && $totalbkd >= 12 ){
+                                                $hasilbkd = "Memenuhi";
+                                            }else{
+                                                $hasilbkd = "Belum Memenuhi";
+                                            }
+
+                                    //Calon Dosen, Dosen Biasa (non Sertifikasi), Dosen Tetap Bukan PNS (non Sertifikasi), Syarat 8 SKS
+                                    }elseif(($profil->id_kat_dosen==6 || $profil->id_kat_dosen==8)){
+                                            $Syarat_BKD = $sytbkd[0]-3; //Tanpa tambah 4
+                                            if($x1->skspendidikan >= $Syarat_BKD ){
+                                                $hasilbkd = "Memenuhi";
+                                            }else{
+                                                $hasilbkd = "Belum Memenuhi";
+                                            }
+
+                                    }else{
+                                            $hasilbkd = "Belum Memenuhi";
+                                    }
+
+                                    ?>
+                                    <span class="required"><?php echo $hasilbkd; ?></span>
+                                </div>
+
                               <div class="col-sm-3">
-                                <label><u><span class="required">HASIL BKD</span></u></label><br />
+                                <label><u><span class="required">Pay For Position (P1)</span></u></label><br />
                                     <?php
                                     // PERHITUNGAN MENURUT KATEGORI DOSEN DAN MAKSIMAL SKS BKD
 
@@ -100,26 +141,29 @@
 
                                     //Dosen Biasa (sudah Sertifikasi),Profesor Biasa, Syarat 12 SKS
                                     if($profil->id_kat_dosen==3 || $profil->id_kat_dosen==7 || $profil->id_kat_dosen==9){
-                                            // if($x1->skspendidikan >= $sytbkd[0] && $x2->skspenelitan >= $sytbkd[1] && $x3->skspengabdian >= $sytbkd[2] && ($x4->skspenunjang <= $sytbkd[3] || $x4->skspenunjang>=$sytbkd[3]) && $totalbkd>=12){
-                                            // $Syarat_BKD = $sytbkd[0]+4;
-                                            //&& $x4->skspenunjang >= $sytbkd[3]
-                                            $Syarat_BKD = $sytbkd[0];
+                                            $Syarat_BKD = $sytbkd[0]+4;
                                             if($x1->skspendidikan >= $Syarat_BKD && $x2->skspenelitan >= $sytbkd[1] && $x3->skspengabdian >= $sytbkd[2] && $totalbkd >= 12 ){
-                                                $hasilbkd = "Memenuhi Syarat BKD";
+                                                $hasilbkd = "Memenuhi";
                                             }else{
-                                                $hasilbkd = "Belum Memenuhi Syarat BKD";
+                                                $hasilbkd = "Belum Memenuhi";
                                             }
 
                                     //Calon Dosen, Dosen Biasa (non Sertifikasi), Dosen Tetap Bukan PNS (non Sertifikasi), Syarat 8 SKS
                                     }elseif(($profil->id_kat_dosen==1 || $profil->id_kat_dosen==2 || $profil->id_kat_dosen==4)){
-                                            if($totalbkd >=12){$hasilbkd = "Memenuhi Syarat BKD"; }else{ $hasilbkd = "Belum Memenuhi Syarat BKD";  }
+                                            $Syarat_BKD = $sytbkd[0]+4;
+                                            if($x1->skspendidikan >= $Syarat_BKD && $totalbkd >=12){
+                                                $hasilbkd = "Memenuhi";
+                                            }else{
+                                                $hasilbkd = "Belum Memenuhi";
+                                            }
+                                              //if($totalbkd >=12){$hasilbkd = "Memenuhi"; }else{ $hasilbkd = "Belum Memenuhi";  }
 
                                     //Calon Dosen, Dosen Biasa (non Sertifikasi), Dosen Tetap Bukan PNS (non Sertifikasi), Syarat 8 SKS
                                     }elseif(($profil->id_kat_dosen==6 || $profil->id_kat_dosen==8)){
-                                            if($x1->skspendidikan >=3){$hasilbkd = "Memenuhi Syarat BKD"; }else{ $hasilbkd = "Belum Memenuhi Syarat BKD";  }
+                                            $hasilbkd = "Dibayar Melalui Absensi";
 
                                     }else{
-                                            $hasilbkd = "Belum Memenuhi Syarat BKD";
+                                            $hasilbkd = "Belum Memenuhi";
                                     }
 
                                     ?>
@@ -127,7 +171,7 @@
                                 </div>
 
                                 <div class="col-sm-3">
-                                  <label><u><span class="required">POIN REMUNERASI</span></u></label><br />
+                                  <label><u><span class="required">Pay For Performance (P2)</span></u></label><br />
                                     <?php
                                     foreach ($poinmaks as $pm);
                                     foreach ($syt_penunjang_poin as $k);
@@ -140,120 +184,41 @@
                                     //Calon Dosen, Dosen Biasa (non Sertifikasi), Dosen Tetap Bukan PNS (non Sertifikasi), Syarat 12 SKS
                                     if($profil->id_kat_dosen==1 || $profil->id_kat_dosen==2 || $profil->id_kat_dosen==4 ){
 
-                                      $Syarat_BKD = $sytbkd[0]+4;
+                                      $Syarat_BKD = $sytbkd[0]-3;
                                       if($x1->skspendidikan >= $Syarat_BKD && $totalbkd>= 12 ){
-
-                                      if($x1->skspendidikan >=10 ){
-                                            if($x2->skspenelitan+$x3->skspengabdian+$x4->skspenunjang ==1 ){
-                                                    foreach ($poinremunerasi as $b);
-                                                    $point_penunjang = $k->poinpenunjang; //Point Penunjang
-                                                    $point_pendidikan = ($b->poinremun-11);
-                                                    $points = $point_pendidikan+$point_penunjang;
-                                            }elseif($x2->skspenelitan+$x3->skspengabdian+$x4->skspenunjang >=2 ){
-                                                    foreach ($poinremunerasi as $b);
-                                                    $point_penunjang = $k->poinpenunjang; //Point Penunjang
-                                                    $point_pendidikan = ($b->poinremun-10);
-                                                    $points = $point_pendidikan+$point_penunjang;
-                                            }elseif($x2->skspenelitan+$x3->skspengabdian+$x4->skspenunjang ==0 ){
-                                                    foreach ($poinremunerasi as $b);
-                                                    $point_penunjang = $k->poinpenunjang; //Point Penunjang
-                                                    $point_pendidikan = ($b->poinremun-12);
-                                                    $points = $point_pendidikan+$point_penunjang;
-
-                                            }else{
-                                                    $points = "Belum Memenuhi";
-                                            }
-
-                                      }else{   $points = "Belum Memenuhi";  }
-
-                                                echo $point = round($points,2);
-
-                                }
+                                                  foreach ($tanpa_syt_penunjang as $tsp);
+                                                  $poin_pendidikan_remun = $poin_kegiatan_sum;
+                                                  $points_penunjang = $tsp->pointanpasyarat;
+                                                  $point = ($poin_pendidikan_remun+$points_penunjang)-8;
+                                                  if($point > 28){$points = 28; }else{$points = $point; }
+                                                  echo $point = round($points,2);
+                                         }else{
+                                                  echo"Belum Memenuhi";
+                                         }
                               /* PROFIL DOSEN 3,7,9 */
                             }elseif($profil->id_kat_dosen==3 || $profil->id_kat_dosen==7 || $profil->id_kat_dosen==9){
                                             foreach ($bkd_syarat_ds as $var);
                                             $bkd_syarat = $var->sks_bkd+$var->sks_remun; //Syarat BKD (SKS+Remun)
                                             $sks_poin = $x1->skspendidikan-$var->sks_remun;
-                                            $Syarat_BKD = $sytbkd[0]+4;
+                                            $Syarat_BKD = $sytbkd[0];
 
                                  if($x1->skspendidikan >= $Syarat_BKD && $x2->skspenelitan >= $sytbkd[1] && $x3->skspengabdian >= $sytbkd[2] && $totalbkd>= 12 ){
-                                            if($x1->skspendidikan == 10){
-                                                        if($x2->skspenelitan+$x3->skspengabdian >= 6){
-                                                           foreach ($tanpa_syt_penunjang as $tsp);
-                                                           $poin_pendidikan_remun = $poin_kegiatan_sum-10;
-                                                           $points_penunjang = $tsp->pointanpasyarat;
-                                                           $point = $points_penunjang+$poin_pendidikan_remun;
-                                                           if($point > 28){$points = 28; }else{$points = $point; }
+                                             foreach ($tanpa_syt_penunjang as $tsp);
+                                             $poin_pendidikan_remun = $poin_kegiatan_sum;
+                                             $points_penunjang = $tsp->pointanpasyarat;
+                                             $point = ($poin_pendidikan_remun+$points_penunjang)-8;
+                                             if($point > 28){$points = 28; }else{$points = $point; }
+                                             echo $point = round($points,2);
+                                    }else{
+                                             echo"Belum Memenuhi";
+                                    }
 
-                                                        }elseif($x2->skspenelitan+$x3->skspengabdian == 5){
-                                                           // foreach ($poinmin as $p1);
-                                                           // $points =  $x4->poinpenunjang - (1*$p1->poinmin);
-                                                           // $points_penunjang = $x4->poinpenunjang - (1*$p1->poinmin);
-                                                           foreach ($tanpa_syt_penunjang as $tsp);
-                                                           $poin_pendidikan_remun = $poin_kegiatan_sum-10;
-                                                           $points_penunjang = $tsp->pointanpasyarat;
-                                                           $point = $points_penunjang+$poin_pendidikan_remun;
-                                                           if($point > 28){$points = 28; }else{$points = $point; }
-
-                                                        }elseif($x4->skspenunjang ==4 ){
-                                                          foreach ($poinmin as $p1);
-                                                          $points =  $x4->poinpenunjang - (2*$p1->poinmin);
-                                                          $points_penunjang =  $x4->poinpenunjang - (2*$p1->poinmin);
-
-                                                        }else{
-                                                            $points = "Belum Memenuhi";
-                                                            $points_penunjang =  0;
-                                                        }
-
-                                              //Jika Pendidikan lebih besar dari syarat pendidikan dan jumlah syarat > 2
-                                              }elseif($x1->skspendidikan > $Syarat_BKD ){
-                                                            foreach ($poinremunerasi as $b);
-
-                                                            if($x2->skspenelitan+$x3->skspengabdian >= 6){
-                                                              foreach ($tanpa_syt_penunjang as $tsp);
-                                                              //$points =  $tsp->pointanpasyarat;
-                                                              $poin_pendidikan_remun = $poin_kegiatan_sum-10;
-                                                              $points_penunjang = $tsp->pointanpasyarat;
-                                                              $point = $points_penunjang+$poin_pendidikan_remun;
-                                                              if($point > 28){$points = 28; }else{$points = $point; }
-
-                                                            }elseif($x2->skspenelitan+$x3->skspengabdian == 5){
-                                                               foreach ($tanpa_syt_penunjang as $tsp);
-
-                                                               $poin_pendidikan_remun = $poin_kegiatan_sum-10;
-                                                               $points_penunjang = $tsp->pointanpasyarat;
-                                                               $point = $points_penunjang+$poin_pendidikan_remun;
-                                                               if($point > 28){$points = 28; }else{$points = $point; }
-
-                                                            }elseif($x4->skspenunjang >= 4 ){
-                                                              // foreach ($tanpa_syt_penunjang as $tsp);
-                                                              // foreach ($poinmin as $p1);
-                                                              // $points_penunjang =  $tsp->pointanpasyarat - (2*$p1->poinmin);
-                                                              // $points = $points_penunjang;
-                                                              foreach ($tanpa_syt_penunjang as $tsp);
-                                                              $poin_pendidikan_remun = $poin_kegiatan_sum-10;
-                                                              $points_penunjang = $tsp->pointanpasyarat;
-                                                              $point = $points_penunjang+$poin_pendidikan_remun;
-                                                              if($point > 28){$points = 28; }else{$points = $point; }
-
-                                                            }else{
-                                                                //$points = "Belum Memenuhi";
-                                                                $points_penunjang =  0;
-                                                                $points = $points_penunjang;
-                                                            }
-
-                                                }else{
-                                                            $points = "Belum Memenuhi";
-                                                }
-                                                        echo $point = round($points,2);
-                                         }
 
                                       /* Profil 6,8*/
                                             }elseif ($profil->id_kat_dosen==6 || $profil->id_kat_dosen==8) {
-                                                $Syarat_BKD = $sytbkd[0];
-
+                                                      $Syarat_BKD = $sytbkd[0]+3;
                                                       if($x1->skspendidikan >= $Syarat_BKD){
-                                                          $points = "Syarat Memenuhi";
+                                                          $points = "Memenuhi 30% P2";
                                                       }else{
                                                           $points = "Belum Memenuhi";
                                                       }
@@ -274,7 +239,7 @@
                   <span class="btn btn-sm btn-warning">BKD di Hitung, Remunerasi Tidak di Hitung</span>
                   <span class="btn btn-sm btn-danger">BKD Tidak di Hitung, Remunerasi di Hitung</span>
               </div>
-              
+
               <fieldset>
                 <legend></legend>
               <a href="<?php echo base_url() ?>RencanaKerja/FormRencana" class="btn btn-lg btn-primary"> + Pengisian BKD</a> >>Klik Tombol ini untuk menambah kegiatan

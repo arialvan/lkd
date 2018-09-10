@@ -17,8 +17,15 @@ function show_verifikator()
            ->order_by('verifikasi.nip ASC');
   $query = $this->db->get()->result();
   return $query;
-    // $query = $this->db->get('verifikasi')->result();
-    // return $query;
+}
+
+function count_subkegiatan($id)
+{
+  $this->db->select('count(id_subkegiatan)AS countid, sum(app_assesor1) AS sum_1, sum(app_assesor2) AS sum_2')
+           ->from('bkd_subkegiatan')
+           ->where('nip=', $id);
+  $query = $this->db->get()->result();
+  return $query;
 }
 
 function show_verifikator_noset()
@@ -190,6 +197,30 @@ function show_ketprodi()
         return $query;
 }
 
+
+/* FILTER */
+function show_verifikator_laporandetail($id)
+{
+  $this->db->select('*')
+                  ->from('verifikator')
+                  ->join('periode_lkd','verifikator.id_periode = periode_lkd.id_periode')
+                  ->where('verifikator.nip',$id)
+                  ->where('periode_lkd.status',1);
+  $query=$this->db->get()->result();
+  return $query;
+}
+
+function filter($id)
+{
+        $this->db->select('*')
+                 ->from('verifikator')
+                 ->join('periode_lkd','verifikator.id_periode = periode_lkd.id_periode')
+                 ->where('periode_lkd.status=',1)
+                 ->where('verifikator.nip=',$id)
+                 ->order_by('verifikator.id_verifikator');
+        $query = $this->db->get()->result();
+        return $query;
+}
 //PENILAIAN
 // function show_viewpages(){
 //
@@ -381,6 +412,39 @@ function show_rekap($id)
   $query=$this->db->get()->result();
   return $query;
 }
+
+function show_syarat_subbkd_poin($id)
+{
+    $this->db->select('SUM(a.sks_subkegiatan) AS subsks, SUM(a.poin_subkegiatan) AS Poin')
+                    ->from('bkd_subkegiatan a')
+                    ->join('bkd_kegiatan b','a.id_kegiatan = b.id_kegiatan')
+                    ->join('periode_lkd c','b.id_periode = c.id_periode')
+                    ->where('a.nip=', $id)
+                    ->where('c.status=',1)
+                    ->where('a.app_assesor1=',1)
+                    ->where('a.app_assesor2=',1)
+                    ->where('a.id_bkd', 1);
+    $query=$this->db->get()->result();
+    return $query;
+}
+
+function show_tanpa_syarat_penunjang($id)
+{
+    $this->db->select('SUM(a.poin_subkegiatan) AS pointanpasyarat')
+                    ->from('bkd_subkegiatan a')
+                    ->join('bkd_kegiatan b','a.id_kegiatan = b.id_kegiatan')
+                    ->join('periode_lkd c','b.id_periode = c.id_periode')
+                    ->where('a.nip=', $id)
+                    ->where('b.renum_hitung=',1)
+                    ->where('c.status=',1)
+                    ->where('a.app_assesor1=',1)
+                    ->where('a.app_assesor2=',1)
+                    ->where_in('a.id_bkd', 4);
+    $query=$this->db->get()->result();
+    return $query;
+}
+
+
 //Update
 function update_pegawai($where,$data,$table)
 {

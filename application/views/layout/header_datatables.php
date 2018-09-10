@@ -27,7 +27,6 @@
     <link href="<?php echo base_url(); ?>assets/vendors/bootstrap-select/bootstrap-select.min.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/vendors/editable/css/bootstrap-editable.css" rel="stylesheet">
 
-
     <!-- Custom Theme Style -->
     <link href="<?php echo base_url(); ?>assets/build/css/custom.min.css" rel="stylesheet">
     <style>

@@ -36,29 +36,9 @@ public function index()
 		$data['ids'] = $this->session->userdata('kat_dosen');
 		$data['profildosen'] = $this->M_laporan->profil();
 		$data['biodata'] = $this->M_laporan->biodata();
-		$data['bkd_syarat'] = $this->M_laporan->syaratbkd();
-		$data['bkd_syarat_ds'] = $this->M_laporan->syaratbkd_ds($id);
-		$data['bkd_syarat_dt'] = $this->M_laporan->syaratbkd_dt($id);
-		$data['rencanakerja'] = $this->M_laporan->show_rencana($id);
-		$data['penelitian'] = $this->M_laporan->show_rencana_penelitian($id);
-		$data['pengabdian'] = $this->M_laporan->show_rencana_pengabdian($id);
-		$data['penunjang'] = $this->M_laporan->show_rencana_penunjang($id);
 		$data['verifikator'] = $this->M_laporan->show_verifikator();
-		$data['bkdkegiatan'] = $this->M_laporan->show_bkdkegiatan();
-		$data['syaratbkd'] = $this->M_laporan->show_syarat_bkd();
-		$data['syaratsubbkd'] = $this->M_laporan->show_syarat_subbkd($id);
-		$data['sum_poin_pendidikan'] = $this->M_laporan->show_syarat_subbkd_poin($id);
-		$data['syt_pendidikan'] = $this->M_laporan->show_syarat_pendidikan($id);
-		$data['syt_penelitian'] = $this->M_laporan->show_syarat_penelitian($id);
-		$data['syt_pengabdian'] = $this->M_laporan->show_syarat_pengabdian($id);
-		$data['syt_penunjang'] = $this->M_laporan->show_syarat_penunjang($id);
-		$data['tanpa_syt_penunjang'] = $this->M_laporan->show_tanpa_syarat_penunjang($id);
-		$data['syt_penunjang_poin'] = $this->M_laporan->show_syarat_penunjang_poin($id);
-		$data['poinremunerasi'] = $this->M_laporan->show_poin_remunerasi($id);
-		$data['poinmaks'] = $this->M_laporan->poin_terbesar($id);
-		$data['poinmin'] = $this->M_laporan->poin_terendah($id);
-		$data['sksxpoin'] = $this->M_laporan->sksxpoin($id);
 		$data['detail_rekap'] = $this->M_laporan->show_detail($id);
+		$data['datadosen'] = $this->M_laporan->show_rekap_dosen($id);
 		$data['title'] = 'Beban Kinerja Dosen';
 		$this->load->view('layout/header_datatables',$data);
 		$this->load->view('layout/side_menu');
@@ -102,9 +82,9 @@ public function index()
 			$data['poinmin'] = $this->M_laporan->poin_terendah($id);
 			$data['sksxpoin'] = $this->M_laporan->sksxpoin($id);
 			$data['detail_rekap'] = $this->M_laporan->show_detail($id);
-			$data['data'] = $this->M_laporan->show_detail($id);
 			$data['fak_id'] = $this->M_dosen->fakultas_id($id);
 			$data['jab_id'] = $this->M_dosen->jabatan_id($id);
+			$data['datadosen'] = $this->M_laporan->show_rekap_dosen($id);
 
 	    $this->pdf->setPaper('A4', 'potrait');
 			$this->pdf->set_option('isRemoteEnabled', TRUE);
@@ -244,14 +224,16 @@ function ambil_fakultas()
 					$data['nipp'] = $this->session->userdata('nipp');
 					$data['level'] = $this->session->userdata('user_level');
 					$data['datadosen'] = $this->M_laporan->show_rekap_asessor1();
+					$data['fak'] = $this->M_verifikator->fakultas();
 					$data['profildosen'] = $this->M_verifikator->profil();
 					$data['title'] = 'Data Dosen';
 					$this->load->view('layout/header_datatables',$data);
 					$this->load->view('layout/side_menu');
 					$this->load->view('pages/bkd/rekap_laporan_asessor1');
-					$this->load->view('layout/footer_datatables');
+					$this->load->view('layout/footer_datatables_rekap');
 			}else{
 					$id = $this->input->get('id_kat_dosen');
+					$id_fak = $this->input->get('id_fakultas');
 					$this->load->library('Pustaka');
 					$ids = $this->session->userdata('nipp');
 					$data['filter'] = $this->M_dosen->filter($ids);
@@ -259,13 +241,14 @@ function ambil_fakultas()
 					$data['name'] = $this->session->userdata('username');
 					$data['nipp'] = $this->session->userdata('nipp');
 					$data['level'] = $this->session->userdata('user_level');
-					$data['datadosen'] = $this->M_laporan->show_rekap_asessor1_id($id);
+					$data['datadosen'] = $this->M_laporan->show_rekap_asessor1_id($id,$id_fak);
+					$data['fak'] = $this->M_verifikator->fakultas();
 					$data['profildosen'] = $this->M_verifikator->profil();
 					$data['title'] = 'Data Dosen';
 					$this->load->view('layout/header_datatables',$data);
 					$this->load->view('layout/side_menu');
 					$this->load->view('pages/bkd/rekap_laporan_asessor1');
-					$this->load->view('layout/footer_datatables');
+					$this->load->view('layout/footer_datatables_rekap');
 			}
 		}
 
@@ -280,14 +263,16 @@ function ambil_fakultas()
 					$data['nipp'] = $this->session->userdata('nipp');
 					$data['level'] = $this->session->userdata('user_level');
 					$data['datadosen'] = $this->M_laporan->show_rekap_asessor2();
+					$data['fak'] = $this->M_verifikator->fakultas();
 					$data['profildosen'] = $this->M_verifikator->profil();
 					$data['title'] = 'Data Dosen';
 					$this->load->view('layout/header_datatables',$data);
 					$this->load->view('layout/side_menu');
 					$this->load->view('pages/bkd/rekap_laporan_asessor2');
-					$this->load->view('layout/footer_datatables');
+					$this->load->view('layout/footer_datatables_rekap');
 			}else{
 					$id = $this->input->get('id_kat_dosen');
+					$id_fak = $this->input->get('id_fakultas');
 					$this->load->library('Pustaka');
 					$ids = $this->session->userdata('nipp');
 					$data['filter'] = $this->M_dosen->filter($ids);
@@ -295,13 +280,14 @@ function ambil_fakultas()
 					$data['name'] = $this->session->userdata('username');
 					$data['nipp'] = $this->session->userdata('nipp');
 					$data['level'] = $this->session->userdata('user_level');
-					$data['datadosen'] = $this->M_laporan->show_rekap_asessor2_id($id);
+					$data['datadosen'] = $this->M_laporan->show_rekap_asessor2_id($id,$id_fak);
+					$data['fak'] = $this->M_verifikator->fakultas();
 					$data['profildosen'] = $this->M_verifikator->profil();
 					$data['title'] = 'Data Dosen';
 					$this->load->view('layout/header_datatables',$data);
 					$this->load->view('layout/side_menu');
 					$this->load->view('pages/bkd/rekap_laporan_asessor2');
-					$this->load->view('layout/footer_datatables');
+					$this->load->view('layout/footer_datatables_rekap');
 			}
 		}
 
@@ -316,14 +302,16 @@ function ambil_fakultas()
 				$data['nipp'] = $this->session->userdata('nipp');
 				$data['level'] = $this->session->userdata('user_level');
 				$data['datadosen'] = $this->M_laporan->show_rekap_asessor();
+				$data['fak'] = $this->M_verifikator->fakultas();
 				$data['profildosen'] = $this->M_laporan->kategori_dosen();
 				$data['title'] = 'Data Dosen';
 				$this->load->view('layout/header_datatables',$data);
 				$this->load->view('layout/side_menu');
 				$this->load->view('pages/bkd/rekap_laporan_asessor');
-				$this->load->view('layout/footer_datatables');
+				$this->load->view('layout/footer_datatables_rekap');
 			}else{
 				$id = $this->input->get('id_kat_dosen');
+				$id_fak = $this->input->get('id_fakultas');
 				$this->load->library('Pustaka');
 				$ids = $this->session->userdata('nipp');
 				$data['filter'] = $this->M_dosen->filter($ids);
@@ -331,18 +319,137 @@ function ambil_fakultas()
 				$data['name'] = $this->session->userdata('username');
 				$data['nipp'] = $this->session->userdata('nipp');
 				$data['level'] = $this->session->userdata('user_level');
-				$data['datadosen'] = $this->M_laporan->show_rekap_asessor_id($id);
+				$data['datadosen'] = $this->M_laporan->show_rekap_asessor_id($id,$id_fak);
+				$data['fak'] = $this->M_verifikator->fakultas();
 				$data['profildosen_id'] = $this->M_laporan->kategori_dosen_id($id);
 				$data['profildosen'] = $this->M_laporan->kategori_dosen();
 				$data['title'] = 'Data Dosen';
 				$this->load->view('layout/header_datatables',$data);
 				$this->load->view('layout/side_menu');
 				$this->load->view('pages/bkd/rekap_laporan_asessor');
-				$this->load->view('layout/footer_datatables');
+				$this->load->view('layout/footer_datatables_rekap');
 			}
-
-
 		}
+
+
+/* REKAP LAPORAN BKD */
+public function RekapLaporanBkdAssesor1()
+{
+	if(empty($this->input->get('id_kat_dosen'))){
+			$this->load->library('Pustaka');
+			$ids = $this->session->userdata('nipp');
+			$data['filter'] = $this->M_dosen->filter($ids);
+			$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
+			$data['name'] = $this->session->userdata('username');
+			$data['nipp'] = $this->session->userdata('nipp');
+			$data['level'] = $this->session->userdata('user_level');
+			$data['datadosen'] = $this->M_laporan->show_rekap_asessor1();
+			$data['profildosen'] = $this->M_verifikator->profil();
+			$data['fak'] = $this->M_verifikator->fakultas();
+			$data['title'] = 'Data Dosen';
+			$this->load->view('layout/header_datatables',$data);
+			$this->load->view('layout/side_menu');
+			$this->load->view('pages/bkd/rekap_laporan_bkd_asessor1');
+			$this->load->view('layout/footer_datatables_rekap');
+	}else{
+			$id = $this->input->get('id_kat_dosen');
+			$id_fak = $this->input->get('id_fakultas');
+			$this->load->library('Pustaka');
+			$ids = $this->session->userdata('nipp');
+			$data['filter'] = $this->M_dosen->filter($ids);
+			$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
+			$data['name'] = $this->session->userdata('username');
+			$data['nipp'] = $this->session->userdata('nipp');
+			$data['level'] = $this->session->userdata('user_level');
+			$data['datadosen'] = $this->M_laporan->show_rekap_asessor1_id($id,$id_fak);
+			$data['profildosen'] = $this->M_verifikator->profil();
+			$data['fak'] = $this->M_verifikator->fakultas();
+			$data['title'] = 'Data Dosen';
+			$this->load->view('layout/header_datatables',$data);
+			$this->load->view('layout/side_menu');
+			$this->load->view('pages/bkd/rekap_laporan_bkd_asessor1');
+			$this->load->view('layout/footer_datatables_rekap');
+	}
+}
+
+public function RekapLaporanBkdAssesor2()
+{
+	if(empty($this->input->get('id_kat_dosen'))){
+			$this->load->library('Pustaka');
+			$ids = $this->session->userdata('nipp');
+			$data['filter'] = $this->M_dosen->filter($ids);
+			$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
+			$data['name'] = $this->session->userdata('username');
+			$data['nipp'] = $this->session->userdata('nipp');
+			$data['level'] = $this->session->userdata('user_level');
+			$data['datadosen'] = $this->M_laporan->show_rekap_asessor2();
+			$data['fak'] = $this->M_verifikator->fakultas();
+			$data['profildosen'] = $this->M_verifikator->profil();
+			$data['title'] = 'Data Dosen';
+			$this->load->view('layout/header_datatables',$data);
+			$this->load->view('layout/side_menu');
+			$this->load->view('pages/bkd/rekap_laporan_bkd_asessor2');
+			$this->load->view('layout/footer_datatables_rekap');
+	}else{
+			$id = $this->input->get('id_kat_dosen');
+			$id_fak = $this->input->get('id_fakultas');
+			$this->load->library('Pustaka');
+			$ids = $this->session->userdata('nipp');
+			$data['filter'] = $this->M_dosen->filter($ids);
+			$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
+			$data['name'] = $this->session->userdata('username');
+			$data['nipp'] = $this->session->userdata('nipp');
+			$data['level'] = $this->session->userdata('user_level');
+			$data['datadosen'] = $this->M_laporan->show_rekap_asessor2_id($id,$id_fak);
+			$data['fak'] = $this->M_verifikator->fakultas();
+			$data['profildosen'] = $this->M_verifikator->profil();
+			$data['title'] = 'Data Dosen';
+			$this->load->view('layout/header_datatables',$data);
+			$this->load->view('layout/side_menu');
+			$this->load->view('pages/bkd/rekap_laporan_bkd_asessor2');
+			$this->load->view('layout/footer_datatables_rekap');
+	}
+}
+
+public function RekapLaporanBkdAssesor1dan2()
+{
+	if(empty($this->input->get('id_kat_dosen'))){
+		$this->load->library('Pustaka');
+		$ids = $this->session->userdata('nipp');
+		$data['filter'] = $this->M_dosen->filter($ids);
+		$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
+		$data['name'] = $this->session->userdata('username');
+		$data['nipp'] = $this->session->userdata('nipp');
+		$data['level'] = $this->session->userdata('user_level');
+		$data['datadosen'] = $this->M_laporan->show_rekap_asessor();
+		$data['fak'] = $this->M_verifikator->fakultas();
+		$data['profildosen'] = $this->M_laporan->kategori_dosen();
+		$data['title'] = 'Data Dosen';
+		$this->load->view('layout/header_datatables',$data);
+		$this->load->view('layout/side_menu');
+		$this->load->view('pages/bkd/rekap_laporan_bkd_asessor');
+		$this->load->view('layout/footer_datatables_rekap');
+	}else{
+		$id = $this->input->get('id_kat_dosen');
+		$id_fak = $this->input->get('id_fakultas');
+		$this->load->library('Pustaka');
+		$ids = $this->session->userdata('nipp');
+		$data['filter'] = $this->M_dosen->filter($ids);
+		$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
+		$data['name'] = $this->session->userdata('username');
+		$data['nipp'] = $this->session->userdata('nipp');
+		$data['level'] = $this->session->userdata('user_level');
+		$data['datadosen'] = $this->M_laporan->show_rekap_asessor_id($id,$id_fak);
+		$data['fak'] = $this->M_verifikator->fakultas();
+		$data['profildosen_id'] = $this->M_laporan->kategori_dosen_id($id);
+		$data['profildosen'] = $this->M_laporan->kategori_dosen();
+		$data['title'] = 'Data Dosen';
+		$this->load->view('layout/header_datatables',$data);
+		$this->load->view('layout/side_menu');
+		$this->load->view('pages/bkd/rekap_laporan_bkd_asessor');
+		$this->load->view('layout/footer_datatables_rekap');
+	}
+}
 //LOGOUT
     public function is_logged_in() {
         $is_logged_in = $this->session->userdata('is_login');

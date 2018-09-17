@@ -265,7 +265,47 @@ public	function ExcelDataAssesor()	{
              unlink('././uploads/excel/'.$file_name); //File Deleted After uploading in database .
              //redirect(base_url() . "Import");
 
+}
 
+//IMPORT UPDATE FAKULTAS DOSEN
+public	function UpdateFakultasDosen()	{
+//Path of files were you want to upload on localhost (C:/xampp/htdocs/ProjectName/uploads/excel/)
+         $configUpload['upload_path'] = FCPATH.'uploads/excel/';
+         $configUpload['allowed_types'] = 'xls|xlsx|csv';
+         $configUpload['max_size'] = '5000';
+         $this->load->library('upload', $configUpload);
+         $this->upload->do_upload('userfile');
+         $upload_data = $this->upload->data(); //Returns array of containing all of the data related to the file you uploaded.
+         $file_name = $upload_data['file_name']; //uploded file name
+         $extension=$upload_data['file_ext'];    // uploded file extension
+
+    //$objReader =PHPExcel_IOFactory::createReader('Excel5');     //For excel 2003
+        $objReader= PHPExcel_IOFactory::createReader('Excel2007');	// For excel 2007
+    //Set to read only
+        $objReader->setReadDataOnly(true);
+    //Load excel file
+        $objPHPExcel=$objReader->load(FCPATH.'uploads/excel/'.$file_name);
+        $totalrows=$objPHPExcel->setActiveSheetIndex(0)->getHighestRow();   //Count Numbe of rows avalable in excel
+        $objWorksheet=$objPHPExcel->setActiveSheetIndex(0);
+    //loop from first data untill last data
+          for($i=2;$i<=$totalrows;$i++)
+          {
+                $nip            =$objWorksheet->getCellByColumnAndRow(0,$i)->getValue();
+                $id_fakultas    =$objWorksheet->getCellByColumnAndRow(1,$i)->getValue();
+
+                $data=array('id_fakultas'=>$id_fakultas);
+                $where = array('nip'=>$nip);
+                $query = $this->M_excel_data_insert_model->update_fakultas_dosen($where, $data, 'profil_dosen');
+                if($query > 0){
+                  var_dump($nip,"Error");
+                  echo "<br />";
+                }else{
+                  var_dump($nip,"Success");
+                  echo "<br />";
+                }
+          }
+             unlink('././uploads/excel/'.$file_name); //File Deleted After uploading in database .
+             echo'<br /><br /><a href="'.base_url().'Pegawai" class="btn btn-primary">Ke Data Pegawai</a>';
 }
 
 //LOGOUT

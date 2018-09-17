@@ -16,11 +16,20 @@
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
+
                     <form class="form form-horizontal" role="form" method="GET" action="<?php echo base_url(); ?>Laporan/RekapLaporanAssesor1">
                       <div class="form-group">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Filter<span class="required"></span></label>
-                          <div class="col-md-4 col-sm-4 col-xs-12">
-                            <select id="id_kat_dosen" name="id_kat_dosen" class="form-control">
+                          <label class="control-label col-md-1 col-sm-1 col-xs-12" for="last-name">Filter<span class="required"></span></label>
+                          <div class="col-md-3 col-sm-3 col-xs-12">
+                            <select id="id_fakultas" name="id_fakultas" class="form-control" required="required">
+                                <option value="">Fakultas</option>
+                                <?php foreach($fak as $f){ ?>
+                                <option value="<?php echo $f->id_fakultas; ?>"><?php echo $f->nama_fakultas; ?></option>
+                                <?php } ?>
+                            </select>
+                          </div>
+                          <div class="col-md-3 col-sm-3 col-xs-12">
+                            <select id="id_kat_dosen" name="id_kat_dosen" class="form-control" required="required">
                                 <option value="">Kategori Dosen</option>
                                 <?php foreach($profildosen as $b){ ?>
                                 <option value="<?php echo $b->id_kat_dosen; ?>"><?php echo $b->kategori_dosen; ?></option>
@@ -37,8 +46,10 @@
                         <table class="table table-striped table-bordered myTable display nowrap" style="width:100%">
                           <thead>
                             <tr>
+                              <th rowspan="2">Fakultas</th>
                               <th rowspan="2">NIP</th>
                               <th rowspan="2">Nama</th>
+                              <th rowspan="2">Kategori Dosen</th>
                               <th colspan="4">Syarat BKD</th>
                               <th colspan="4">Laporan(Volume/SKS)</th>
                               <th colspan="1">Kesimupulan</th>
@@ -103,8 +114,10 @@
                               }
                             ?>
                               <tr>
+                                  <th scope="row"><?php echo $dt['nama_fakultas']; ?></th>
                                   <th scope="row"><?php echo $dt['nip']; ?></th>
                                   <td bgcolor="#FFFFF0"><?php echo $dt['nama_peg']; ?></td>
+                                  <td scope="row"><?php echo $dt['kategori_dosen']; ?></td>
                                       <td><?php echo $dt['Syt_Pendidikan']; ?></td>
                                       <td><?php echo $dt['Syt_Penelitian']; ?></td>
                                       <td><?php echo $dt['Syt_Pengabdian']; ?></td>

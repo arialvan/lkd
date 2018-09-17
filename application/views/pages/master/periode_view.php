@@ -21,23 +21,29 @@
                         <tr>
                           <th>#</th>
                           <th>Periode</th>
+                          <th>Edit</th>
                           <th>Status</th>
-                          <th>Aksi</th>
                         </tr>
                       </thead>
                       <tbody>
                         <?php
                         $no = 1;
                         foreach($periodelkd as $dt){
-                            if($dt->status==1){$status="Aktif";}else {$status="Tidak Aktif";}
+                          //  if($dt->status==1){$status="Aktif";}else {$status="Tidak Aktif";}
                         ?>
                         <tr>
                           <th scope="row"><?php echo $no++; ?></th>
                           <td><?php echo $dt->periode.' - '.$dt->ket_periode; ?></td>
-                          <td><?php echo $status; ?></td>
                           <td>
                               <?php echo anchor('Master/EditPeriode/'.$dt->id_periode,'<span class="glyphicon glyphicon-pencil" title="Edit Data"></span>'); ?>
-                              <?php echo anchor('Master/HapusPeriode/'.$dt->id_periode,'<span class="glyphicon glyphicon-remove" title="Hapus Periode"></span>'); ?>
+                              <?php //echo anchor('Master/HapusPeriode/'.$dt->id_periode,'<span class="glyphicon glyphicon-remove" title="Hapus Periode"></span>'); ?>
+                          </td>
+                          <td>
+                              <?php if($dt->status==1){ ?>
+                                <a href="<?php echo base_url() ?>Master/UpdateStatusPeriode/<?php echo $dt->id_periode.'/'. 0; ?> " class="btn btn-primary" title="Status Saat Ini Aktif" onclick="return confirm('Apakah Anda Ingin Menonaktifkan Periode Ini ?')">Aktif</a>
+                              <?php }else{ ?>
+                                <a href="<?php echo base_url() ?>Master/UpdateStatusPeriode/<?php echo $dt->id_periode.'/'. 1; ?> " class="btn btn-danger" title="Status Saat Ini Aktif" onclick="return confirm('Apakah Anda Ingin Aktifkan Periode Ini ?')">Non Aktif</a>
+                              <?php } ?>
                           </td>
                         </tr>
                         <?php } ?>

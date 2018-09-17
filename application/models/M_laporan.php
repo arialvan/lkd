@@ -393,6 +393,32 @@ function show_viewpages(){
   return $query;
 }
 
+function show_rekap_dosen($id){
+  $this->db->select('a.nip,b.nama_peg,c.id_kat_dosen,
+                      MAX(CASE WHEN d.id_bkd = 1 THEN d.sks_bkd ELSE 0 END) AS Syt_Pendidikan,
+                      MAX(CASE WHEN d.id_bkd = 2 THEN d.sks_bkd ELSE 0 END) AS Syt_Penelitian,
+                      MAX(CASE WHEN d.id_bkd = 3 THEN d.sks_bkd ELSE 0 END) AS Syt_Pengabdian,
+                      MAX(CASE WHEN d.id_bkd = 4 THEN d.sks_bkd ELSE 0 END) AS Syt_Penunjang,
+                      FORMAT(SUM(CASE WHEN a.id_bkd = 1 THEN a.sks_subkegiatan/4 END),2) AS Pendidikan,
+                      SUM(CASE WHEN a.id_bkd = 2 THEN a.sks_subkegiatan/4 END) AS Penelitian,
+                      SUM(CASE WHEN a.id_bkd = 3 THEN a.sks_subkegiatan/4 END) AS Pengabdian,
+                      SUM(CASE WHEN a.id_bkd = 4 THEN a.sks_subkegiatan/4 END) AS Penunjang,
+                      FORMAT(SUM(CASE WHEN a.id_bkd IN ("1","4") THEN a.poin_subkegiatan/4 END)-8 ,2) AS Points
+                    ');
+  $this->db->from('bkd_subkegiatan a');
+  $this->db->join('tb_pegawai b','a.nip=b.nip');
+  $this->db->join('profil_dosen c','a.nip=c.nip');
+  $this->db->join('bkd_remun_dosen d','c.id_kat_dosen=d.id_kat_dosen', 'INNER');
+  $this->db->where('a.app_assesor1', 1);
+  $this->db->where('a.app_assesor2', 1);
+  $this->db->where('a.nip', $id);
+  $this->db->group_by('a.nip');
+
+  $query=$this->db->get()->result_array();
+  return $query;
+
+}
+
 // function show_rekap_asessor1(){
 //   $this->db->select('*')
 //                   ->from('profil_dosen a')
@@ -447,7 +473,7 @@ function kategori_dosen()
 }
 
 function show_rekap_asessor(){
-  $this->db->select('a.nip,b.nama_peg,c.id_kat_dosen,
+  $this->db->select('a.nip,b.nama_peg,c.id_kat_dosen,c.id_fakultas,e.nama_fakultas,f.kategori_dosen,
                       MAX(CASE WHEN d.id_bkd = 1 THEN d.sks_bkd ELSE 0 END) AS Syt_Pendidikan,
                       MAX(CASE WHEN d.id_bkd = 2 THEN d.sks_bkd ELSE 0 END) AS Syt_Penelitian,
                       MAX(CASE WHEN d.id_bkd = 3 THEN d.sks_bkd ELSE 0 END) AS Syt_Pengabdian,
@@ -462,6 +488,8 @@ function show_rekap_asessor(){
   $this->db->join('tb_pegawai b','a.nip=b.nip');
   $this->db->join('profil_dosen c','a.nip=c.nip');
   $this->db->join('bkd_remun_dosen d','c.id_kat_dosen=d.id_kat_dosen', 'INNER');
+  $this->db->join('tbl_mst_fakultas e','c.id_fakultas=e.id_fakultas', 'LEFT');
+  $this->db->join('master_kategori_dosen f','c.id_kat_dosen=f.id_kat_dosen', 'LEFT');
   $this->db->where('a.app_assesor1', 1);
   $this->db->where('a.app_assesor2', 1);
   $this->db->group_by('a.nip');
@@ -471,8 +499,8 @@ function show_rekap_asessor(){
 
 }
 
-function show_rekap_asessor_id($id){
-  $this->db->select('a.nip,b.nama_peg,c.id_kat_dosen,
+function show_rekap_asessor_id($id,$id_fak){
+  $this->db->select('a.nip,b.nama_peg,c.id_kat_dosen,c.id_fakultas,e.nama_fakultas,f.kategori_dosen,
                       MAX(CASE WHEN d.id_bkd = 1 THEN d.sks_bkd ELSE 0 END) AS Syt_Pendidikan,
                       MAX(CASE WHEN d.id_bkd = 2 THEN d.sks_bkd ELSE 0 END) AS Syt_Penelitian,
                       MAX(CASE WHEN d.id_bkd = 3 THEN d.sks_bkd ELSE 0 END) AS Syt_Pengabdian,
@@ -487,9 +515,12 @@ function show_rekap_asessor_id($id){
   $this->db->join('tb_pegawai b','a.nip=b.nip');
   $this->db->join('profil_dosen c','a.nip=c.nip');
   $this->db->join('bkd_remun_dosen d','c.id_kat_dosen=d.id_kat_dosen', 'INNER');
+  $this->db->join('tbl_mst_fakultas e','c.id_fakultas=e.id_fakultas', 'LEFT');
+  $this->db->join('master_kategori_dosen f','c.id_kat_dosen=f.id_kat_dosen', 'LEFT');
   $this->db->where('a.app_assesor1', 1);
   $this->db->where('a.app_assesor2', 1);
   $this->db->where('c.id_kat_dosen', $id);
+  $this->db->where('c.id_fakultas', $id_fak);
   $this->db->group_by('a.nip');
 
   $query=$this->db->get()->result_array();
@@ -498,7 +529,7 @@ function show_rekap_asessor_id($id){
 }
 
 function show_rekap_asessor1(){
-  $this->db->select('a.nip,b.nama_peg,c.id_kat_dosen,
+  $this->db->select('a.nip,b.nama_peg,c.id_kat_dosen,c.id_fakultas,e.nama_fakultas,f.kategori_dosen,
                       MAX(CASE WHEN d.id_bkd = 1 THEN d.sks_bkd ELSE 0 END) AS Syt_Pendidikan,
                       MAX(CASE WHEN d.id_bkd = 2 THEN d.sks_bkd ELSE 0 END) AS Syt_Penelitian,
                       MAX(CASE WHEN d.id_bkd = 3 THEN d.sks_bkd ELSE 0 END) AS Syt_Pengabdian,
@@ -513,6 +544,8 @@ function show_rekap_asessor1(){
   $this->db->join('tb_pegawai b','a.nip=b.nip');
   $this->db->join('profil_dosen c','a.nip=c.nip');
   $this->db->join('bkd_remun_dosen d','c.id_kat_dosen=d.id_kat_dosen', 'INNER');
+  $this->db->join('tbl_mst_fakultas e','c.id_fakultas=e.id_fakultas', 'LEFT');
+  $this->db->join('master_kategori_dosen f','c.id_kat_dosen=f.id_kat_dosen', 'LEFT');
   $this->db->where('a.app_assesor1', 1);
   $this->db->group_by('a.nip');
 
@@ -520,8 +553,8 @@ function show_rekap_asessor1(){
   return $query;
 }
 
-function show_rekap_asessor1_id($id){
-  $this->db->select('a.nip,b.nama_peg,c.id_kat_dosen,
+function show_rekap_asessor1_id($id,$id_fak){
+  $this->db->select('a.nip,b.nama_peg,c.id_kat_dosen,c.id_fakultas,e.nama_fakultas,f.kategori_dosen,
                       MAX(CASE WHEN d.id_bkd = 1 THEN d.sks_bkd ELSE 0 END) AS Syt_Pendidikan,
                       MAX(CASE WHEN d.id_bkd = 2 THEN d.sks_bkd ELSE 0 END) AS Syt_Penelitian,
                       MAX(CASE WHEN d.id_bkd = 3 THEN d.sks_bkd ELSE 0 END) AS Syt_Pengabdian,
@@ -536,8 +569,11 @@ function show_rekap_asessor1_id($id){
   $this->db->join('tb_pegawai b','a.nip=b.nip');
   $this->db->join('profil_dosen c','a.nip=c.nip');
   $this->db->join('bkd_remun_dosen d','c.id_kat_dosen=d.id_kat_dosen', 'INNER');
+  $this->db->join('tbl_mst_fakultas e','c.id_fakultas=e.id_fakultas', 'LEFT');
+  $this->db->join('master_kategori_dosen f','c.id_kat_dosen=f.id_kat_dosen', 'LEFT');
   $this->db->where('a.app_assesor1', 1);
   $this->db->where('c.id_kat_dosen', $id);
+  $this->db->where('c.id_fakultas', $id_fak);
   $this->db->group_by('a.nip');
 
   $query=$this->db->get()->result_array();
@@ -546,7 +582,7 @@ function show_rekap_asessor1_id($id){
 
 
 function show_rekap_asessor2(){
-  $this->db->select('a.nip,b.nama_peg,c.id_kat_dosen,
+  $this->db->select('a.nip,b.nama_peg,c.id_kat_dosen,c.id_fakultas,e.nama_fakultas,f.kategori_dosen,
                       MAX(CASE WHEN d.id_bkd = 1 THEN d.sks_bkd ELSE 0 END) AS Syt_Pendidikan,
                       MAX(CASE WHEN d.id_bkd = 2 THEN d.sks_bkd ELSE 0 END) AS Syt_Penelitian,
                       MAX(CASE WHEN d.id_bkd = 3 THEN d.sks_bkd ELSE 0 END) AS Syt_Pengabdian,
@@ -561,6 +597,8 @@ function show_rekap_asessor2(){
   $this->db->join('tb_pegawai b','a.nip=b.nip');
   $this->db->join('profil_dosen c','a.nip=c.nip');
   $this->db->join('bkd_remun_dosen d','c.id_kat_dosen=d.id_kat_dosen', 'INNER');
+  $this->db->join('tbl_mst_fakultas e','c.id_fakultas=e.id_fakultas', 'LEFT');
+  $this->db->join('master_kategori_dosen f','c.id_kat_dosen=f.id_kat_dosen', 'LEFT');
   $this->db->where('a.app_assesor2', 1);
   $this->db->group_by('a.nip');
 
@@ -568,8 +606,8 @@ function show_rekap_asessor2(){
   return $query;
 }
 
-function show_rekap_asessor2_id($id){
-  $this->db->select('a.nip,b.nama_peg,c.id_kat_dosen,
+function show_rekap_asessor2_id($id,$id_fak){
+  $this->db->select('a.nip,b.nama_peg,c.id_kat_dosen,c.id_fakultas,e.nama_fakultas,f.kategori_dosen,
                       MAX(CASE WHEN d.id_bkd = 1 THEN d.sks_bkd ELSE 0 END) AS Syt_Pendidikan,
                       MAX(CASE WHEN d.id_bkd = 2 THEN d.sks_bkd ELSE 0 END) AS Syt_Penelitian,
                       MAX(CASE WHEN d.id_bkd = 3 THEN d.sks_bkd ELSE 0 END) AS Syt_Pengabdian,
@@ -584,8 +622,11 @@ function show_rekap_asessor2_id($id){
   $this->db->join('tb_pegawai b','a.nip=b.nip');
   $this->db->join('profil_dosen c','a.nip=c.nip');
   $this->db->join('bkd_remun_dosen d','c.id_kat_dosen=d.id_kat_dosen', 'INNER');
+  $this->db->join('tbl_mst_fakultas e','c.id_fakultas=e.id_fakultas', 'LEFT');
+  $this->db->join('master_kategori_dosen f','c.id_kat_dosen=f.id_kat_dosen', 'LEFT');
   $this->db->where('a.app_assesor2', 1);
   $this->db->where('c.id_kat_dosen', $id);
+  $this->db->where('c.id_fakultas', $id_fak);
   $this->db->group_by('a.nip');
 
   $query=$this->db->get()->result_array();

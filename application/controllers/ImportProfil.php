@@ -85,7 +85,6 @@ class ImportProfil extends CI_Controller
 
 
         }
-
 //LOGOUT
     public function is_logged_in() {
         $is_logged_in = $this->session->userdata('is_login');

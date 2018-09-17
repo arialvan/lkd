@@ -19,6 +19,22 @@ class Master extends CI_Controller {
 
         }
 
+public function Admin()
+{
+	$ids = $this->session->userdata('nipp');
+	$data['filter'] = $this->M_dosen->filter($ids);
+	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
+	$data['name'] = $this->session->userdata('username');
+	$data['nipp'] = $this->session->userdata('nipp');
+	$data['level'] = $this->session->userdata('user_level');
+	$data['admin'] = $this->M_master->show_admin();
+	$data['title'] = 'Data Admin Fakultas';
+	$this->load->view('layout/header_datatables',$data);
+	$this->load->view('layout/side_menu');
+	$this->load->view('pages/master/admin');
+	$this->load->view('layout/footer_datatables');
+}
+
 /*PERIODE*/
 public function Periode()
 {
@@ -34,6 +50,48 @@ public function Periode()
     $this->load->view('pages/master/periode_view');
     $this->load->view('layout/footer_datatables');
 }
+
+public function FormAdmin()
+{
+    if($this->session->userdata('user_level')==1){
+			$id = $this->session->userdata('nipp');
+			$data['filter'] = $this->M_dosen->filter($id);
+			$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($id);
+        $data['name'] = $this->session->userdata('username');
+				$data['nipp'] = $this->session->userdata('nipp');
+				$data['pegawai'] = $this->M_master->show_pegawai();
+				$data['fakultas'] = $this->M_master->show_fakultas();
+        $data['title'] = 'Form Tambah Admin';
+        $this->load->view('layout/header_datatables',$data);
+        $this->load->view('layout/side_menu');
+        $this->load->view('pages/master/admin_input');
+        $this->load->view('layout/footer_datatables');
+    }else {
+			$id = $this->session->userdata('nipp');
+			$data['filter'] = $this->M_dosen->filter($id);
+			$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($id);
+        $data['name'] = $this->session->userdata('username');
+				$data['nipp'] = $this->session->userdata('nipp');
+        $this->load->view('layout/header',$data);
+        $this->load->view('layout/side_menu');
+        $this->load->view('pages/tidak_punya_akses');
+        $this->load->view('layout/footer');
+    }
+}
+
+function InsertAdmin()
+{
+      	$data = array(
+                			'nip' => $this->input->post('nip'),
+											'id_fakultas' => $this->input->post('id_fakultas'),
+                			'user_level' => 4
+            				);
+      	$this->M_master->insert_admin($data, 'profil_dosen');
+        redirect('Master/FormAdmin');
+}
+
+/* PERIODE */
+
 public function FormPeriode()
 {
     if($this->session->userdata('user_level')==1){
@@ -59,6 +117,7 @@ public function FormPeriode()
         $this->load->view('layout/footer');
     }
 }
+
 function InsertPeriode()
 {
             $data = array(
@@ -71,6 +130,7 @@ function InsertPeriode()
             $this->M_master->insert_periode($data, 'periode_lkd');
             redirect('Master/Periode');
 }
+
 public function EditPeriode($id)
 {
   if($this->session->userdata('user_level')==1)
@@ -100,6 +160,7 @@ public function EditPeriode($id)
         $this->load->view('layout/footer');
   }
 }
+
 function UpdatePeriode()
 {
 	$data = array(
@@ -110,6 +171,15 @@ function UpdatePeriode()
         $this->M_master->update_periode($where, $data, 'periode_lkd');
         echo "Update Succes"; redirect('Master/Periode','refresh');
 }
+
+function UpdateStatusPeriode($id)
+{
+	$data = array('status' => $this->uri->segment(4));
+        $where = array('id_periode' =>$id);
+        $this->M_master->update_status_periode($where, $data, 'periode_lkd');
+        echo "Update Succes"; redirect('Master/Periode','refresh');
+}
+
 function HapusPeriode($id) {
     $where = array('id_periode' => $id);
     $this->M_master->hapus_periode($where, 'periode_lkd');

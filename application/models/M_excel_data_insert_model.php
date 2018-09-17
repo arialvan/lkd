@@ -31,6 +31,11 @@ class M_excel_data_insert_model extends CI_Model {
       	$this->db->update($table,$data);
     }
 
+    function update_fakultas_dosen($where,$data,$table){
+      	$this->db->where($where);
+      	$this->db->update($table,$data);
+    }
+
 }
 
 ?>

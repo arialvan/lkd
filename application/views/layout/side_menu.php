@@ -14,11 +14,12 @@
                   </li>
                 </ul>
               </div>
-              <?php if($this->session->userdata('user_level')==1) { ?>
 
+              <?php if($this->session->userdata('user_level')==1) { ?>
               <div class="menu_section">
               <h3><u>Pengaturan Data</u></h3>
                 <ul class="nav side-menu">
+                  <li><a href="<?php echo base_url() ?>Master/Admin"><i class="fa fa-adn"></i>Admin Fakultas</a></li>
                   <li><a href="<?php echo base_url() ?>Master/Periode"><i class="fa fa-calendar"></i>Periode</a></li>
                   <li><a href="<?php echo base_url() ?>Verifikator"><i class="fa fa-user-md"></i>Verifikator</a></li>
                   <li><a href="<?php echo base_url() ?>Dosen"><i class="fa fa-user"></i>Profil Dosen</a></li>
@@ -27,18 +28,40 @@
                         <li><a href="<?php echo base_url() ?>MasterBkd">BKD</a></li>
                         <li><a href="<?php echo base_url() ?>MasterBkd/ProfilDosen">Skema Profil</a></li>
                         <li><a href="<?php echo base_url() ?>MasterBkd/SyaratFile">Input Syarat File</a></li>
+                        <li><a href="<?php echo base_url() ?>MasterBkd/SettingRencana">Setting Rencana Kerja</a></li>
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-clipboard"></i> Rekap Laporan <span class="fa fa-chevron-down"></span></a>
+                </ul>
+              </div>
+
+              <div class="menu_section">
+              <h3><u>Rekap Laporan</u></h3>
+                <ul class="nav side-menu">
+                  <li><a><i class="fa fa-book"></i> Laporan Lengkap <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li><a href="<?php echo base_url() ?>Laporan/RekapLaporanAssesor1">Disetuji Assesor 1</a></li>
                         <li><a href="<?php echo base_url() ?>Laporan/RekapLaporanAssesor2">Disetujui Assesor 2</a></li>
                         <li><a href="<?php echo base_url() ?>Laporan/RekapAssesor1dan2">Disetujui Assesor 1 dan 2</a></li>
                     </ul>
                   </li>
+                  <li><a><i class="fa fa-clone"></i> Laporan BKD <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        <li><a href="<?php echo base_url() ?>Laporan/RekapLaporanBkdAssesor1">Disetuji Assesor 1</a></li>
+                        <li><a href="<?php echo base_url() ?>Laporan/RekapLaporanBkdAssesor2">Disetujui Assesor 2</a></li>
+                        <li><a href="<?php echo base_url() ?>Laporan/RekapLaporanBkdAssesor1dan2">Disetujui Assesor 1 dan 2</a></li>
+                    </ul>
+                  </li>
                 </ul>
               </div>
+              <?php } ?>
 
+              <?php if($this->session->userdata('user_level')==1 || $this->session->userdata('user_level')==4) { ?>
+              <div class="menu_section">
+              <h3><u>Periksa Data BKD</u></h3>
+                  <ul class="nav side-menu">
+                    <li><a href="<?php echo base_url() ?>AdminFakultas"><i class="fa fa-clipboard"></i>Laporan Kinerja Dosen</a></li>
+                  </ul>
+              </div>
               <?php } ?>
 
               <?php if($this->session->userdata('user_level')==2) { ?>

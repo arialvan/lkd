@@ -21,6 +21,7 @@
                             echo'<li><h5>Assesor I  = '.$d->assesor1.'</h5></li>';
                             echo'<li><h5>Assesor 2  = '.$d->assesor2.'</h5></li></ul>';
                           }
+                          $RkDosen=$d->rk_dosen;
                       ?>
                       <br />
                       <?php
@@ -242,7 +243,9 @@
 
               <fieldset>
                 <legend></legend>
-              <a href="<?php echo base_url() ?>RencanaKerja/FormRencana" class="btn btn-lg btn-primary"> + Pengisian BKD</a> >>Klik Tombol ini untuk menambah kegiatan
+                <?php if($d->rk_dosen==1){ ?>
+                <a href="<?php echo base_url() ?>RencanaKerja/FormRencana" class="btn btn-lg btn-primary"> + Pengisian BKD</a> >>Klik Tombol ini untuk menambah kegiatan
+              <?php }else { echo '<span class="btn btn-lg btn-danger" data-toggle="modal" data-target="#oops">Pengisian BKD Di Tutup</span>'; } ?>
               </fieldset>
               <hr />
 <!--
@@ -285,9 +288,9 @@ PENDIDIKAN
                           <th scope="row"><?php echo $no++.'&nbsp;&nbsp;'.$this->pustaka->syarat($dt->syarat); ?></th>
                           <td>
                             <?php
-                              // if($dt->app_assesor1==1 || $dt->app_assesor2==1){
-                              //     echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan).'</span>';
-                              // }else{
+                              if($RkDosen==0){
+                                  echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan).'</span>';
+                              }else{
                             ?>
                               <a href="javascript:;"
                                   data-id_kegiatan="<?php echo $dt->id_kegiatan ?>"
@@ -298,16 +301,15 @@ PENDIDIKAN
                                   data-toggle="modal" data-target="#edit-pendidikan">
                                   <?php echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan).'</span>'; ?>
                               </a>
-                            <?php // } ?>
+                            <?php  } ?>
                           </td>
                           <td><?php echo $dt->sks_subkegiatan; ?></td>
                           <td><?php echo $dt->poin_subkegiatan; ?></td>
                           <td><?php echo $this->pustaka->periksa($dt->app_ketuaprodi); ?></td>
                           <td>
                             <?php
-                              if($dt->app_ketuaprodi==1){
-                                // echo '<span class="glyphicon glyphicon-ok" title="OK"></span>';
-                                echo anchor('RencanaKerja/HapusSubkegiatan/'.$dt->id_subkegiatan,'<span class="glyphicon glyphicon-remove" title="Hapus Data" Onclick="return ConfirmDelete()"></span>');
+                              if($dt->app_ketuaprodi==1 && $RkDosen==0){
+                                echo '<span class="glyphicon glyphicon-ok" title="OK"></span>';
                               }else{
                                 echo anchor('RencanaKerja/HapusSubkegiatan/'.$dt->id_subkegiatan,'<span class="glyphicon glyphicon-remove" title="Hapus Data" Onclick="return ConfirmDelete()"></span>');
                               }
@@ -369,6 +371,11 @@ PENDIDIKAN
                         <tr>
                           <th scope="row"><?php echo $no++.'&nbsp;&nbsp;'.$this->pustaka->syarat($dt1->syarat); ?></th>
                           <td>
+                            <?php
+                              if($RkDosen==0){
+                                  echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan1).'</span>';
+                              }else{
+                            ?>
                             <a href="javascript:;"
                                 data-id_kegiatan="<?php echo $dt1->id_kegiatan ?>"
                                 data-id_subkegiatan="<?php echo $dt1->id_subkegiatan ?>"
@@ -378,15 +385,15 @@ PENDIDIKAN
                                 data-toggle="modal" data-target="#edit-pendidikan">
                                 <?php echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan1).'</span>'; ?>
                             </a>
+                            <?php  } ?>
                           </td>
                           <td><?php echo $dt1->sks_subkegiatan; ?></td>
                           <td><?php echo $dt1->poin_subkegiatan; ?></td>
                           <td><?php echo $this->pustaka->periksa($dt1->app_ketuaprodi); ?></td>
                           <td>
                             <?php
-                              if($dt1->app_ketuaprodi==1){
-                                // echo '<span class="glyphicon glyphicon-ok" title="OK"></span>';
-                                echo anchor('RencanaKerja/HapusSubkegiatan/'.$dt1->id_subkegiatan,'<span class="glyphicon glyphicon-remove" title="Hapus Data" Onclick="return ConfirmDelete()"></span>');
+                              if($dt1->app_ketuaprodi==1 && $RkDosen==0){
+                                echo '<span class="glyphicon glyphicon-ok" title="OK"></span>';
                               }else{
                                 echo anchor('RencanaKerja/HapusSubkegiatan/'.$dt1->id_subkegiatan,'<span class="glyphicon glyphicon-remove" title="Hapus Data" Onclick="return ConfirmDelete()"></span>');
                               }
@@ -443,6 +450,11 @@ PENDIDIKAN
                         <tr>
                           <th scope="row"><?php echo $no++.'&nbsp;&nbsp;'.$this->pustaka->syarat($dt2->syarat); ?></th>
                           <td>
+                            <?php
+                              if($RkDosen==0){
+                                  echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan2).'</span>';
+                              }else{
+                            ?>
                             <a href="javascript:;"
                                 data-id_kegiatan="<?php echo $dt2->id_kegiatan ?>"
                                 data-id_subkegiatan="<?php echo $dt2->id_subkegiatan ?>"
@@ -452,15 +464,15 @@ PENDIDIKAN
                                 data-toggle="modal" data-target="#edit-pendidikan">
                                 <?php echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan2).'</span>'; ?>
                             </a>
+                            <?php  } ?>
                           </td>
                           <td><?php echo $dt2->sks_subkegiatan; ?></td>
                           <td><?php echo $dt2->poin_subkegiatan; ?></td>
                           <td><?php echo $this->pustaka->periksa($dt2->app_ketuaprodi); ?></td>
                           <td>
                             <?php
-                              if($dt2->app_ketuaprodi==1){
-                                // echo '<span class="glyphicon glyphicon-ok" title="OK"></span>';
-                                echo anchor('RencanaKerja/HapusSubkegiatan/'.$dt2->id_subkegiatan,'<span class="glyphicon glyphicon-remove" title="Hapus Data" Onclick="return ConfirmDelete()"></span>');
+                              if($dt2->app_ketuaprodi==1 && $RkDosen==0){
+                                echo '<span class="glyphicon glyphicon-ok" title="OK"></span>';
                               }else{
                                 echo anchor('RencanaKerja/HapusSubkegiatan/'.$dt2->id_subkegiatan,'<span class="glyphicon glyphicon-remove" title="Hapus Data" Onclick="return ConfirmDelete()"></span>');
                               }
@@ -518,6 +530,11 @@ PENDIDIKAN
                         <tr>
                           <th scope="row"><?php echo $no++.'&nbsp;&nbsp;'.$this->pustaka->syarat($dt3->syarat); ?></th>
                           <td>
+                            <?php
+                              if($RkDosen==0){
+                                  echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan3).'</span>';
+                              }else{
+                            ?>
                             <a href="javascript:;"
                                 data-id_kegiatan="<?php echo $dt3->id_kegiatan ?>"
                                 data-id_subkegiatan="<?php echo $dt3->id_subkegiatan ?>"
@@ -527,15 +544,15 @@ PENDIDIKAN
                                 data-toggle="modal" data-target="#edit-pendidikan">
                                 <?php echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan3).'</span>'; ?>
                             </a>
+                            <?php  } ?>
                           </td>
                           <td><?php echo $dt3->sks_subkegiatan; ?></td>
                           <td><?php echo $dt3->poin_subkegiatan; ?></td>
                           <td><?php echo $this->pustaka->periksa($dt3->app_ketuaprodi); ?></td>
                           <td>
                             <?php
-                              if($dt3->app_ketuaprodi==1){
-                                // echo '<span class="glyphicon glyphicon-ok" title="OK"></span>';
-                                echo anchor('RencanaKerja/HapusSubkegiatan/'.$dt3->id_subkegiatan,'<span class="glyphicon glyphicon-remove" title="Hapus Data" Onclick="return ConfirmDelete()"></span>');
+                              if($dt3->app_ketuaprodi==1 && $RkDosen==0){
+                                echo '<span class="glyphicon glyphicon-ok" title="OK"></span>';
                               }else{
                                 echo anchor('RencanaKerja/HapusSubkegiatan/'.$dt3->id_subkegiatan,'<span class="glyphicon glyphicon-remove" title="Hapus Data" Onclick="return ConfirmDelete()"></span>');
                               }
@@ -600,5 +617,28 @@ PENDIDIKAN
                                         </div>
                                     </div>
                                 </div>
+
+                                <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="oops" class="modal fade">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                                                <h4 class="modal-title"></h4>
+                                            </div>
+                                            <form class="form form-horizontal" role="form" method="post" action="<?php echo base_url(); ?>RencanaKerja/UpdateRencana">
+
+                                                <div class="form-group">
+                                                    <label class="col-lg-2 col-sm-2 control-label"></label>
+                                                    <div class="col-lg-10">
+                                                      <h4>Pengisian RBKD Telah di Tutup</h4>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                              	                    <button type="button" class="btn btn-warning" data-dismiss="modal"> Tutup</button>
+                              	                </div>
+                                            </form>
+                                            </div>
+                                        </div>
+                                    </div>
                           </div>
    </div>

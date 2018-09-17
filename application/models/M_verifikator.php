@@ -262,6 +262,14 @@ function profil()
     return $query;
 }
 
+function fakultas()
+{
+    $this->db->select('*')
+                    ->from('tbl_mst_fakultas');
+    $query=$this->db->get()->result();
+    return $query;
+}
+
 function profil_remunerasi($id)
 {
   $this->db->select('profil_dosen.id_kat_dosen')

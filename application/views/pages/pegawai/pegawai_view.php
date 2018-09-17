@@ -22,7 +22,7 @@
                           <th>Nip</th>
                           <th>Nama</th>
                           <th>Kategori Dosen</th>
-                          <th>Pendidikan Terakhir</th>
+                          <th>Fakultas</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -36,7 +36,7 @@
                           <td><?php echo $dt->nip; ?></td>
                           <td><?php echo $dt->nama_peg; ?></td>
                           <td><?php echo $dt->kategori_dosen; ?></td>
-                          <td><?php echo $dt->s3; ?></td>
+                          <td><?php echo $dt->nama_fakultas; ?></td>
                           <td>
                               <?php echo anchor('Pegawai/ProfilPegawai/'.$dt->nip,'<span class="glyphicon glyphicon-arrow-right" title="Detil Data"></span>'); ?>&nbsp;&nbsp;
                               <?php if($level==1){ ?>

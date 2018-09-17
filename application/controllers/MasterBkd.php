@@ -10,6 +10,7 @@ class MasterBkd extends CI_Controller {
 						$this->load->model('M_verifikator');
 						$this->load->model('M_pegawai');
 						$this->load->model('M_dosen');
+						$this->load->model('M_master');
             $this->load->helper(array('form', 'url'));
             $this->acl = $this->session->userdata('acl');
 
@@ -39,6 +40,41 @@ public function index()
 		$this->load->view('layout/side_menu');
 		$this->load->view('pages/bkd/masterbkd_view');
 		$this->load->view('layout/footer_datatables');
+	}
+
+	public function SettingRencana()
+	{
+		$id = $this->session->userdata('nipp');
+		$data['filter'] = $this->M_dosen->filter($id);
+		$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($id);
+	  $data['name'] = $this->session->userdata('username');
+		$data['nipp'] = $this->session->userdata('nipp');
+	  $data['dosen'] = $this->M_master->show_dosen();
+		$data['periode'] = $this->M_master->show_periode_aktif();
+	  $data['title'] = 'Profil Dosen';
+	  $this->load->view('layout/header_datatables',$data);
+	  $this->load->view('layout/side_menu');
+	  $this->load->view('pages/master/set_rencanakerja');
+	  $this->load->view('layout/footer_datatables');
+	}
+
+	function UpdateStatusRencana($id)
+	{
+		$id_verifikator	= $this->uri->segment(3);
+		$rk_dosen 	= $this->uri->segment(4);
+
+		$data = array('rk_dosen' => $rk_dosen);
+	        $where = array('id_verifikator' =>$id_verifikator);
+	        $this->M_master->update_status_periode($where, $data, 'verifikator');
+	        echo "Update Succes"; redirect('MasterBkd/SettingRencana','refresh');
+	}
+
+	function UpdateStatusRencanaAll()
+	{
+		$data = array('rk_dosen' => $this->uri->segment(4));
+		$where = array('id_periode' =>$this->uri->segment(3));
+	  $this->M_master->update_status_rk($where,$data, 'verifikator');
+	  echo "Update Succes"; redirect('MasterBkd/SettingRencana','refresh');
 	}
 
 /*BKD*/

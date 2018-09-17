@@ -21,17 +21,22 @@
     <script src="<?php echo base_url(); ?>assets/vendors/pdfmake/build/vfs_fonts.js"></script>
     <script src="<?php echo base_url(); ?>assets/vendors/bootstrap-select/bootstrap-select.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/vendors/editable/js/bootstrap-editable.js"></script>
+    <script src="<?php echo base_url(); ?>assets/vendors/datatables.net-buttons-bs/js/dataTables.buttons.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/vendors/datatables.net-buttons-bs/js/buttons.flash.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/vendors/datatables.net-buttons-bs/js/buttons.html5.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/vendors/datatables.net-buttons-bs/js/buttons.print.min.js"></script>
     <!-- Custom Theme Scripts -->
     <script src="<?php echo base_url(); ?>assets/build/js/custom.min.js"></script>
 
 <script>
-
 $(document).ready(function() {
     $('.myTable').DataTable( {
         "scrollX": true,
+        // "dom": 'Bfrtip',
          "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
         buttons: [
-            'copy', 'excel', 'pdf'
+            // 'copy', 'csv', 'excel', 'pdf', 'print'
+            'copy', 'excel'
         ]
     } );
 } );

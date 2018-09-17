@@ -88,11 +88,11 @@ function show_golongan_select(){
  /*PEGAWAI VIEWS*/
 
     function show_viewpages(){
-      $this->db->select('profil_dosen.nip,profil_dosen.s3,tb_pegawai.nama_peg,master_kategori_dosen.kategori_dosen')
+      $this->db->select('profil_dosen.nip,profil_dosen.s3,profil_dosen.id_fakultas,tb_pegawai.nama_peg,master_kategori_dosen.kategori_dosen,tbl_mst_fakultas.nama_fakultas')
                       ->from('profil_dosen')
                       ->join('tb_pegawai','profil_dosen.nip=tb_pegawai.nip')
                       ->join('master_kategori_dosen','profil_dosen.id_kat_dosen=master_kategori_dosen.id_kat_dosen')
-                      ->where('profil_dosen.nip !=', 007)
+                      ->join('tbl_mst_fakultas','profil_dosen.id_fakultas=tbl_mst_fakultas.id_fakultas', 'LEFT')
                       ->where('profil_dosen.id_kat_dosen !=', 0)
                       ->order_by('profil_dosen.nip ASC');
       $query=$this->db->get()->result();

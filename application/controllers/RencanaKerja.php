@@ -92,6 +92,10 @@ public function index()
 /*RENCANA KERJA*/
 public function FormRencana()
 {
+	$auth=$this->M_rencanakerja->show_verifikator();
+	foreach ($auth as $keys);
+
+	if($keys->rk_dosen == 1){
 	$ids = $this->session->userdata('nipp');
 	$data['filter'] = $this->M_dosen->filter($ids);
 	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
@@ -104,6 +108,18 @@ public function FormRencana()
       $this->load->view('layout/side_menu');
       $this->load->view('pages/bkd/inputrencana');
       $this->load->view('layout/footer');
+	}else{
+		$ids = $this->session->userdata('nipp');
+		$data['filter'] = $this->M_dosen->filter($ids);
+		$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
+				$data['name'] = $this->session->userdata('username');
+				$data['nipp'] = $this->session->userdata('nipp');
+				$data['title'] = 'Input Rencana Kerja';
+				$this->load->view('layout/header',$data);
+				$this->load->view('layout/side_menu');
+				$this->load->view('pages/tidak_punya_akses');
+				$this->load->view('layout/footer');
+	}
 }
 
 public function FormRencanaTambahan()

@@ -22,6 +22,7 @@
                           <th>Nip</th>
                           <th>Nama</th>
                           <th>Action</th>
+                          <th>Reset</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -42,6 +43,18 @@
                                     echo'<span class="text text-primary" title="Selesai">Selesai Diperiksa</span>';
                                 }else{
                                     echo anchor('AdminFakultas/PeriksaLaporanDetail/'.$dt->nip,'<span class="btn btn-sm btn-primary" title="Lihat Data">Lihat Data</span>');
+                                }
+                              ?>
+                          </td>
+                          <td>
+                              <?php
+                              $atts = array('width'=> 900,'height'=> 600,'scrollbars'=> 'yes','status'=> 'yes','resizable'=> 'yes',
+                                            'screenx'=> 0,'screeny'=> 0,'window_name' => '_blank'
+                                            );
+                                if($dt->admin_periksa==1){
+                                  echo anchor_popup('AdminFakultas/PeriksaLaporanDetail/'.$dt->nip,'<span class="btn btn-sm btn-warning" title="Update Data">Update</span>', $atts);
+                                }else{
+                                  echo'-';
                                 }
                               ?>
                           </td>

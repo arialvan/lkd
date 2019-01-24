@@ -8,11 +8,38 @@
             <div class="clearfix"></div>
             <div class="col-md-12 col-sm-12 col-xs-12">
               <?php foreach($periode as $p); ?>
+
+              <div class="x_panel">
+                <div class="x_title">
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                  </ul>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                  <div class="col-md-6 col-sm-6 col-xs-6">
+                    <fieldset>
+                      <legend>Rencana Kerja</legend>
+                        <a href="<?php echo base_url() ?>MasterBkd/UpdateStatusRencanaAll/<?php echo $p->id_periode.'/'. 0; ?>" class="btn btn-md btn-danger" title="Tutup Pengisian Rencana Kerja Dosen" onclick="return confirm('Apakah Anda Ingin Menonaktifkan Seluruh Pengisian Rencana Kerja?')"><i class="fa fa-eye-slash"></i> >> Nonaktfikan Semua Pengisian Rencana Kerja</a>
+                        <br />
+                        <a href="<?php echo base_url() ?>MasterBkd/UpdateStatusRencanaAll/<?php echo $p->id_periode.'/'. 1; ?>" class="btn btn-md btn-primary" title="Tutup Pengisian Rencana Kerja Dosen" onclick="return confirm('Apakah Anda Ingin Mengaktifkan Seluruh Pengisian Rencana Kerja?')"><i class="fa fa-eye"></i> >> Aktifkan Semua Pengisian Rencana Kerja</a>
+                    </fieldset>
+                  </div>
+
+
+                  <div class="col-md-6 col-sm-6 col-xs-6">
+                    <fieldset>
+                      <legend>Upload Laporan</legend>
+                        <a href="<?php echo base_url() ?>MasterBkd/UpdateStatusLaporanAll/<?php echo $p->id_periode.'/'. 0; ?>" class="btn btn-md btn-danger" title="Tutup Pengisian Rencana Kerja Dosen" onclick="return confirm('Apakah Anda Ingin Menonaktifkan Seluruh Pengisian Rencana Kerja?')"><i class="fa fa-eye-slash"></i> >> Nonaktfikan Semua Upload Laporan</a>
+                        <br />
+                        <a href="<?php echo base_url() ?>MasterBkd/UpdateStatusLaporanAll/<?php echo $p->id_periode.'/'. 1; ?>" class="btn btn-md btn-primary" title="Tutup Pengisian Rencana Kerja Dosen" onclick="return confirm('Apakah Anda Ingin Mengaktifkan Seluruh Pengisian Rencana Kerja?')"><i class="fa fa-eye"></i> >> Aktifkan Semua Upload Laporan</a>
+                    </fieldset>
+                  </div>
+                </div>
+              </div>
+
                 <div class="x_panel">
                   <div class="x_title">
-                    <a href="<?php echo base_url() ?>MasterBkd/UpdateStatusRencanaAll/<?php echo $p->id_periode.'/'. 0; ?>" class="btn btn-md btn-danger" title="Tutup Pengisian Rencana Kerja Dosen" onclick="return confirm('Apakah Anda Ingin Menonaktifkan Seluruh Pengisian Rencana Kerja?')"><i class="fa fa-eye-slash"></i> >> Nonaktfikan Semua Pengisian Rencana Kerja</a>
-                    <br />
-                    <a href="<?php echo base_url() ?>MasterBkd/UpdateStatusRencanaAll/<?php echo $p->id_periode.'/'. 1; ?>" class="btn btn-md btn-primary" title="Tutup Pengisian Rencana Kerja Dosen" onclick="return confirm('Apakah Anda Ingin Mengaktifkan Seluruh Pengisian Rencana Kerja?')"><i class="fa fa-eye"></i> >> Aktifkan Semua Pengisian Rencana Kerja</a>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                     </ul>
@@ -25,7 +52,8 @@
                           <th>#</th>
                           <th>NIP</th>
                           <th>NAMA</th>
-                          <th>AKSI</th>
+                          <th>PENGISIAN<br />RENCANA KERJA</th>
+                          <th>UPLOAD LAPORAN</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -39,9 +67,16 @@
                           <td><?php echo $dt->nama_peg; ?></td>
                           <td>
                             <?php if($dt->rk_dosen==1){ ?>
-                              <a href="<?php echo base_url() ?>MasterBkd/UpdateStatusRencana/<?php echo $dt->id_verifikator.'/'. 0; ?> " class="btn btn-primary" title="Status Saat Ini Aktif" onclick="return confirm('Apakah Anda Ingin Menonaktifkan Periode Ini ?')">Aktif</a>
+                              <a href="<?php echo base_url() ?>MasterBkd/UpdateStatusRencana/<?php echo $dt->id_verifikator.'/'. 0; ?> " class="btn btn-primary" title="Status Saat Ini Aktif" onclick="return confirm('Apakah Anda Ingin Menonaktifkan Rencana Kerja Ini ?')">Aktif</a>
                             <?php }else{ ?>
-                              <a href="<?php echo base_url() ?>MasterBkd/UpdateStatusRencana/<?php echo $dt->id_verifikator.'/'. 1; ?> " class="btn btn-danger" title="Status Saat Ini Tidak Aktif" onclick="return confirm('Apakah Anda Ingin Aktifkan Periode Ini ?')">Non Aktif</a>
+                              <a href="<?php echo base_url() ?>MasterBkd/UpdateStatusRencana/<?php echo $dt->id_verifikator.'/'. 1; ?> " class="btn btn-danger" title="Status Saat Ini Tidak Aktif" onclick="return confirm('Apakah Anda Ingin Aktifkan Rencana Kerja Ini ?')">Non Aktif</a>
+                            <?php } ?>
+                          </td>
+                          <td>
+                            <?php if($dt->lp_dosen==1){ ?>
+                              <a href="<?php echo base_url() ?>MasterBkd/UpdateStatusLaporan/<?php echo $dt->id_verifikator.'/'. 0; ?> " class="btn btn-primary" title="Status Saat Ini Aktif" onclick="return confirm('Apakah Anda Ingin Menonaktifkan Laporan Ini ?')">Aktif</a>
+                            <?php }else{ ?>
+                              <a href="<?php echo base_url() ?>MasterBkd/UpdateStatusLaporan/<?php echo $dt->id_verifikator.'/'. 1; ?> " class="btn btn-danger" title="Status Saat Ini Tidak Aktif" onclick="return confirm('Apakah Anda Ingin Aktifkan Laporan Ini ?')">Non Aktif</a>
                             <?php } ?>
                           </td>
                         </tr>

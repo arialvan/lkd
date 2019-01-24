@@ -6,6 +6,7 @@ var $tabless = 'pegview';
    function __construct()
     {
         parent::__construct();
+        $this->dbsimpeg = $this->load->database('dbsimpeg', TRUE);
     }
 
 //SHOW
@@ -20,14 +21,13 @@ function show_golongan($id)
 }
 // WEB SERVICE
     function show_pegawai_service(){
-      $this->db->select('nip,nama_peg,alamat')
-               ->from('tb_pegawai');
+      $this->dbsimpeg->select('nip,nama_peg,alamat')
+                      ->from('tb_pegawai');
       $query = $this->db->get()->result();
       return $query;
     }
 
     function show_pegawai_services($where,$table){
-        //return $this->db->get_where($table,$where);
         $this->db->select('nip,nama_peg,alamat');
         $query=$this->db->get_where($table,$where);
         return $query;
@@ -36,19 +36,19 @@ function show_golongan($id)
 
 /*PEGAWAI ALL*/
     function show_pegawai(){
-      $this->db->select('profil_dosen.nip,profil_dosen.s3,tb_pegawai.nama_peg,master_kategori_dosen.kategori_dosen')
-                      ->from('profil_dosen')
-                      ->join('tb_pegawai','profil_dosen.nip=tb_pegawai.nip')
-                      ->join('master_kategori_dosen','profil_dosen.id_kat_dosen=master_kategori_dosen.id_kat_dosen')
-                      ->where('profil_dosen.nip !=', 007)
-                      ->order_by('profil_dosen.nip ASC');
+      $this->db->select('a.nip,a.s3,b.nama_peg,c.kategori_dosen')
+                      ->from('uinar_lkd2.profil_dosen a')
+                      ->join('simpeg.tb_pegawai b','a.nip=b.nip')
+                      ->join('uinar_lkd2.master_kategori_dosen c','a.id_kat_dosen=c.id_kat_dosen')
+                      ->where('a.nip !=', 007)
+                      ->order_by('a.nip ASC');
       $query=$this->db->get()->result();
       return $query;
     }
 
 /* INSERT PROFIL PEGAWAI */
     function show_pegawai_setting(){
-        $this->db->select('nip,nama_peg,status_peg,status_profesi,status_profil')
+        $this->dbsimpeg->select('nip,nama_peg,status_peg,status_profesi,status_profil')
                  ->from('tb_pegawai')
                  ->where('nip !=', 007)
                  ->where('status_profesi !=', 2);
@@ -58,7 +58,7 @@ function show_golongan($id)
 
 /* INSERT PROFIL DOSEN */
     function show_dosen_setting(){
-        $this->db->select('nip,nama_peg,status_peg,status_profesi,status_profil')
+        $this->dbsimpeg->select('nip,nama_peg,status_peg,status_profesi,status_profil')
                  ->from('tb_pegawai')
                  ->where('nip !=', 007)
                  ->where('status_profesi =', 2);
@@ -68,17 +68,17 @@ function show_golongan($id)
 
 /*PEGAWAI*/
     function show_pegawai_profil(){
-        $query = $this->db->get('tb_pegawai_profil')->result();
+        $query = $this->dbsimpeg->get('tb_pegawai_profil')->result();
         return $query;
     }
 //show_golongan_select
 function show_golongan_select(){
-    $query = $this->db->get('tb_golongan')->result();
+    $query = $this->dbsimpeg->get('tb_golongan')->result();
     return $query;
 }
 /*PEGAWAI*/
     function show_pegawai_stprof(){
-        $this->db->select('*')
+        $this->dbsimpeg->select('*')
                         ->from('tb_pegawai')
                         ->where(array('status_profil' => 0))
                         ->order_by('nip');
@@ -88,22 +88,22 @@ function show_golongan_select(){
  /*PEGAWAI VIEWS*/
 
     function show_viewpages(){
-      $this->db->select('profil_dosen.nip,profil_dosen.s3,profil_dosen.id_fakultas,tb_pegawai.nama_peg,master_kategori_dosen.kategori_dosen,tbl_mst_fakultas.nama_fakultas')
-                      ->from('profil_dosen')
-                      ->join('tb_pegawai','profil_dosen.nip=tb_pegawai.nip')
-                      ->join('master_kategori_dosen','profil_dosen.id_kat_dosen=master_kategori_dosen.id_kat_dosen')
-                      ->join('tbl_mst_fakultas','profil_dosen.id_fakultas=tbl_mst_fakultas.id_fakultas', 'LEFT')
-                      ->where('profil_dosen.id_kat_dosen !=', 0)
-                      ->order_by('profil_dosen.nip ASC');
+      $this->db->select('*')
+                      ->from('uinar_lkd2.profil_dosen a')
+                      ->join('simpeg.tb_pegawai b','a.nip=b.nip', 'LEFT')
+                      ->join('uinar_lkd2.master_kategori_dosen c','a.id_kat_dosen=c.id_kat_dosen')
+                      ->join('uinar_lkd2.tbl_mst_fakultas d','a.id_fakultas=d.id_fakultas', 'LEFT')
+                      ->where('a.id_kat_dosen !=', 0)
+                      ->order_by('a.nip ASC');
       $query=$this->db->get()->result();
       return $query;
     }
 
     function show_viewpages_edit($id){
-      $this->db->select('*')
+      $this->dbsimpeg->select('*')
                       ->from('pegview')
                       ->where('nip=', $id);
-      $query=$this->db->get()->result();
+      $query=$this->dbsimpeg->get()->result();
       return $query;
     }
 
@@ -129,9 +129,9 @@ function show_golongan_select(){
 /*EDIT PEGAWAI*/
     function edit_pegawai($id){
       $this->db->select('*')
-                      ->from('tb_pegawai')
-                      ->join('profil_dosen','tb_pegawai.nip = profil_dosen.nip')
-                      ->where('profil_dosen.nip=', $id);
+                      ->from('simpeg.tb_pegawai a')
+                      ->join('uinar_lkd2.profil_dosen b','a.nip = b.nip')
+                      ->where('b.nip=', $id);
       $query=$this->db->get()->result();
       return $query;
     }
@@ -149,11 +149,11 @@ function show_golongan_select(){
     public function get_by_id($id)
     	{
 
-        $this->db->select('*');
-        $this->db->from('tb_pegawai_profil');
-        $this->db->join('pegview', 'tb_pegawai_profil.nip = pegview.nip');
-        $this->db->where('tb_pegawai_profil.nip', $id);
-        $query = $this->db->get();
+        $this->dbsimpeg->select('*');
+        $this->dbsimpeg->from('tb_pegawai_profil');
+        $this->dbsimpeg->join('pegview', 'tb_pegawai_profil.nip = pegview.nip');
+        $this->dbsimpeg->where('tb_pegawai_profil.nip', $id);
+        $query = $this->dbsimpeg->get();
 
     		return $query->row();
     	}
@@ -171,41 +171,60 @@ function show_golongan_select(){
 /*HAPUS DATA PEGAWAI*/
     function hapus_pegawai($where,$table){
         $msg = '<i class="fa fa-check text-success"></i> Hapus Data Berhasil';
-	$this->db->where($where);
-	$this->db->delete($table);
+      	$this->db->where($where);
+      	$this->db->delete($table);
         if($this->db->affected_rows() < 1 ){
             $msg = '<i class="fa fa-close text-danger"></i> Hapus data gagal.';
         }
     }
 
+/* KATEGORI DOSEN */
+        function show_kategori_dosen(){
+          $this->db->select('*');
+          $this->db->from('master_kategori_dosen');
+          $query = $this->db->get()->result();
+
+          return $query;
+        }
+
 /* RIWAYAT PENDIDIKAN JOIN PENDIDIKAN */
     function riwayatpendidikan($id){
         $this->db->select('*');
-        $this->db->from('tb_riwayatpendidikan');
-        $this->db->join('tb_pendidikan', 'tb_pendidikan.id_pendidikan = tb_riwayatpendidikan.id_pendidikan');
-        //$this->db->join('tb_pegawai', 'tb_pegawai.nip = tb_riwayatpendidikan.nip','left');
-        $this->db->where('tb_riwayatpendidikan.nip', $id);
+        $this->db->from('simpeg.tb_riwayatpendidikan');
+        $this->db->join('simpeg.tb_pendidikan', 'simpeg.tb_pendidikan.id_pendidikan = simpeg.tb_riwayatpendidikan.id_pendidikan');
+        $this->db->where('simpeg.tb_riwayatpendidikan.nip', $id);
         $query = $this->db->get()->result();
 
         return $query;
     }
 /* RIWAYAT JABATAN JOIN JABATAN */
     function riwayatjabatan($id){
-        $this->db->select('tb_riwayatjabatan_pegawai.id_riwayat_jabatan,tb_riwayatjabatan_pegawai.nip,tb_riwayatjabatan_pegawai.id_jabatan,YEAR(tb_riwayatjabatan_pegawai.tgl_riwayat) AS Tahun,tb_jabatan_struktural.jabatan_struktural');
-        $this->db->from('tb_riwayatjabatan_pegawai');
-        $this->db->join('tb_jabatan_struktural', 'tb_jabatan_struktural.id_jabatan = tb_riwayatjabatan_pegawai.id_jabatan');
-        //$this->db->join('tb_pegawai', 'tb_pegawai.nip = tb_riwayatjabatan.nip','left');
-        $this->db->where('tb_riwayatjabatan_pegawai.nip', $id);
+        $this->db->select('simpeg.tb_riwayatjabatan_pegawai.id_riwayat_jabatan,simpeg.tb_riwayatjabatan_pegawai.nip,
+                           simpeg.tb_riwayatjabatan_pegawai.id_jabatan,YEAR(simpeg.tb_riwayatjabatan_pegawai.tgl_riwayat) AS Tahun,
+                           simpeg.tb_jabatan_struktural.jabatan_struktural');
+        $this->db->from('simpeg.tb_riwayatjabatan_pegawai');
+        $this->db->join('simpeg.tb_jabatan_struktural', 'simpeg.tb_jabatan_struktural.id_jabatan = simpeg.tb_riwayatjabatan_pegawai.id_jabatan');
+        $this->db->where('simpeg.tb_riwayatjabatan_pegawai.nip', $id);
         $query = $this->db->get()->result();
         return $query;
     }
 /* RIWAYAT DIKLAT*/
-    function riwayatdiklat($where,$table){
-       return $this->db->get_where($table,$where);
+    function riwayatdiklat($id){
+      $this->db->select('*');
+      $this->db->from('simpeg.tb_riwayatdiklat');
+      $this->db->where('simpeg.tb_riwayatdiklat.nip', $id);
+      $query = $this->db->get()->result();
+
+      return $query;
     }
 /* RIWAYAT SEMINAR*/
-    function riwayatseminar($where,$table){
-       return $this->db->get_where($table,$where);
+    function riwayatseminar($id){
+      $this->db->select('*');
+      $this->db->from('simpeg.tb_riwayatseminar');
+      $this->db->where('simpeg.tb_riwayatseminar.nip', $id);
+      $query = $this->db->get()->result();
+
+      return $query;
     }
 
 /*INSERT ORGANISASI */
@@ -309,7 +328,18 @@ function show_golongan_select(){
 function edit_password($where,$table){
     return $this->db->get_where($table,$where);
 }
+
 function update_password($where,$data,$table){
+        	$this->db->where($where);
+        	$this->db->update($table,$data);
+}
+
+function update_pass($where,$data,$table){
+        	$this->db->where($where);
+        	$this->db->update($table,$data);
+}
+
+function update_kat_dosen($where,$data,$table){
         	$this->db->where($where);
         	$this->db->update($table,$data);
 }
@@ -323,5 +353,38 @@ function update_profil($where,$data,$table){
         	$this->db->update($table,$data);
 }
 
+public function model_loginas($id) {
+    $nip = $id;
+        $this->db->select('a.nip,a.user_level,a.id_kat_dosen,b.nama_peg');
+        $this->db->from('uinar_lkd2.profil_dosen a');
+        $this->db->join('simpeg.tb_pegawai b', 'a.nip = b.nip', 'left');
+        $this->db->where('a.nip', $nip);
+        $query = $this->db->get()->row();
+    //var_dump($query);
+          if ($query) {
+              //GET ACL
+              $qAcl = $this->db->where('nip',$nip)->get('profil_dosen')->row();
+                      if($qAcl){
+                                $acl  = array('username'=>$qAcl->nip);
+                                $sess = array(
+                                                'nipp' => $query->nip,
+                                                'username' => $query->nama_peg,
+                                                'user_level' => $query->user_level,
+                                                'kat_dosen' => $query->id_kat_dosen,
+                                                'is_login' => TRUE
+                                              );
+                                $this->session->set_userdata($sess);
+                                $msg = 'success';
+
+                      }else {
+                          $msg = 'error';
+                      }
+          } else {
+              $msg = 'error';
+          }
+
+    $this->db->close();
+    return $msg;
+}
 
 }

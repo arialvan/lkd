@@ -5,6 +5,7 @@ class M_dosen extends CI_Model{
    function __construct()
     {
         parent::__construct();
+        $this->dbsimpeg = $this->load->database('dbsimpeg', TRUE);
     }
 
 /*VERIFIKATOR*/
@@ -74,25 +75,25 @@ function filterketuaprodi($id)
 /*DOSEN*/
 function show_dosen()
 {
-        $this->db->select('profil_dosen.nip,profil_dosen.nidn,profil_dosen.id_kat_dosen,tb_pegawai.nama_peg,master_kategori_dosen.kategori_dosen')
-                 ->from('profil_dosen')
-                 ->join('tb_pegawai','profil_dosen.nip = tb_pegawai.nip')
-                 ->join('master_kategori_dosen','profil_dosen.id_kat_dosen = master_kategori_dosen.id_kat_dosen','left')
-                 ->where('profil_dosen.nip!=007')
-                 ->where('profil_dosen.id_kat_dosen!=0')
-                 ->order_by('tb_pegawai.nama_peg ASC');
+        $this->db->select('a.nip,a.nidn,a.id_kat_dosen,b.nama_peg,c.kategori_dosen')
+                 ->from('uinar_lkd.profil_dosen a')
+                 ->join('simpeg.tb_pegawai b','a.nip = b.nip')
+                 ->join('uinar_lkd.master_kategori_dosen c','a.id_kat_dosen = c.id_kat_dosen','left')
+                 ->where('a.nip!=007')
+                 ->where('a.id_kat_dosen!=0')
+                 ->order_by('b.nama_peg ASC');
         $query = $this->db->get()->result();
         return $query;
 }
 
 function show_dosen_profil()
 {
-  $this->db->select('profil_dosen.nip,profil_dosen.id_kat_dosen,tb_pegawai.nama_peg')
-           ->from('profil_dosen')
-           ->join('tb_pegawai','profil_dosen.nip = tb_pegawai.nip')
-           ->where('profil_dosen.nip!=007')
-           ->where('profil_dosen.id_kat_dosen=0')
-           ->order_by('tb_pegawai.nama_peg ASC');
+  $this->db->select('a.nip,a.id_kat_dosen,b.nama_peg')
+           ->from('uinar_lkd.profil_dosen a')
+           ->join('simpeg.tb_pegawai b','a.nip = b.nip')
+           ->where('a.nip!=007')
+           ->where('a.id_kat_dosen=0')
+           ->order_by('b.nama_peg ASC');
         $query = $this->db->get()->result();
         return $query;
 }
@@ -120,30 +121,30 @@ function show_periode()
 
 function show_assesor1()
 {
-        $this->db->select('nip,nama_peg')
-                 ->from('tb_pegawai')
-                 ->where('status_profesi =', 2);
-                 //->where('status_profesi !=', 2);
+        $this->dbsimpeg->select('nip,nama_peg')
+                       ->from('tb_pegawai')
+                       ->where('status_profesi =', 2);
+                       //->where('status_profesi !=', 2);
         $query = $this->db->get()->result();
         return $query;
 }
 
 function show_assesor2()
 {
-        $this->db->select('nip,nama_peg')
-                 ->from('tb_pegawai')
-                 ->where('status_profesi =', 2);
-                 //->where('status_profesi !=', 2);
+        $this->dbsimpeg->select('nip,nama_peg')
+                       ->from('tb_pegawai')
+                       ->where('status_profesi =', 2);
+                       //->where('status_profesi !=', 2);
         $query = $this->db->get()->result();
         return $query;
 }
 
 function show_ketprodi()
 {
-        $this->db->select('nip,nama_peg')
-                 ->from('tb_pegawai')
-                 ->where('status_profesi =', 2);
-                 //->where('status_profesi !=', 2);
+        $this->dbsimpeg->select('nip,nama_peg')
+                       ->from('tb_pegawai')
+                       ->where('status_profesi =', 2);
+                       //->where('status_profesi !=', 2);
         $query = $this->db->get()->result();
         return $query;
 }
@@ -157,9 +158,9 @@ function update_dosen($where,$data,$table)
 
 function edit_pegawai(){
   $this->db->select('*')
-                  ->from('tb_pegawai')
-                  ->join('profil_dosen','tb_pegawai.nip = profil_dosen.nip')
-                  ->where('profil_dosen.nip=', $this->session->userdata('nipp'));
+                  ->from('simpeg.tb_pegawai a')
+                  ->join('uinar_lkd.profil_dosen b','a.nip = b.nip')
+                  ->where('b.nip=', $this->session->userdata('nipp'));
   $query=$this->db->get()->result();
   return $query;
 }

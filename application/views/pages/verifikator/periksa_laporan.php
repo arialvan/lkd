@@ -76,7 +76,13 @@
                             ?>
                           </td>
                           <td>
-                              <?php echo anchor('Verifikator/PeriksaLaporanDetail/'.$dt->nip,'<span class="btn btn-sm btn-primary" title="Lihat Data">Lihat Data</span>'); ?>
+                              <?php
+                                if($dt->statuslaporan==1){
+                                  echo anchor('Verifikator/PeriksaLaporanDetail/'.$dt->nip,'<span class="btn btn-sm btn-primary" title="Lihat Data">Lihat Data</span>');
+                                }else{
+                                  echo '-';
+                                }
+                              ?>
                           </td>
                         </tr>
                         <?php } ?>

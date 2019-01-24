@@ -37,10 +37,10 @@ public function index()
 		$data['bkd_syarat'] = $this->M_rencanakerja->syaratbkd();
 		$data['bkd_syarat_ds'] = $this->M_rencanakerja->syaratbkd_ds($id);
 		$data['bkd_syarat_dt'] = $this->M_rencanakerja->syaratbkd_dt($id);
-		$data['rencanakerja'] = $this->M_rencanakerja->show_rencana($id);
-		$data['penelitian'] = $this->M_rencanakerja->show_rencana_penelitian($id);
-		$data['pengabdian'] = $this->M_rencanakerja->show_rencana_pengabdian($id);
-		$data['penunjang'] = $this->M_rencanakerja->show_rencana_penunjang($id);
+		$data['rencanakerja'] = $this->M_rencanakerja->show_rencana_rk($id);
+		$data['penelitian'] = $this->M_rencanakerja->show_rencana_penelitian_rk($id);
+		$data['pengabdian'] = $this->M_rencanakerja->show_rencana_pengabdian_rk($id);
+		$data['penunjang'] = $this->M_rencanakerja->show_rencana_penunjang_rk($id);
 		$data['verifikator'] = $this->M_rencanakerja->show_verifikator();
 		$data['bkdkegiatan'] = $this->M_rencanakerja->show_bkdkegiatan();
 		$data['syaratbkd'] = $this->M_rencanakerja->show_syarat_bkd();
@@ -56,6 +56,9 @@ public function index()
 		$data['poinmaks'] = $this->M_rencanakerja->poin_terbesar($id);
 		$data['poinmin'] = $this->M_rencanakerja->poin_terendah($id);
 		$data['sksxpoin'] = $this->M_rencanakerja->sksxpoin($id);
+		$data['bkd'] = $this->M_rencanakerja->show_bkd();
+		$data['bkdkegiatan'] = $this->M_rencanakerja->show_bkdkegiatan();
+		$data['periode_aktif'] = $this->M_rencanakerja->show_periode_aktif();
 
 		$data['title'] = 'Beban Kinerja Dosen';
 		$this->load->view('layout/header_datatables',$data);
@@ -74,14 +77,19 @@ public function index()
 			$data['name'] = $this->session->userdata('username');
 			$data['nipp'] = $this->session->userdata('nipp');
 			$data['ids'] = $this->session->userdata('kat_dosen');
+			$data['syaratbkd'] = $this->M_verifikator->show_syarat_bkd();
+			$data['rekap_dosen'] = $this->M_verifikator->show_rekap_dosen($id);
 			$data['rencanakerja'] = $this->M_rencanakerja->show_rencana($id);
 			$data['penelitian'] = $this->M_rencanakerja->show_rencana_penelitian($id);
 			$data['pengabdian'] = $this->M_rencanakerja->show_rencana_pengabdian($id);
 			$data['penunjang'] = $this->M_rencanakerja->show_rencana_penunjang($id);
 			$data['verifikator'] = $this->M_rencanakerja->show_verifikator();
-			$data['bkdkegiatan'] = $this->M_rencanakerja->show_bkdkegiatan();
-			$data['syaratbkd'] = $this->M_rencanakerja->show_syarat_bkd();
-			$data['syaratsubbkd'] = $this->M_rencanakerja->show_syarat_subbkd($id);
+			$data['dilaporkan'] = $this->M_rencanakerja->show_dilaporkan();
+			// $data['bkdkegiatan'] = $this->M_rencanakerja->show_bkdkegiatan();
+			// $data['syaratsubbkd'] = $this->M_rencanakerja->show_syarat_subbkd($id);
+			// $data['bkd'] = $this->M_rencanakerja->show_bkd();
+			$data['listrbkd'] = $this->M_rencanakerja->show_listrbkd($id);
+			$data['listlaporan'] = $this->M_rencanakerja->show_listlaporan($id);
 			$data['title'] = 'Rekap Rencana Kerja Dosen';
 			$this->load->view('layout/header_datatables',$data);
 			$this->load->view('layout/side_menu');
@@ -95,7 +103,7 @@ public function FormRencana()
 	$auth=$this->M_rencanakerja->show_verifikator();
 	foreach ($auth as $keys);
 
-	if($keys->rk_dosen == 1){
+	if($keys->rk_dosen == 1){ //Filter
 	$ids = $this->session->userdata('nipp');
 	$data['filter'] = $this->M_dosen->filter($ids);
 	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
@@ -183,16 +191,30 @@ foreach ($this->input->post('bkd_kegiatan') as $key => $value) {
 								$poin_kali = 0;
 						}
 
+						//APP Ketua Prodi
+							$id = $this->session->userdata('nipp');
+							$datas = $this->M_rencanakerja->cek_ketuaprodi($id);
+							foreach ($datas as $keys);
+							if($keys->ketua_prodi !=NULL){
+									$app_kp = 1;
+							}else{
+									$app_kp = 0;
+							}
+
+
             $data = array(
+										'id_periode' => $this->input->post('id_periode'),
 										'nip' => $this->session->userdata('nipp'),
 										'id_bkd' => $this->input->post('bkd')[$bkd],
 		                'id_kegiatan' => $key,
 		                'sub_kegiatan' => $this->input->post('sub_kegiatan')[$bkd],
+										'sks_post' => $sks_post,
 										'sks_subkegiatan' => $sks_kali,
 										'poin_subkegiatan' => $poin_kali,
-										'app_ketuaprodi' => 1,
+										'app_ketuaprodi' => $app_kp,
 		                'user_create' => $this->session->userdata('username')
             );
+						// var_dump($data);
 						//Insert
             $this->M_rencanakerja->insert_rencanakerja($data, 'bkd_subkegiatan');
         }
@@ -373,17 +395,18 @@ function InsertLaporan()
 								$namafile[] = $filenames;
 
                 // $_FILES['file']['name']     = $_FILES['files']['name'][$i];
+
 								$_FILES['file']['name']     = $filenames;
                 $_FILES['file']['type']     = $_FILES['files']['type'][$i];
                 $_FILES['file']['tmp_name'] = $_FILES['files']['tmp_name'][$i];
-                $_FILES['file']['error']     = $_FILES['files']['error'][$i];
+                $_FILES['file']['error']    = $_FILES['files']['error'][$i];
                 $_FILES['file']['size']     = $_FILES['files']['size'][$i];
 
                 // Konfigurasi Upload File
 								//Cek Direktori
 									$directoryname = $this->session->userdata('nipp');
 									if (!is_dir('./uploads/'.$directoryname)) { //Jika Folder Belum Ada Maka Buat Folder Baru
-										  mkdir('./uploads/' . $this->session->userdata('nipp'), 0777, TRUE); //Folder Baru
+										  mkdir('./uploads/'.$this->session->userdata('nipp').'/'.date("Y"), 0777, TRUE); //Folder Baru
 									}
 
 									// Nama Direktori File
@@ -401,7 +424,14 @@ function InsertLaporan()
                     $fileData = $this->upload->data();
                     $uploadData[$i]['file_name'] = $this->session->userdata('nipp').'_'.time();
                     $uploadData[$i]['uploaded_on'] = date("Y-m-d H:i:s");
-                }
+                }else{
+										echo '<h2>
+															Upload File Error...
+															Pastikan file Anda format PDF.
+													</h2>';
+										echo '<h2><a href="'.base_url().'RencanaKerja/EditLaporan/'.$this->input->post('id_subkegiatan').'">KEMBALI</a></h2>';
+										exit;
+								}
             }
 
                 // Insert files data into the database
@@ -417,10 +447,15 @@ function InsertLaporan()
 								}
 
 							//	Update Sub Kegiatan
-								$data = array('status_laporan' => 1);
+							if(!empty($this->input->post('lapor_sebagai_bkd')))
+							{
+									$lsb=$this->input->post('lapor_sebagai_bkd');
+							}else{
+									$lsb==0;
+							}
+								$data = array('status_laporan' => 1, 'lapor_sebagai_bkd' => $lsb);
 							  $where = array('id_subkegiatan' => $this->input->post('id_subkegiatan'));
 							  $this->M_rencanakerja->update_rencana($where, $data, 'bkd_subkegiatan');
-
 								redirect('RencanaKerja/Laporan');
         }else{
 								redirect('RencanaKerja/EditLaporan/',$this->input->post('id_subkegiatan'));
@@ -440,6 +475,7 @@ function UpdateRencana()
 	$point = $this->input->post('sks')*$keys->poin; //Poin Edit
 
 	$data = array('sub_kegiatan' => $this->input->post('subkegiatan'),
+								'sks_post' => $this->input->post('sks'),
 								'sks_subkegiatan	' => $sks,
 								'poin_subkegiatan	' => $point);
 

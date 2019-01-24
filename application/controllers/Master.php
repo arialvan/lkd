@@ -43,7 +43,9 @@ public function Periode()
 	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
     $data['name'] = $this->session->userdata('username');
 		$data['nipp'] = $this->session->userdata('nipp');
-    $data['periodelkd'] = $this->M_master->show_periode();
+		$data['periode'] = $this->M_master->show_periode();
+    $data['periode_nonaktif'] = $this->M_master->show_periode_nonaktif();
+		$data['periode_aktif'] = $this->M_master->show_periode_aktif();
     $data['title'] = 'Periode';
     $this->load->view('layout/header_datatables',$data);
     $this->load->view('layout/side_menu');
@@ -174,7 +176,7 @@ function UpdatePeriode()
 
 function UpdateStatusPeriode($id)
 {
-	$data = array('status' => $this->uri->segment(4));
+				$data = array('status' => $this->uri->segment(4));
         $where = array('id_periode' =>$id);
         $this->M_master->update_status_periode($where, $data, 'periode_lkd');
         echo "Update Succes"; redirect('Master/Periode','refresh');
@@ -184,6 +186,145 @@ function HapusPeriode($id) {
     $where = array('id_periode' => $id);
     $this->M_master->hapus_periode($where, 'periode_lkd');
     redirect('Master/Periode');
+}
+
+
+public function CopyData()
+{
+
+	if($this->input->post('id') == "subkegiatan"){
+			$dt = $this->input->post('periode_lama');
+			$query=$this->M_master->show_subkegiatan($dt);
+				foreach($query as $row )
+		    {
+
+				 $data = array(
+											 'id_bkd' => $row->id_bkd,
+											 'id_periode' => $this->input->post('periode_baru'),
+											 'kegiatan' => $row->kegiatan,
+											 'syarat' => $row->syarat,
+											 'bkd_hitung' => $row->bkd_hitung,
+											 'bkd_sks' => $row->bkd_sks,
+											 'renum_hitung' => $row->renum_hitung,
+											 'poin' => $row->poin,
+											 'renum_tarif' => $row->renum_tarif,
+											 'syarat_file' => $row->syarat_file,
+											 'user_create' => $this->session->userdata('nipp')
+				 					 		);
+
+				 // echo '<pre>' . var_export($data, true) . '</pre>';
+				 // Insert Copy Data
+				 $this->M_master->insert_copy_data($data, 'bkd_kegiatan');
+				 //Update Status CopyData
+				 $datas = array('copy_subkegiatan' => 1);
+			         $where = array('id_periode' =>$this->input->post('periode_baru'));
+			         $this->M_master->update_status_periode($where, $datas, 'periode_lkd');
+		    }
+				echo '<h2>Copy Data Kegiatan Berhasil <a href="'.base_url().'Master/Periode">Kembali</a></h2>';
+
+	}elseif($this->input->post('id') == "verifikator"){
+		$dt = $this->input->post('periode_lama');
+		$query=$this->M_master->show_verifikator($dt);
+			foreach($query as $row )
+			{
+			 $data = array(
+										 'nip' => $row->nip,
+										 'id_periode' => $this->input->post('periode_baru'),
+										 'assesor_1' => $row->assesor_1,
+										 'assesor_2' => $row->assesor_2,
+										 'ketua_prodi' => $row->ketua_prodi,
+										 'user_create' => $this->session->userdata('nipp'),
+										 'statuslaporan' => 0,
+										 'p_assesor1' => 0,
+										 'p_assesor2' => 0,
+										 'p_kaprodi' => 0,
+										 'rk_dosen' => 1,
+										 'lp_dosen' => 0
+										);
+
+			 //echo '<pre>' . var_export($data, true) . '</pre>';
+			 // Insert Copy Data
+			 $this->M_master->insert_copy_data($data, 'verifikator');
+			 //Update Status CopyData
+			 $datas = array('copy_verifikator' => 1);
+						 $where = array('id_periode' =>$this->input->post('periode_baru'));
+						 $this->M_master->update_status_periode($where, $datas, 'periode_lkd');
+			}
+			echo '<h2>Copy Data Verifikator Berhasil <a href="'.base_url().'Master/Periode">Kembali</a></h2>';
+
+
+	}elseif($this->input->post('id') == "skema"){
+		$dt = $this->input->post('periode_lama');
+		$query=$this->M_master->show_skema($dt);
+			foreach($query as $row )
+			{
+			 $data = array(
+										 'id_kat_dosen' => $row->id_kat_dosen,
+										 'id_bkd' => $row->id_bkd,
+										 'id_remun' => $row->id_remun,
+										 'sks_bkd' => $row->sks_bkd,
+										 'sks_remun' => $row->sks_remun,
+										 'poin_remun' => $row->poin_remun,
+										 'id_periode' => $this->input->post('periode_baru'),
+										 'user_create' => $this->session->userdata('nipp')
+										);
+
+			 //echo '<pre>' . var_export($data, true) . '</pre>';
+			 // Insert Copy Data
+			 $this->M_master->insert_copy_data($data, 'bkd_remun_dosen');
+			 //Update Status CopyData
+			 $datas = array('copy_skema' => 1);
+						 $where = array('id_periode' =>$this->input->post('periode_baru'));
+						 $this->M_master->update_status_periode($where, $datas, 'periode_lkd');
+			}
+			echo '<h2>Copy Data Skema Perhitungan Berhasil <a href="'.base_url().'Master/Periode">Kembali</a></h2>';
+
+	}else{
+			echo '<h2>Tidak ada Data di Copy <a href="'.base_url().'Master/Periode">Kembali</a></h2>';
+	}
+
+}
+
+
+function Reset() {
+		$id_periode = $this->uri->segment(3);
+		$segment    = $this->uri->segment(4);
+
+		if($segment=="subkegiatan"){
+				$where = array('id_periode' => $id_periode);
+		    $this->M_master->hapus_copy($where, 'bkd_kegiatan');
+				//Update Status CopyData
+				$datas = array('copy_subkegiatan' => 0);
+							$where = array('id_periode' =>$id_periode);
+							$this->M_master->update_status_periode($where, $datas, 'periode_lkd');
+
+		    echo '<h2>Reset Data Kegiatan Berhasil <a href="'.base_url().'Master/Periode">Kembali</a></h2>';
+
+		}elseif($segment=="verifikator"){
+			$where = array('id_periode' => $id_periode);
+			$this->M_master->hapus_copy($where, 'verifikator');
+			//Update Status CopyData
+			$datas = array('copy_verifikator' => 0);
+						$where = array('id_periode' =>$id_periode);
+						$this->M_master->update_status_periode($where, $datas, 'periode_lkd');
+
+			echo '<h2>Reset Data Verifikator Berhasil <a href="'.base_url().'Master/Periode">Kembali</a></h2>';
+
+		}elseif($segment=="skema"){
+			$where = array('id_periode' => $id_periode);
+			$this->M_master->hapus_copy($where, 'bkd_remun_dosen');
+			//Update Status CopyData
+			$datas = array('copy_skema' => 0);
+						$where = array('id_periode' =>$id_periode);
+						$this->M_master->update_status_periode($where, $datas, 'periode_lkd');
+
+			echo '<h2>Reset Data Skema Perhitungan Berhasil <a href="'.base_url().'Master/Periode">Kembali</a></h2>';
+
+		}else{
+			echo '<h2>Reset Data Gagal <a href="'.base_url().'Master/Periode">Kembali</a></h2>';
+		}
+
+
 }
 
 //LOGOUT

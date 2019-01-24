@@ -25,10 +25,61 @@
     <script src="<?php echo base_url(); ?>assets/vendors/datatables.net-buttons-bs/js/buttons.flash.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/vendors/datatables.net-buttons-bs/js/buttons.html5.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/vendors/datatables.net-buttons-bs/js/buttons.print.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/vendors/bootstrap-toggle/bootstrap-toggle.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/vendors/introjs/intro.js"></script>
     <!-- Custom Theme Scripts -->
     <script src="<?php echo base_url(); ?>assets/build/js/custom.min.js"></script>
 
 <script>
+
+function cek_pendidikan(cekbox){
+    for(i=0; i < cekbox.length; i++){
+        cekbox[i].checked = true;
+    }
+}
+
+function uncek_pendidikan(cekbox){
+    for(i=0; i < cekbox.length; i++){
+        cekbox[i].checked = false;
+    }
+}
+
+function cek_penelitian(cekbox1){
+    for(i=0; i < cekbox1.length; i++){
+        cekbox1[i].checked = true;
+    }
+}
+
+function uncek_penelitian(cekbox1){
+    for(i=0; i < cekbox1.length; i++){
+        cekbox1[i].checked = false;
+    }
+}
+
+function cek_pengabdian(cekbox2){
+    for(i=0; i < cekbox2.length; i++){
+        cekbox2[i].checked = true;
+    }
+}
+
+function uncek_pengabdian(cekbox2){
+    for(i=0; i < cekbox2.length; i++){
+        cekbox2[i].checked = false;
+    }
+}
+
+function cek_penunjang(cekbox3){
+    for(i=0; i < cekbox3.length; i++){
+        cekbox3[i].checked = true;
+    }
+}
+
+function uncek_penunjang(cekbox3){
+    for(i=0; i < cekbox3.length; i++){
+        cekbox3[i].checked = false;
+    }
+}
+
 $(document).ready(function() {
     $('.myTable').DataTable( {
         "scrollX": true,
@@ -85,6 +136,30 @@ $(document).ready(function() {
 
         $(document).ready(function() {
                 // Untuk sunting
+                $('#edit-syaratfile').on('show.bs.modal', function (event) {
+                    var div   = $(event.relatedTarget) // Tombol dimana modal di tampilkan
+                    var modal = $(this)
+
+                    // Isi nilai pada field
+                    modal.find('#id').attr("value",div.data('id'));
+                    modal.find('#id_file').attr("value",div.data('id_file'));
+                    modal.find('#file').attr("value",div.data('file'));
+                });
+            });
+
+            $(document).ready(function() {
+                    // Untuk sunting
+                    $('#copy-bkd').on('show.bs.modal', function (event) {
+                        var div   = $(event.relatedTarget) // Tombol dimana modal di tampilkan
+                        var modal = $(this)
+
+                        // Isi nilai pada field
+                        modal.find('#id').attr("value",div.data('id'));
+                    });
+                });
+
+        $(document).ready(function() {
+                // Untuk sunting
                 $('#cek_file').on('show.bs.modal', function (event) {
                     var div   = $(event.relatedTarget) // Tombol dimana modal di tampilkan
                     var modal = $(this)
@@ -108,6 +183,37 @@ $(document).ready(function() {
                         modal.find('#nama').attr("value",div.data('nama'));
                     });
                 });
+
+//Update Kategori DOSEN
+$(document).ready(function() {
+        // Untuk sunting
+        $('#edit-pegawai').on('show.bs.modal', function (event) {
+            var div   = $(event.relatedTarget) // Tombol dimana modal di tampilkan
+            var modal = $(this)
+
+            // Isi nilai pada field
+            modal.find('#id').attr("value",div.data('id'));
+            modal.find('#nip').attr("value",div.data('nip'));
+            modal.find('#nips').attr("value",div.data('nips'));
+            modal.find('#nama').attr("value",div.data('nama'));
+            modal.find('#katdosen').attr("value",div.data('katdosen'));
+        });
+    });
+
+//Update Password DOSEN
+    $(document).ready(function() {
+            // Untuk sunting
+            $('#edit-password').on('show.bs.modal', function (event) {
+                var div   = $(event.relatedTarget) // Tombol dimana modal di tampilkan
+                var modal = $(this)
+
+                // Isi nilai pada field
+                modal.find('#id').attr("value",div.data('id'));
+                modal.find('#nips').attr("value",div.data('nips'));
+                modal.find('#nama').attr("value",div.data('nama'));
+            });
+        });
+
 
 function ConfirmDelete() {
   return confirm("Anda yakin ingin menghapus data ini?");
@@ -451,6 +557,88 @@ function saveToDB()
             saveToDB();
             e.preventDefault();
     });
+
+//TAB PANEL
+$(document).ready(function(){
+$('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+    localStorage.setItem('activeTab', $(e.target).attr('href'));
+});
+var activeTab = localStorage.getItem('activeTab');
+if(activeTab){
+    $('#myTab a[href="' + activeTab + '"]').tab('show');
+}
+});
+
+// Dropdown Insert
+function kegiatan()
+{
+    var state=$('#bkd').val();
+    $.post('<?php echo base_url();?>RencanaKerja/ambil_kegiatan/',
+    {
+      state:state
+    },
+    function(data)
+    {
+      $('#bkd_kegiatan').html(data);
+      //$('#id_unit_kerja').html(data);
+    });
+}
+
+function kegiatan2()
+{
+    var state=$('.bkd').val();
+    $.post('<?php echo base_url();?>RencanaKerja/ambil_kegiatan/',
+    {
+      state:state
+    },
+    function(data)
+    {
+      $('.bkd_kegiatan').html(data);
+      //$('#id_unit_kerja').html(data);
+    });
+}
+
+
+// function myFunction() {
+//       var idsub = document.getElementsByClassName("id_subkegiatan");
+//       var dataString = 'id_subkegiatan=' + idsub[0];
+//
+//       // AJAX code to submit form.
+//       $.ajax({
+//       type: "POST",
+//       url: "<?php echo base_url(); ?>Verifikator/Appketuaprodi",
+//       data: dataString,
+//       cache: false,
+//       success: function(html) {
+//       alert(html);
+//       }
+//       });
+//
+//       return false;
+// }
+
+$(document).ready(function(){
+      $('#submit').click(function(){
+           var languages = [];
+           $('.get_value').each(function(){
+                if($(this).is('input[type="hidden"]'))
+                {
+                     languages.push($(this).val());
+                }
+           });
+           languages = languages.toString();
+           //console.log(languages);
+           $.ajax({
+                url: "<?php echo base_url(); ?>Verifikator/Appketuaprodi",
+                method:"POST",
+                data:{languages:languages},
+                success:function(data){
+                     $('#result').html(data);
+                }
+           });
+      });
+ });
+
     </script>
   </body>
 </html>

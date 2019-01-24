@@ -573,7 +573,7 @@ PENDIDIKAN
 
                 <div class="x_panel">
                   <div class="x_content">
-                        <?php echo anchor('AdminFakultas/SelesaiPeriksa/'.$dt->nip,'<span class="btn btn-lg btn-primary" title="Lihat Data">Selesai Memeriksa</span>'); ?>
+                        <?php echo anchor('AdminFakultas/SelesaiPeriksa/'.$this->uri->segment(3),'<span class="btn btn-lg btn-primary" title="Lihat Data">Selesai Memeriksa</span>'); ?>
                   </div>
                 </div>
 

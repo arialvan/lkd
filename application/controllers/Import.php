@@ -222,7 +222,7 @@ public	function ExcelDataAssesor()	{
 //Path of files were you want to upload on localhost (C:/xampp/htdocs/ProjectName/uploads/excel/)
          $configUpload['upload_path'] = FCPATH.'uploads/excel/';
          $configUpload['allowed_types'] = 'xls|xlsx|csv';
-         $configUpload['max_size'] = '5000';
+         $configUpload['max_size'] = '10000';
          $this->load->library('upload', $configUpload);
          $this->upload->do_upload('userfile');
          $upload_data = $this->upload->data(); //Returns array of containing all of the data related to the file you uploaded.
@@ -248,6 +248,13 @@ public	function ExcelDataAssesor()	{
                 $ketua_prodi    =$objWorksheet->getCellByColumnAndRow(5,$i)->getValue();
                 $user_create    =$objWorksheet->getCellByColumnAndRow(6,$i)->getValue();
                 $time_create    =$objWorksheet->getCellByColumnAndRow(7,$i)->getValue();
+                $statuslaporan  =$objWorksheet->getCellByColumnAndRow(8,$i)->getValue();
+                $p_assesor1     =$objWorksheet->getCellByColumnAndRow(9,$i)->getValue();
+                $p_assesor2     =$objWorksheet->getCellByColumnAndRow(10,$i)->getValue();
+                $p_kaprodi      =$objWorksheet->getCellByColumnAndRow(11,$i)->getValue();
+                $rk_dosen       =$objWorksheet->getCellByColumnAndRow(12,$i)->getValue();
+                $lp_dosen       =$objWorksheet->getCellByColumnAndRow(13,$i)->getValue();
+                $admin_periksa  =$objWorksheet->getCellByColumnAndRow(14,$i)->getValue();
 
                 $data_user=array(   'id_verifikator'=>$id_verifikator,
                                     'nip'=>$nip,
@@ -256,13 +263,20 @@ public	function ExcelDataAssesor()	{
                                     'assesor_2'=>$assesor_2,
                                     'ketua_prodi'=>$ketua_prodi,
                                     'user_create'=>$user_create,
-                                    'time_create'=>$time_create
+                                    'time_create'=>$time_create,
+                                    'statuslaporan'=>$statuslaporan,
+                                    'p_assesor1'=>$p_assesor1,
+                                    'p_assesor2'=>$p_assesor2,
+                                    'p_kaprodi'=>$p_kaprodi,
+                                    'rk_dosen'=>$rk_dosen,
+                                    'lp_dosen'=>$lp_dosen,
+                                    'admin_periksa'=>$admin_periksa
                                 );
-
+            //echo '<pre>' . var_export($data_user, true) . '</pre>';
             $this->M_excel_data_insert_model->Add_Assesor($data_user);
 
           }
-             unlink('././uploads/excel/'.$file_name); //File Deleted After uploading in database .
+            unlink('././uploads/excel/'.$file_name); //File Deleted After uploading in database .
              //redirect(base_url() . "Import");
 
 }

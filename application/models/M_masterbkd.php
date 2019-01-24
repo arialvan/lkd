@@ -14,6 +14,12 @@ function show_bkd()
     return $query;
 }
 
+function show_syarat()
+{
+    $query = $this->db->get('bkd_buktifisik')->result();
+    return $query;
+}
+
 function show_remun()
 {
     $query = $this->db->get('remunerasi')->result();
@@ -347,6 +353,12 @@ function update_bkd($where,$data,$table)
 }
 
 function update_subbkd($where,$data,$table)
+{
+    $this->db->where($where);
+    $this->db->update($table,$data);
+}
+
+function update_syaratfile($where,$data,$table)
 {
     $this->db->where($where);
     $this->db->update($table,$data);

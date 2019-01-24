@@ -5,15 +5,16 @@ class M_master extends CI_Model{
    function __construct()
     {
         parent::__construct();
+        $this->dbsimpeg = $this->load->database('dbsimpeg', TRUE);
     }
 
 //Admin Fakultas
 function show_admin()
     {
       $this->db->select('a.nip,a.id_fakultas,b.nama_peg,c.nama_fakultas')
-               ->from('profil_dosen a')
-               ->join('tb_pegawai b','a.nip=b.nip','LEFT')
-               ->join('tbl_mst_fakultas c','a.id_fakultas = c.id_fakultas','LEFT')
+               ->from('uinar_lkd2.profil_dosen a')
+               ->join('simpeg.tb_pegawai b','a.nip=b.nip','LEFT')
+               ->join('uinar_lkd2.tbl_mst_fakultas c','a.id_fakultas = c.id_fakultas','LEFT')
                ->where('a.user_level=', 4)
                ->order_by('a.nip');
       $query = $this->db->get()->result();
@@ -26,10 +27,37 @@ function show_periode()
     return $query;
 }
 
+function show_subkegiatan($dt)
+{
+  $this->db->select('*')
+           ->from('bkd_kegiatan')
+           ->where('id_periode=', $dt);
+  $query = $this->db->get()->result();
+  return $query;
+}
+
+function show_verifikator($dt)
+{
+  $this->db->select('*')
+           ->from('verifikator')
+           ->where('id_periode=', $dt);
+  $query = $this->db->get()->result();
+  return $query;
+}
+
+function show_skema($dt)
+{
+  $this->db->select('*')
+           ->from('bkd_remun_dosen')
+           ->where('id_periode=', $dt);
+  $query = $this->db->get()->result();
+  return $query;
+}
+
 /* Pegawai */
 function show_pegawai()
 {
-    $query = $this->db->get('tb_pegawai')->result();
+    $query = $this->dbsimpeg->get('tb_pegawai')->result();
     return $query;
 }
 
@@ -67,12 +95,21 @@ function show_periode_aktif()
         return $query;
 }
 
+function show_periode_nonaktif()
+{
+        $this->db->select('*')
+                 ->from('periode_lkd')
+                 ->where('status=',0);
+        $query = $this->db->get()->result();
+        return $query;
+}
+
 function show_dosen()
 {
-        $this->db->select('a.id_verifikator,a.nip,a.id_periode,a.rk_dosen,b.nama_peg')
-                 ->from('verifikator a')
-                 ->join('tb_pegawai b','a.nip = b.nip')
-                 ->join('periode_lkd c','a.id_periode = c.id_periode')
+        $this->db->select('a.id_verifikator,a.nip,a.id_periode,a.rk_dosen,a.lp_dosen,b.nama_peg')
+                 ->from('uinar_lkd2.verifikator a')
+                 ->join('simpeg.tb_pegawai b','a.nip = b.nip')
+                 ->join('uinar_lkd2.periode_lkd c','a.id_periode = c.id_periode')
                  ->where('c.status=',1)
                  ->order_by('b.nama_peg ASC');
         $query = $this->db->get()->result();
@@ -147,7 +184,19 @@ function update_status_periode($where,$data,$table)
     $this->db->update($table,$data);
 }
 
+function update_status_laporan($where,$data,$table)
+{
+    $this->db->where($where);
+    $this->db->update($table,$data);
+}
+
 function update_status_rk($where,$data,$table)
+{
+    $this->db->where($where);
+    $this->db->update($table,$data);
+}
+
+function update_status_lp($where,$data,$table)
 {
     $this->db->where($where);
     $this->db->update($table,$data);
@@ -223,6 +272,28 @@ function syaratbkd_dt($id2)
                     ->where('a.id_kat_dosen=', $id2);
     $query=$this->db->get()->result();
     return $query;
+}
+
+function insert_copy_data($data,$table)
+{
+  $msg = '<i class="fa fa-check text-success"></i> Simpan Data Berhasil';
+  $this->db->insert($table, $data);
+  if($this->db->affected_rows() < 1 )
+      {
+          $msg = '<i class="fa fa-close text-danger"></i> Simpan data gagal.';
+      }
+      return $msg;
+}
+
+function hapus_copy($where,$table)
+{
+    $msg = '<i class="fa fa-check text-success"></i> Hapus Data Berhasil';
+    $this->db->where($where);
+    $this->db->delete($table);
+    if($this->db->affected_rows() < 1 )
+        {
+            $msg = '<i class="fa fa-close text-danger"></i> Hapus data gagal.';
+        }
 }
 
 }//Close Class

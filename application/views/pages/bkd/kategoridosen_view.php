@@ -47,8 +47,8 @@
 <!-- SUB BKD -->
                 <div class="x_panel">
                   <div class="x_title">
-                    <span>Klik Tombol Set up untuk mengatur skema BKD dan Remunerasi periode aktif.</span><br /><br />
-                    <a href="<?php echo base_url() ?>MasterBkd/FormSkema" class="btn btn-primary">Set up Skema</a>
+                    <span>Klik Tombol Atur untuk mengatur skema BKD dan Remunerasi periode aktif.</span><br /><br />
+                    <a href="<?php echo base_url() ?>MasterBkd/FormSkema" class="btn btn-primary">Atur Skema</a>
 
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>

@@ -20,7 +20,7 @@
                       <div class="form-group">
                           <label class="control-label col-md-1 col-sm-1 col-xs-12" for="last-name">Filter<span class="required"></span></label>
                           <div class="col-md-3 col-sm-3 col-xs-12">
-                            <select id="id_fakultas" name="id_fakultas" class="form-control" required="required">
+                            <select id="fak" name="fak" class="form-control" required="required">
                                 <option value="">Fakultas</option>
                                 <?php foreach($fak as $f){ ?>
                                 <option value="<?php echo $f->id_fakultas; ?>"><?php echo $f->nama_fakultas; ?></option>
@@ -28,7 +28,7 @@
                             </select>
                           </div>
                           <div class="col-md-3 col-sm-3 col-xs-12">
-                            <select id="id_kat_dosen" name="id_kat_dosen" class="form-control" required="required">
+                            <select id="kat" name="kat" class="form-control">
                                 <option value="">Kategori Dosen</option>
                                 <?php foreach($profildosen as $b){ ?>
                                 <option value="<?php echo $b->id_kat_dosen; ?>"><?php echo $b->kategori_dosen; ?></option>
@@ -111,7 +111,7 @@
                             ?>
                               <tr>
                                   <th scope="row"><?php echo $dt['nama_fakultas']; ?></th>
-                                  <th scope="row"><?php echo $dt['nip']; ?></th>
+                                  <th scope="row"><?php echo "'".$dt['nip']; ?></th>
                                   <td bgcolor="#FFFFF0"><?php echo $dt['nama_peg']; ?></td>
                                   <td scope="row"><?php echo $dt['kategori_dosen']; ?></td>
                                       <td><?php echo $dt['Syt_Pendidikan']; ?></td>

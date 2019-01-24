@@ -47,8 +47,83 @@
                     </form>
                   </div>
                 </div>
+
+                <div class="x_panel">
+                  <div class="x_title">
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <table class="table table-striped table-bordered myTable display nowrap" style="width:100%">
+                      <thead>
+                        <tr>
+                          <th>No</th>
+                          <th>Nama File</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <?php
+                        $no = 1;
+                        foreach($syarat as $dt){
+                        ?>
+                        <tr>
+                          <th scope="row"><?php echo $no++; ?></th>
+                          <td><?php echo $dt->nama_file; ?></td>
+                          <td>
+                            <a href="javascript:;"
+                                data-id="<?php echo $dt->id; ?>"
+                                data-id_file="<?php echo $dt->id; ?>"
+                                data-file="<?php echo $dt->nama_file; ?>"
+                                data-toggle="modal" data-target="#edit-syaratfile">
+                                <span class="glyphicon glyphicon-edit" title="Edit"></span>
+                            </a>
+                          </td>
+                        </tr>
+                        <?php } ?>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+
               </div>
             </div>
 
           </div>
    </div>
+
+   <!-- Modal Kegiatan -->
+   <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="edit-syaratfile" class="modal fade">
+       <div class="modal-dialog">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                   <h4 class="modal-title">Ubah Data</h4>
+               </div>
+               <form class="form form-horizontal" role="form" method="post" action="<?php echo base_url(); ?>MasterBkd/UpdateSyarat">
+                 <input type="hidden" class="form-control" id="id" name="id" />
+                 <div class="modal-body">
+                         <div class="form-group">
+                             <label class="col-lg-2 col-sm-2 control-label">ID</label>
+                             <div class="col-lg-10">
+                                 <input type="text" class="form-control" id="id_file" name="id_file" disabled />
+                             </div>
+                         </div>
+                         <div class="form-group">
+                             <label class="col-lg-2 col-sm-2 control-label">Nama File</label>
+                             <div class="col-lg-10">
+                                 <input type="text" class="form-control" id="file" name="file" />
+                             </div>
+                         </div>
+                     </div>
+                     <div class="modal-footer">
+                         <button class="btn btn-info" type="submit"> Simpan&nbsp;</button>
+                         <button type="button" class="btn btn-warning" data-dismiss="modal"> Batal</button>
+                     </div>
+                   </form>
+               </div>
+           </div>
+       </div>

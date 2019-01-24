@@ -142,7 +142,7 @@
 
                                     //Dosen Biasa (sudah Sertifikasi),Profesor Biasa, Syarat 12 SKS
                                     if($profil->id_kat_dosen==3 || $profil->id_kat_dosen==7 || $profil->id_kat_dosen==9){
-                                            $Syarat_BKD = $sytbkd[0]+4;
+                                            echo $Syarat_BKD = $sytbkd[0]+4;
                                             if($x1->skspendidikan >= $Syarat_BKD && $x2->skspenelitan >= $sytbkd[1] && $x3->skspengabdian >= $sytbkd[2] && $totalbkd >= 12 ){
                                                 $hasilbkd = "Memenuhi";
                                             }else{
@@ -241,342 +241,443 @@
                   <span class="btn btn-sm btn-danger">BKD Tidak di Hitung, Remunerasi di Hitung</span>
               </div>
 
-              <fieldset>
-                <legend></legend>
-                <?php if($d->rk_dosen==1){ ?>
-                <a href="<?php echo base_url() ?>RencanaKerja/FormRencana" class="btn btn-lg btn-primary"> + Pengisian BKD</a> >>Klik Tombol ini untuk menambah kegiatan
-              <?php }else { echo '<span class="btn btn-lg btn-danger" data-toggle="modal" data-target="#oops">Pengisian BKD Di Tutup</span>'; } ?>
-              </fieldset>
-              <hr />
-<!--
-=========================
-PENDIDIKAN
-=========================
--->
-                <div class="x_panel">
-                  <div class="x_title">
-                    <b>PENDIDIKAN</b>
-                    <ul class="nav navbar-right panel_toolbox">
-                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                    </ul>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                    <table class="table table-striped table-bordered myTable display nowrap" style="width:100%">
-                      <thead>
-                        <tr>
-                          <th>#</th>
-                          <th>Kegiatan</th>
-                          <th>BKD SKS</th>
-                          <th>Poin Remunerasi</th>
-                          <th>App Ketua Prodi</th>
-                          <th>Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <?php
-                        $no = 1;
-                        foreach($rencanakerja as $dt){
-                          if($dt->bkd_hitung=='1' && $dt->renum_hitung=='1'){ $kegiatans="<b><span class='text text-success'>".$dt->kegiatan."</span></b>";}
-                          if($dt->bkd_hitung=='1' && $dt->renum_hitung=='0'){ $kegiatans="<b><span class='text text-warning'>".$dt->kegiatan."</span></b>";}
-                          if($dt->bkd_hitung=='0' && $dt->renum_hitung=='1'){ $kegiatans="<b><span class='text text-danger'>".$dt->kegiatan."</span></b>";}
-                          $total[]=$dt->sks_subkegiatan;
-                          $poin[]=$dt->poin_subkegiatan;
-                          $subkegiatan = wordwrap($dt->sub_kegiatan, 65, "<br />\n");
-                        ?>
-                        <tr>
-                          <th scope="row"><?php echo $no++.'&nbsp;&nbsp;'.$this->pustaka->syarat($dt->syarat); ?></th>
-                          <td>
-                            <?php
-                              if($RkDosen==0){
-                                  echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan).'</span>';
-                              }else{
-                            ?>
-                              <a href="javascript:;"
-                                  data-id_kegiatan="<?php echo $dt->id_kegiatan ?>"
-                                  data-id_subkegiatan="<?php echo $dt->id_subkegiatan ?>"
-                                  data-kegiatan="<?php echo $dt->kegiatan ?>"
-                                  data-subkegiatan="<?php echo $dt->sub_kegiatan ?>"
-                                  data-sks="<?php echo $dt->sks_subkegiatan ?>"
-                                  data-toggle="modal" data-target="#edit-pendidikan">
-                                  <?php echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan).'</span>'; ?>
-                              </a>
-                            <?php  } ?>
-                          </td>
-                          <td><?php echo $dt->sks_subkegiatan; ?></td>
-                          <td><?php echo $dt->poin_subkegiatan; ?></td>
-                          <td><?php echo $this->pustaka->periksa($dt->app_ketuaprodi); ?></td>
-                          <td>
-                            <?php
-                              if($dt->app_ketuaprodi==1 && $RkDosen==0){
-                                echo '<span class="glyphicon glyphicon-ok" title="OK"></span>';
-                              }else{
-                                echo anchor('RencanaKerja/HapusSubkegiatan/'.$dt->id_subkegiatan,'<span class="glyphicon glyphicon-remove" title="Hapus Data" Onclick="return ConfirmDelete()"></span>');
-                              }
-                            ?>
-                          </td>
-                        </tr>
-                        <?php } ?>
-                      </tbody>
-                      <tfoot>
-                        <tr>
-                            <th colspan="2" style="text-align:right">Total:</th>
-                            <th><?php echo @array_sum($total); ?></th>
-                            <th><?php echo @array_sum($poin); ?></th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </tfoot>
-                    </table>
-                  </div>
-                  <div class="clearfix"></div>
-                  </div>
-<!--
-  =========================
-  PENELTIAN
-  =========================
--->
-                <div class="x_panel">
-                  <div class="x_title">
-                    <b>PENELITIAN</b>
-                    <ul class="nav navbar-right panel_toolbox">
-                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                    </ul>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                    <!-- <table id="datatable-buttons" class="table table-striped table-bordered myTable"> -->
-                    <table class="table table-striped table-bordered myTable display nowrap" style="width:100%">
-                      <thead>
-                        <tr>
-                          <th>#</th>
-                          <th>Kegiatan</th>
-                          <th>BKD SKS</th>
-                          <th>Poin Remunerasi</th>
-                          <th>App Ketua Prodi</th>
-                          <th>Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <?php
-                        $no = 1;
-                        foreach($penelitian as $dt1){
-                          if($dt1->bkd_hitung=='1' && $dt1->renum_hitung=='1'){ $kegiatans="<b><span class='text text-success'>".$dt1->kegiatan."</span></b>";}
-                          if($dt1->bkd_hitung=='1' && $dt1->renum_hitung=='0'){ $kegiatans="<b><span class='text text-warning'>".$dt1->kegiatan."</span></b>";}
-                          if($dt1->bkd_hitung=='0' && $dt1->renum_hitung=='1'){ $kegiatans="<b><span class='text text-danger'>".$dt1->kegiatan."</span></b>";}
-                          $total1[]=$dt1->sks_subkegiatan;
-                          $poin1[]=$dt1->poin_subkegiatan;
-                          $subkegiatan1 = wordwrap($dt1->sub_kegiatan, 65, "<br />\n");
-                        ?>
-                        <tr>
-                          <th scope="row"><?php echo $no++.'&nbsp;&nbsp;'.$this->pustaka->syarat($dt1->syarat); ?></th>
-                          <td>
-                            <?php
-                              if($RkDosen==0){
-                                  echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan1).'</span>';
-                              }else{
-                            ?>
-                            <a href="javascript:;"
-                                data-id_kegiatan="<?php echo $dt1->id_kegiatan ?>"
-                                data-id_subkegiatan="<?php echo $dt1->id_subkegiatan ?>"
-                                data-kegiatan="<?php echo $dt1->kegiatan ?>"
-                                data-subkegiatan="<?php echo $dt1->sub_kegiatan ?>"
-                                data-sks="<?php echo $dt1->sks_subkegiatan ?>"
-                                data-toggle="modal" data-target="#edit-pendidikan">
-                                <?php echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan1).'</span>'; ?>
-                            </a>
-                            <?php  } ?>
-                          </td>
-                          <td><?php echo $dt1->sks_subkegiatan; ?></td>
-                          <td><?php echo $dt1->poin_subkegiatan; ?></td>
-                          <td><?php echo $this->pustaka->periksa($dt1->app_ketuaprodi); ?></td>
-                          <td>
-                            <?php
-                              if($dt1->app_ketuaprodi==1 && $RkDosen==0){
-                                echo '<span class="glyphicon glyphicon-ok" title="OK"></span>';
-                              }else{
-                                echo anchor('RencanaKerja/HapusSubkegiatan/'.$dt1->id_subkegiatan,'<span class="glyphicon glyphicon-remove" title="Hapus Data" Onclick="return ConfirmDelete()"></span>');
-                              }
-                            ?>
-                          </td>
-                        </tr>
-                        <?php } ?>
-                      </tbody>
-                      <tfoot>
-                        <tr>
-                            <th colspan="2" style="text-align:right">Total:</th>
-                            <th><?php echo @array_sum($total1); ?></th>
-                            <th><?php echo @array_sum($poin1); ?></th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </tfoot>
-                    </table>
-                  </div>
-                  <div class="clearfix"></div>
-                </div>
+<!-- Modal Kegiatan -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Isi Rencana Kegiatan</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form class="form form-horizontal" role="form" method="post" action="<?php echo base_url(); ?>RencanaKerja/InsertRencana">
+      <?php foreach($periode_aktif as $pa); ?>
+      <input type="hidden" name="id_periode" value="<?php echo $pa->id_periode ?>" />
+      <div class="modal-body">
+          <div id="field">
+          <div id="field0">
 
-                <div class="x_panel">
-                  <div class="x_title">
-                    <b>PENGABDIAN</b>
-                    <ul class="nav navbar-right panel_toolbox">
-                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                    </ul>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                    <table class="table table-striped table-bordered myTable display nowrap" style="width:100%">
-                      <thead>
-                        <tr>
-                          <th>#</th>
-                          <th>Kegiatan</th>
-                          <th>BKD SKS</th>
-                          <th>Poin Remunerasi</th>
-                          <th>App Ketua Prodi</th>
-                          <th>Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <?php
-                        $no = 1;
-                        foreach($pengabdian as $dt2){
-                          if($dt2->bkd_hitung=='1' && $dt2->renum_hitung=='1'){ $kegiatans="<b><span class='text text-success'>".$dt2->kegiatan."</span></b>";}
-                          if($dt2->bkd_hitung=='1' && $dt2->renum_hitung=='0'){ $kegiatans="<b><span class='text text-warning'>".$dt2->kegiatan."</span></b>";}
-                          if($dt2->bkd_hitung=='0' && $dt2->renum_hitung=='1'){ $kegiatans="<b><span class='text text-danger'>".$dt2->kegiatan."</span></b>";}
-                          $total2[]=$dt2->sks_subkegiatan;
-                          $poin2[]=$dt2->poin_subkegiatan;
-                          $subkegiatan2 = wordwrap($dt2->sub_kegiatan, 65, "<br />\n");
-                        ?>
-                        <tr>
-                          <th scope="row"><?php echo $no++.'&nbsp;&nbsp;'.$this->pustaka->syarat($dt2->syarat); ?></th>
-                          <td>
-                            <?php
-                              if($RkDosen==0){
-                                  echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan2).'</span>';
-                              }else{
-                            ?>
-                            <a href="javascript:;"
-                                data-id_kegiatan="<?php echo $dt2->id_kegiatan ?>"
-                                data-id_subkegiatan="<?php echo $dt2->id_subkegiatan ?>"
-                                data-kegiatan="<?php echo $dt2->kegiatan ?>"
-                                data-subkegiatan="<?php echo $dt2->sub_kegiatan ?>"
-                                data-sks="<?php echo $dt2->sks_subkegiatan ?>"
-                                data-toggle="modal" data-target="#edit-pendidikan">
-                                <?php echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan2).'</span>'; ?>
-                            </a>
-                            <?php  } ?>
-                          </td>
-                          <td><?php echo $dt2->sks_subkegiatan; ?></td>
-                          <td><?php echo $dt2->poin_subkegiatan; ?></td>
-                          <td><?php echo $this->pustaka->periksa($dt2->app_ketuaprodi); ?></td>
-                          <td>
-                            <?php
-                              if($dt2->app_ketuaprodi==1 && $RkDosen==0){
-                                echo '<span class="glyphicon glyphicon-ok" title="OK"></span>';
-                              }else{
-                                echo anchor('RencanaKerja/HapusSubkegiatan/'.$dt2->id_subkegiatan,'<span class="glyphicon glyphicon-remove" title="Hapus Data" Onclick="return ConfirmDelete()"></span>');
-                              }
-                            ?>
-                          </td>
-                        </tr>
-                        <?php } ?>
-                      </tbody>
-                      <tfoot>
-                        <tr>
-                            <th colspan="2" style="text-align:right">Total:</th>
-                            <th><?php echo @array_sum($total2); ?></th>
-                            <th><?php echo @array_sum($poin2); ?></th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </tfoot>
-                    </table>
-                  </div>
-                  <div class="clearfix"></div>
-                </div>
-
-
-                <div class="x_panel">
-                  <div class="x_title">
-                    <b>PENUNJANG</b>
-                    <ul class="nav navbar-right panel_toolbox">
-                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                    </ul>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                    <table class="table table-striped table-bordered myTable display nowrap" style="width:100%">
-                      <thead>
-                        <tr>
-                          <th>#</th>
-                          <th>Kegiatan</th>
-                          <th>BKD SKS</th>
-                          <th>Poin Remunerasi</th>
-                          <th>App Ketua Prodi</th>
-                          <th>Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <?php
-                        $no = 1;
-                        foreach($penunjang as $dt3){
-                          if($dt3->bkd_hitung=='1' && $dt3->renum_hitung=='1'){ $kegiatans="<b><span class='text text-success'>".$dt3->kegiatan."</span></b>";}
-                          if($dt3->bkd_hitung=='1' && $dt3->renum_hitung=='0'){ $kegiatans="<b><span class='text text-warning'>".$dt3->kegiatan."</span></b>";}
-                          if($dt3->bkd_hitung=='0' && $dt3->renum_hitung=='1'){ $kegiatans="<b><span class='text text-danger'>".$dt3->kegiatan."</span></b>";}
-                          $total3[]=$dt3->sks_subkegiatan;
-                          $poin3[]=$dt3->poin_subkegiatan;
-                          $subkegiatan3 = wordwrap($dt3->sub_kegiatan, 65, "<br />\n");
-                        ?>
-                        <tr>
-                          <th scope="row"><?php echo $no++.'&nbsp;&nbsp;'.$this->pustaka->syarat($dt3->syarat); ?></th>
-                          <td>
-                            <?php
-                              if($RkDosen==0){
-                                  echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan3).'</span>';
-                              }else{
-                            ?>
-                            <a href="javascript:;"
-                                data-id_kegiatan="<?php echo $dt3->id_kegiatan ?>"
-                                data-id_subkegiatan="<?php echo $dt3->id_subkegiatan ?>"
-                                data-kegiatan="<?php echo $dt3->kegiatan ?>"
-                                data-subkegiatan="<?php echo $dt3->sub_kegiatan ?>"
-                                data-sks="<?php echo $dt3->sks_subkegiatan ?>"
-                                data-toggle="modal" data-target="#edit-pendidikan">
-                                <?php echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan3).'</span>'; ?>
-                            </a>
-                            <?php  } ?>
-                          </td>
-                          <td><?php echo $dt3->sks_subkegiatan; ?></td>
-                          <td><?php echo $dt3->poin_subkegiatan; ?></td>
-                          <td><?php echo $this->pustaka->periksa($dt3->app_ketuaprodi); ?></td>
-                          <td>
-                            <?php
-                              if($dt3->app_ketuaprodi==1 && $RkDosen==0){
-                                echo '<span class="glyphicon glyphicon-ok" title="OK"></span>';
-                              }else{
-                                echo anchor('RencanaKerja/HapusSubkegiatan/'.$dt3->id_subkegiatan,'<span class="glyphicon glyphicon-remove" title="Hapus Data" Onclick="return ConfirmDelete()"></span>');
-                              }
-                            ?>
-                          </td>
-
-                        </tr>
-                        <?php } ?>
-                      </tbody>
-                      <tfoot>
-                        <tr>
-                            <th colspan="2" style="text-align:right">Total:</th>
-                            <th><?php echo @array_sum($total3); ?></th>
-                            <th><?php echo @array_sum($poin3); ?></th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </tfoot>
-                    </table>
-                  </div>
-                  <div class="clearfix"></div>
-                </div>
+          <div class="form-group">
+            <div class="col-sm-12">
+              <label>BKD<span class="required">*</span></label>
+                <select id="bkd" name="bkd[]" class="form-control" onchange="kegiatan()" required>
+                    <option value="">Pilih</option>
+                    <?php foreach($bkd as $b){ ?>
+                    <option value="<?php echo $b->id_bkd; ?>"><?php echo $b->ket_bkd; ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-12">
+              <label>SUB BKD<span class="required">*</span></label>
+                <select name="bkd_kegiatan[]" id="bkd_kegiatan" class="form-control col-md-7 col-xs-12 types">
+                    <option value="">- Pilih - </option>
+                </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-6">
+            <label>Volume/SKS<span class="required">*</span></label>
+              <input id="sks_subkegiatan[]" class="form-control" name="sks_subkegiatan" />
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-4">
+            <label>Keterangan<span class="required">*</span></label>
+              <textarea id="sub_kegiatan" class="form-control" name="sub_kegiatan[]" rows="5" cols="100"></textarea>
+            </div>
+          </div>
 
           </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-4">
+            <!-- <button id="add-more" name="add-more" class="btn btn-primary">+ Tambah Form</button> -->
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+                <div class="form-group">
+                  <div class="col-sm-12 col-md-12 col-xs-12" data-step="1" data-intro="Ini adalah Tab Menu Rencana Kerja yang sudah di kategorikan">
+                      <ul class="nav nav-tabs" id="myTab">
+                          <li class="active"><a data-toggle="tab" href="#pendidikan_tab" class="bg-primary">PENDIDIKAN</a></li>
+                          <li><a data-toggle="tab" href="#penelitian_tab" class="bg-primary">PENELITIAN</a></li>
+                          <li><a data-toggle="tab" href="#pengabdian_tab" class="bg-primary">PENGABDIAN</a></li>
+                          <li><a data-toggle="tab" href="#penunjang_tab" class="bg-primary">PENUNJANG</a></li>
+                      </ul>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+
+                <div class="tab-content">
+                  <!--PENDIDIKAN  -->
+                              <div id="pendidikan_tab" class="tab-pane fade in active">
+                                <div class="x_panel">
+                                  <div class="x_title">
+                                    <fieldset>
+                                      <legend></legend>
+                                        <a class="" href="javascript:void(0);" onclick="javascript:introJs().start();">Silahkan <i class="btn btn-sm btn-danger">BACA</i> Petunjuk Pengisian Rencana Kerja >></a>
+                                        <hr />
+                                    </fieldset>
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" data-step="2" data-intro="Klik tombol ini untuk mengisi rencana kerja.">
+                                      + Isi Kegiatan
+                                    </button>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                  </div>
+                                  <div class="x_content" data-step="3" data-intro="Rencana Kerja yang sudah di submit akan masuk ke tabel ini">
+                                    <table class="table table-striped table-bordered myTable display nowrap" style="width:100%">
+                                      <thead>
+                                        <tr>
+                                          <th>#</th>
+                                          <th>Kegiatan</th>
+                                          <th>Volume/SKS</th>
+                                          <th>BKD SKS</th>
+                                          <th>Poin Remunerasi</th>
+                                          <th>App Ketua Prodi</th>
+                                          <th>Action</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <?php
+                                        $no = 1;
+                                        foreach($rencanakerja as $dt){
+                                          if($dt->bkd_hitung=='1' && $dt->renum_hitung=='1'){ $kegiatans="<b><span class='text text-success'>".$dt->kegiatan."</span></b>";}
+                                          if($dt->bkd_hitung=='1' && $dt->renum_hitung=='0'){ $kegiatans="<b><span class='text text-warning'>".$dt->kegiatan."</span></b>";}
+                                          if($dt->bkd_hitung=='0' && $dt->renum_hitung=='1'){ $kegiatans="<b><span class='text text-danger'>".$dt->kegiatan."</span></b>";}
+                                          $totalsks[]=$dt->sks_post;
+                                          $total[]=$dt->sks_subkegiatan;
+                                          $poin[]=$dt->poin_subkegiatan;
+                                          $subkegiatan = wordwrap($dt->sub_kegiatan, 65, "<br />\n");
+                                        ?>
+                                        <tr>
+                                          <th scope="row"><?php echo $no++.'&nbsp;&nbsp;'.$this->pustaka->syarat($dt->syarat); ?></th>
+                                          <td data-step="4" data-intro="Untuk Edit Rencana Kerja silahkan klik Item Kegiatan pada kolom Kegiatan.">
+                                            <?php
+                                              if($RkDosen==0){
+                                                  echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan).'</span>';
+                                              }else{
+                                            ?>
+                                              <a href="javascript:;"
+                                                  data-id_kegiatan="<?php echo $dt->id_kegiatan ?>"
+                                                  data-id_subkegiatan="<?php echo $dt->id_subkegiatan ?>"
+                                                  data-kegiatan="<?php echo $dt->kegiatan ?>"
+                                                  data-subkegiatan="<?php echo $dt->sub_kegiatan ?>"
+                                                  data-sks="<?php echo $dt->sks_post ?>"
+                                                  data-toggle="modal" data-target="#edit-pendidikan">
+                                                  <?php echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan).'</span>'; ?>
+                                              </a>
+                                            <?php  } ?>
+                                          </td>
+                                          <td><?php echo $dt->sks_post; ?></td>
+                                          <td><?php echo $dt->sks_subkegiatan; ?></td>
+                                          <td><?php echo $dt->poin_subkegiatan; ?></td>
+                                          <td data-step="6" data-intro="Kolom Keterangan Approval dari Ketua Prodi. SELESAI"><?php echo $this->pustaka->periksa($dt->app_ketuaprodi); ?></td>
+                                          <td data-step="5" data-intro="Hapus Rencana Kerja di sini.">
+                                            <?php
+                                              if($dt->app_ketuaprodi==1 && $RkDosen==0){
+                                                echo '<span class="glyphicon glyphicon-ok" title="OK"></span>';
+                                              }else{
+                                                echo anchor('RencanaKerja/HapusSubkegiatan/'.$dt->id_subkegiatan,'<span class="glyphicon glyphicon-remove" title="Hapus Data" Onclick="return ConfirmDelete()"></span>');
+                                              }
+                                            ?>
+                                          </td>
+                                        </tr>
+                                        <?php } ?>
+                                      </tbody>
+                                      <tfoot>
+                                        <tr>
+                                            <th colspan="2" style="text-align:right">Total:</th>
+                                            <th><?php echo @array_sum($totalsks); ?></th>
+                                            <th><?php echo @array_sum($total); ?></th>
+                                            <th><?php echo @array_sum($poin); ?></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
+                                    </table>
+                                  </div>
+                                  <div class="clearfix"></div>
+                                  </div>
+                              </div>
+                  <!--PENELITIAN  -->
+                              <div id="penelitian_tab" class="tab-pane fade">
+                                <div class="x_panel">
+                                  <div class="x_title">
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
+                                      + Isi Kegiatan
+                                    </button>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                  </div>
+                                  <div class="x_content">
+                                    <!-- <table id="datatable-buttons" class="table table-striped table-bordered myTable"> -->
+                                    <table class="table table-striped table-bordered myTable display nowrap" style="width:100%">
+                                      <thead>
+                                        <tr>
+                                          <th>#</th>
+                                          <th>Kegiatan</th>
+                                          <th>Volume/SKS</th>
+                                          <th>BKD SKS</th>
+                                          <th>Poin Remunerasi</th>
+                                          <th>App Ketua Prodi</th>
+                                          <th>Action</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <?php
+                                        $no = 1;
+                                        foreach($penelitian as $dt1){
+                                          if($dt1->bkd_hitung=='1' && $dt1->renum_hitung=='1'){ $kegiatans="<b><span class='text text-success'>".$dt1->kegiatan."</span></b>";}
+                                          if($dt1->bkd_hitung=='1' && $dt1->renum_hitung=='0'){ $kegiatans="<b><span class='text text-warning'>".$dt1->kegiatan."</span></b>";}
+                                          if($dt1->bkd_hitung=='0' && $dt1->renum_hitung=='1'){ $kegiatans="<b><span class='text text-danger'>".$dt1->kegiatan."</span></b>";}
+                                          $totalsks1[]=$dt1->sks_post;
+                                          $total1[]=$dt1->sks_subkegiatan;
+                                          $poin1[]=$dt1->poin_subkegiatan;
+                                          $subkegiatan1 = wordwrap($dt1->sub_kegiatan, 65, "<br />\n");
+                                        ?>
+                                        <tr>
+                                          <th scope="row"><?php echo $no++.'&nbsp;&nbsp;'.$this->pustaka->syarat($dt1->syarat); ?></th>
+                                          <td>
+                                            <?php
+                                              if($RkDosen==0){
+                                                  echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan1).'</span>';
+                                              }else{
+                                            ?>
+                                            <a href="javascript:;"
+                                                data-id_kegiatan="<?php echo $dt1->id_kegiatan ?>"
+                                                data-id_subkegiatan="<?php echo $dt1->id_subkegiatan ?>"
+                                                data-kegiatan="<?php echo $dt1->kegiatan ?>"
+                                                data-subkegiatan="<?php echo $dt1->sub_kegiatan ?>"
+                                                data-sks="<?php echo $dt1->sks_post ?>"
+                                                data-toggle="modal" data-target="#edit-pendidikan">
+                                                <?php echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan1).'</span>'; ?>
+                                            </a>
+                                            <?php  } ?>
+                                          </td>
+                                          <td><?php echo $dt1->sks_post; ?></td>
+                                          <td><?php echo $dt1->sks_subkegiatan; ?></td>
+                                          <td><?php echo $dt1->poin_subkegiatan; ?></td>
+                                          <td><?php echo $this->pustaka->periksa($dt1->app_ketuaprodi); ?></td>
+                                          <td>
+                                            <?php
+                                              if($dt1->app_ketuaprodi==1 && $RkDosen==0){
+                                                echo '<span class="glyphicon glyphicon-ok" title="OK"></span>';
+                                              }else{
+                                                echo anchor('RencanaKerja/HapusSubkegiatan/'.$dt1->id_subkegiatan,'<span class="glyphicon glyphicon-remove" title="Hapus Data" Onclick="return ConfirmDelete()"></span>');
+                                              }
+                                            ?>
+                                          </td>
+                                        </tr>
+                                        <?php } ?>
+                                      </tbody>
+                                      <tfoot>
+                                        <tr>
+                                            <th colspan="2" style="text-align:right">Total:</th>
+                                            <th><?php echo @array_sum($totalsks1); ?></th>
+                                            <th><?php echo @array_sum($total1); ?></th>
+                                            <th><?php echo @array_sum($poin1); ?></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
+                                    </table>
+                                  </div>
+                                  <div class="clearfix"></div>
+                                </div>
+                              </div>
+                  <!--PENGABDIAN  -->
+                              <div id="pengabdian_tab" class="tab-pane fade">
+                                <div class="x_panel">
+                                  <div class="x_title">
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
+                                      + Isi Kegiatan
+                                    </button>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                  </div>
+                                  <div class="x_content">
+                                    <table class="table table-striped table-bordered myTable display nowrap" style="width:100%">
+                                      <thead>
+                                        <tr>
+                                          <th>#</th>
+                                          <th>Kegiatan</th>
+                                          <th>Volume/SKS</th>
+                                          <th>BKD SKS</th>
+                                          <th>Poin Remunerasi</th>
+                                          <th>App Ketua Prodi</th>
+                                          <th>Action</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <?php
+                                        $no = 1;
+                                        foreach($pengabdian as $dt2){
+                                          if($dt2->bkd_hitung=='1' && $dt2->renum_hitung=='1'){ $kegiatans="<b><span class='text text-success'>".$dt2->kegiatan."</span></b>";}
+                                          if($dt2->bkd_hitung=='1' && $dt2->renum_hitung=='0'){ $kegiatans="<b><span class='text text-warning'>".$dt2->kegiatan."</span></b>";}
+                                          if($dt2->bkd_hitung=='0' && $dt2->renum_hitung=='1'){ $kegiatans="<b><span class='text text-danger'>".$dt2->kegiatan."</span></b>";}
+                                          $totalsks2[]=$dt2->sks_post;
+                                          $total2[]=$dt2->sks_subkegiatan;
+                                          $poin2[]=$dt2->poin_subkegiatan;
+                                          $subkegiatan2 = wordwrap($dt2->sub_kegiatan, 65, "<br />\n");
+                                        ?>
+                                        <tr>
+                                          <th scope="row"><?php echo $no++.'&nbsp;&nbsp;'.$this->pustaka->syarat($dt2->syarat); ?></th>
+                                          <td>
+                                            <?php
+                                              if($RkDosen==0){
+                                                  echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan2).'</span>';
+                                              }else{
+                                            ?>
+                                            <a href="javascript:;"
+                                                data-id_kegiatan="<?php echo $dt2->id_kegiatan ?>"
+                                                data-id_subkegiatan="<?php echo $dt2->id_subkegiatan ?>"
+                                                data-kegiatan="<?php echo $dt2->kegiatan ?>"
+                                                data-subkegiatan="<?php echo $dt2->sub_kegiatan ?>"
+                                                data-sks="<?php echo $dt2->sks_post ?>"
+                                                data-toggle="modal" data-target="#edit-pendidikan">
+                                                <?php echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan2).'</span>'; ?>
+                                            </a>
+                                            <?php  } ?>
+                                          </td>
+                                          <td><?php echo $dt2->sks_post; ?></td>
+                                          <td><?php echo $dt2->sks_subkegiatan; ?></td>
+                                          <td><?php echo $dt2->poin_subkegiatan; ?></td>
+                                          <td><?php echo $this->pustaka->periksa($dt2->app_ketuaprodi); ?></td>
+                                          <td>
+                                            <?php
+                                              if($dt2->app_ketuaprodi==1 && $RkDosen==0){
+                                                echo '<span class="glyphicon glyphicon-ok" title="OK"></span>';
+                                              }else{
+                                                echo anchor('RencanaKerja/HapusSubkegiatan/'.$dt2->id_subkegiatan,'<span class="glyphicon glyphicon-remove" title="Hapus Data" Onclick="return ConfirmDelete()"></span>');
+                                              }
+                                            ?>
+                                          </td>
+                                        </tr>
+                                        <?php } ?>
+                                      </tbody>
+                                      <tfoot>
+                                        <tr>
+                                            <th colspan="2" style="text-align:right">Total:</th>
+                                            <th><?php echo @array_sum($totalsks2); ?></th>
+                                            <th><?php echo @array_sum($total2); ?></th>
+                                            <th><?php echo @array_sum($poin2); ?></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
+                                    </table>
+                                  </div>
+                                  <div class="clearfix"></div>
+                                </div>
+                              </div>
+                  <!--PENUNJANG  -->
+                              <div id="penunjang_tab" class="tab-pane fade">
+                                <div class="x_panel">
+                                  <div class="x_title">
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
+                                      + Isi Kegiatan
+                                    </button>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                  </div>
+                                  <div class="x_content">
+                                    <table class="table table-striped table-bordered myTable display nowrap" style="width:100%">
+                                      <thead>
+                                        <tr>
+                                          <th>#</th>
+                                          <th>Kegiatan</th>
+                                          <th>Volume/SKS</th>
+                                          <th>BKD SKS</th>
+                                          <th>Poin Remunerasi</th>
+                                          <th>App Ketua Prodi</th>
+                                          <th>Action</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <?php
+                                        $no = 1;
+                                        foreach($penunjang as $dt3){
+                                          if($dt3->bkd_hitung=='1' && $dt3->renum_hitung=='1'){ $kegiatans="<b><span class='text text-success'>".$dt3->kegiatan."</span></b>";}
+                                          if($dt3->bkd_hitung=='1' && $dt3->renum_hitung=='0'){ $kegiatans="<b><span class='text text-warning'>".$dt3->kegiatan."</span></b>";}
+                                          if($dt3->bkd_hitung=='0' && $dt3->renum_hitung=='1'){ $kegiatans="<b><span class='text text-danger'>".$dt3->kegiatan."</span></b>";}
+                                          $totalsks3[]=$dt3->sks_post;
+                                          $total3[]=$dt3->sks_subkegiatan;
+                                          $poin3[]=$dt3->poin_subkegiatan;
+                                          $subkegiatan3 = wordwrap($dt3->sub_kegiatan, 65, "<br />\n");
+                                        ?>
+                                        <tr>
+                                          <th scope="row"><?php echo $no++.'&nbsp;&nbsp;'.$this->pustaka->syarat($dt3->syarat); ?></th>
+                                          <td>
+                                            <?php
+                                              if($RkDosen==0){
+                                                  echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan3).'</span>';
+                                              }else{
+                                            ?>
+                                            <a href="javascript:;"
+                                                data-id_kegiatan="<?php echo $dt3->id_kegiatan ?>"
+                                                data-id_subkegiatan="<?php echo $dt3->id_subkegiatan ?>"
+                                                data-kegiatan="<?php echo $dt3->kegiatan ?>"
+                                                data-subkegiatan="<?php echo $dt3->sub_kegiatan ?>"
+                                                data-sks="<?php echo $dt3->sks_post ?>"
+                                                data-toggle="modal" data-target="#edit-pendidikan">
+                                                <?php echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan3).'</span>'; ?>
+                                            </a>
+                                            <?php  } ?>
+                                          </td>
+                                          <td><?php echo $dt3->sks_post; ?></td>
+                                          <td><?php echo $dt3->sks_subkegiatan; ?></td>
+                                          <td><?php echo $dt3->poin_subkegiatan; ?></td>
+                                          <td><?php echo $this->pustaka->periksa($dt3->app_ketuaprodi); ?></td>
+                                          <td>
+                                            <?php
+                                              if($dt3->app_ketuaprodi==1 && $RkDosen==0){
+                                                echo '<span class="glyphicon glyphicon-ok" title="OK"></span>';
+                                              }else{
+                                                echo anchor('RencanaKerja/HapusSubkegiatan/'.$dt3->id_subkegiatan,'<span class="glyphicon glyphicon-remove" title="Hapus Data" Onclick="return ConfirmDelete()"></span>');
+                                              }
+                                            ?>
+                                          </td>
+
+                                        </tr>
+                                        <?php } ?>
+                                      </tbody>
+                                      <tfoot>
+                                        <tr>
+                                            <th colspan="2" style="text-align:right">Total:</th>
+                                            <th><?php echo @array_sum($totalsks3); ?></th>
+                                            <th><?php echo @array_sum($total3); ?></th>
+                                            <th><?php echo @array_sum($poin3); ?></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
+                                    </table>
+                                  </div>
+                                  <div class="clearfix"></div>
+                                </div>
+                              </div>
+                </div>
 
           <!-- MODAL PENDIDIKAN -->
                             <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="edit-pendidikan" class="modal fade">
@@ -642,3 +743,4 @@ PENDIDIKAN
                                     </div>
                           </div>
    </div>
+ </div>

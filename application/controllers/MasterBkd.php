@@ -69,6 +69,17 @@ public function index()
 	        echo "Update Succes"; redirect('MasterBkd/SettingRencana','refresh');
 	}
 
+	function UpdateStatusLaporan($id)
+	{
+		$id_verifikator	= $this->uri->segment(3);
+		$lp_dosen 	= $this->uri->segment(4);
+
+		$data = array('lp_dosen' => $lp_dosen);
+	        $where = array('id_verifikator' =>$id_verifikator);
+	        $this->M_master->update_status_laporan($where, $data, 'verifikator');
+	        echo "Update Succes"; redirect('MasterBkd/SettingRencana','refresh');
+	}
+
 	function UpdateStatusRencanaAll()
 	{
 		$data = array('rk_dosen' => $this->uri->segment(4));
@@ -77,6 +88,14 @@ public function index()
 	  echo "Update Succes"; redirect('MasterBkd/SettingRencana','refresh');
 	}
 
+
+	function UpdateStatusLaporanAll()
+	{
+		$data = array('lp_dosen' => $this->uri->segment(4));
+		$where = array('id_periode' =>$this->uri->segment(3));
+		$this->M_master->update_status_lp($where,$data, 'verifikator');
+		echo "Update Succes"; redirect('MasterBkd/SettingRencana','refresh');
+	}
 /*BKD*/
 public function FormBkd()
 {
@@ -146,12 +165,12 @@ public function SyaratFile()
 	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
       $data['name'] = $this->session->userdata('username');
 			$data['nipp'] = $this->session->userdata('nipp');
-			//$data['periode'] = $this->M_masterbkd->show_periode();
+			$data['syarat'] = $this->M_masterbkd->show_buktifisik();
       $data['title'] = 'Input Syarat File';
-      $this->load->view('layout/header',$data);
+      $this->load->view('layout/header_datatables',$data);
       $this->load->view('layout/side_menu');
       $this->load->view('pages/bkd/inputsyarat');
-      $this->load->view('layout/footer');
+      $this->load->view('layout/footer_datatables');
 }
 
 function InsertSyarat()
@@ -364,10 +383,21 @@ function UpdateRenumerasi()
         echo "Update Succes"; redirect('MasterBkd','refresh');
 }
 
+function UpdateSyarat()
+{
+	$data = array(
+									'nama_file' => $this->input->post('file')
+                );
+        $where = array('id' => $this->input->post('id'));
+
+        $this->M_masterbkd->update_syaratfile($where, $data, 'bkd_buktifisik');
+        echo "Update Succes"; redirect('MasterBkd/SyaratFile','refresh');
+}
+
 function HapusRenumerasi($id) {
     $where = array('id_kegiatan' => $id);
     $this->M_masterbkd->hapus_subbkd($where, 'bkd_kegiatan');
-    echo "Hapus Sukses"; redirect('MasterBkd','refresh');
+    echo "Hapus Sukses"; redirect('MasterBkd/','refresh');
 }
 
 // EDIT TABLE

@@ -20,16 +20,16 @@
                         <div class="form-group">
                             <label class="control-label col-md-1 col-sm-1 col-xs-12" for="last-name">Filter<span class="required"></span></label>
                             <div class="col-md-3 col-sm-3 col-xs-12">
-                              <select id="id_fakultas" name="id_fakultas" class="form-control" required="required">
+                              <select id="fak" name="fak" class="form-control" required="required">
                                   <option value="">Fakultas</option>
-                                  <?php foreach($fak as $f){ ?>
+                                  <?php foreach($fak as $f){ //$this->encrypt->encode($f->id_fakultas)?>
                                   <option value="<?php echo $f->id_fakultas; ?>"><?php echo $f->nama_fakultas; ?></option>
                                   <?php } ?>
                               </select>
                             </div>
                             <div class="col-md-3 col-sm-3 col-xs-12">
-                              <select id="id_kat_dosen" name="id_kat_dosen" class="form-control" required="required">
-                                  <option value="">Kategori Dosen</option>
+                              <select id="kat" name="kat" class="form-control">
+                                  <option value="0">Kategori Dosen</option>
                                   <?php foreach($profildosen as $b){ ?>
                                   <option value="<?php echo $b->id_kat_dosen; ?>"><?php echo $b->kategori_dosen; ?></option>
                                   <?php } ?>
@@ -41,7 +41,6 @@
                         </div>
                         <div class="ln_solid"></div>
                       </form>
-
                       <table class="table table-striped table-bordered myTable display nowrap" style="width:100%">
                         <thead>
                           <tr>
@@ -51,9 +50,14 @@
                             <th rowspan="2">Kategori Dosen</th>
                             <th colspan="4">Syarat BKD</th>
                             <th colspan="4">Laporan(Volume/SKS)</th>
+                            <th colspan="4">Poin Detail</th>
                             <th colspan="1">Kesimupulan</th>
                             <th colspan="2">Remunerasi</th>
                                 <tr>
+                                  <td>Pendidikan</td>
+                                  <td>Penelitian</td>
+                                  <td>Pengabdian</td>
+                                  <td>Penunjang</td>
                                   <td>Pendidikan</td>
                                   <td>Penelitian</td>
                                   <td>Pengabdian</td>
@@ -114,7 +118,7 @@
                           ?>
                             <tr>
                                 <th scope="row"><?php echo $dt['nama_fakultas']; ?></th>
-                                <th scope="row"><?php echo $dt['nip']; ?></th>
+                                <th scope="row"><?php echo "'".$dt['nip']; ?></th>
                                 <td bgcolor="#FFFFF0"><?php echo $dt['nama_peg']; ?></td>
                                 <td scope="row"><?php echo $dt['kategori_dosen']; ?></td>
                                     <td><?php echo $dt['Syt_Pendidikan']; ?></td>
@@ -125,6 +129,10 @@
                                     <td><?php echo $dt['Penelitian']; ?></td>
                                     <td><?php echo $dt['Pengabdian']; ?></td>
                                     <td><?php echo $dt['Penunjang']; ?></td>
+                                    <td><?php echo $dt['DetailPendidikan']; ?></td>
+                                    <td><?php echo $dt['DetailPenelitian']; ?></td>
+                                    <td><?php echo $dt['DetailPengabdian']; ?></td>
+                                    <td><?php echo $dt['DetailPenunjang']; ?></td>
                                     <td><?php echo $hasilbkd; ?></td>
                                     <td><?php echo $hasil_p1; ?></td>
                                     <td><?php echo $point; ?></td>

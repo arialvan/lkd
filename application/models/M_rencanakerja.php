@@ -5,6 +5,7 @@ class M_rencanakerja extends CI_Model{
    function __construct()
     {
         parent::__construct();
+        $this->dbsimpeg = $this->load->database('dbsimpeg', TRUE);
     }
 
 /*BKD*/
@@ -83,6 +84,29 @@ function show_bkdkegiatan()
                     ->where('periode_lkd.status=', 1);
     $query=$this->db->get()->result();
     return $query;
+}
+
+function show_periode_aktif()
+{
+    $this->db->select('*')
+                    ->from('periode_lkd')
+                    ->where('status=', 1);
+    $query=$this->db->get()->result();
+    return $query;
+}
+
+// CEK KETUA PRODI
+function cek_ketuaprodi($id)
+{
+  $this->db->select('a.ketua_prodi');
+  $this->db->from('verifikator a');
+  $this->db->join('periode_lkd b','a.id_periode=b.id_periode');
+  $this->db->where('a.ketua_prodi', $id);
+  $this->db->where('b.status', 1);
+  $this->db->group_by('a.ketua_prodi');
+
+  $query=$this->db->get()->result();
+  return $query;
 }
 
 // QUERY PERHITUNGAN
@@ -253,6 +277,31 @@ function poin_terendah($id)
     return $query;
 }
 
+function show_rekap_dosen($id){
+  $this->db->select('a.nip,b.nama_peg,c.id_kat_dosen,
+                      MAX(CASE WHEN d.id_bkd = 1 THEN d.sks_bkd ELSE 0 END) AS Syt_Pendidikan,
+                      MAX(CASE WHEN d.id_bkd = 2 THEN d.sks_bkd ELSE 0 END) AS Syt_Penelitian,
+                      MAX(CASE WHEN d.id_bkd = 3 THEN d.sks_bkd ELSE 0 END) AS Syt_Pengabdian,
+                      MAX(CASE WHEN d.id_bkd = 4 THEN d.sks_bkd ELSE 0 END) AS Syt_Penunjang,
+                      FORMAT(SUM(CASE WHEN a.id_bkd = 1 THEN a.sks_subkegiatan/4 END),2) AS Pendidikan,
+                      SUM(CASE WHEN a.id_bkd = 2 THEN a.sks_subkegiatan/4 END) AS Penelitian,
+                      SUM(CASE WHEN a.id_bkd = 3 THEN a.sks_subkegiatan/4 END) AS Pengabdian,
+                      SUM(CASE WHEN a.id_bkd = 4 THEN a.sks_subkegiatan/4 END) AS Penunjang,
+                      FORMAT(SUM(CASE WHEN a.id_bkd IN ("1","4") THEN a.poin_subkegiatan/4 END)-8 ,2) AS Points
+                    ');
+  $this->db->from('bkd_subkegiatan a');
+  $this->db->join('tb_pegawai b','a.nip=b.nip');
+  $this->db->join('profil_dosen c','a.nip=c.nip');
+  $this->db->join('bkd_remun_dosen d','c.id_kat_dosen=d.id_kat_dosen', 'INNER');
+  $this->db->where('a.app_assesor1', 1);
+  $this->db->where('a.app_assesor2', 1);
+  $this->db->where('a.nip', $id);
+  $this->db->group_by('a.nip');
+
+  $query=$this->db->get()->result_array();
+  return $query;
+
+}
 
 function show_tanpa_syarat_penunjang($id)
 {
@@ -347,9 +396,9 @@ function edit_subkegiatan($id)
   function edit_subkegiatan2($id)
 {
     $this->db->select('*')
-                    ->from('bkd_subkegiatan_file')
-                    ->join('bkd_subkegiatan','bkd_subkegiatan_file.id_subkegiatan = bkd_subkegiatan.id_subkegiatan')
-                    ->where('bkd_subkegiatan_file.id_subkegiatan=', $id);
+                    ->from('bkd_subkegiatan_file a')
+                    ->join('bkd_subkegiatan b','a.id_subkegiatan = b.id_subkegiatan')
+                    ->where('a.id_subkegiatan=', $id);
     $query=$this->db->get()->result();
     return $query;
 
@@ -423,15 +472,98 @@ function show_laporan()
   return $query;
 }
 
-function show_rencana($id)
+function show_listrbkd($id)
 {
   $this->db->select('a.*,b.*,c.*, (a.status_laporan) AS statuslaporan')
   // $this->db->select('*')
                   ->from('bkd_subkegiatan a')
                   ->join('bkd_kegiatan b','a.id_kegiatan = b.id_kegiatan')
+                  ->join('periode_lkd c','a.id_periode = c.id_periode')
+                  ->where('a.nip=', $id)
+                  ->where('a.di_laporkan=', 0)
+                  ->where('c.status', 1);
+  $query=$this->db->get()->result();
+  return $query;
+}
+
+function show_listlaporan($id)
+{
+  $this->db->select('a.*,b.*,c.*,d.*, (a.status_laporan) AS statuslaporan')
+  // $this->db->select('*')
+                  ->from('bkd_subkegiatan_laporan a')
+                  ->join('bkd_kegiatan b','a.id_kegiatan = b.id_kegiatan')
                   ->join('periode_lkd c','b.id_periode = c.id_periode','LEFT')
+                  ->join('bkd d','b.id_bkd = d.id_bkd','LEFT')
+                  ->where('a.nip=', $id)
+                  ->where('c.status', 1);
+  $query=$this->db->get()->result();
+  return $query;
+}
+
+function show_rencana_rk($id)
+{
+  $this->db->select('a.*,b.*,c.*, (a.status_laporan) AS statuslaporan')
+  // $this->db->select('*')
+                  ->from('bkd_subkegiatan a')
+                  ->join('bkd_kegiatan b','a.id_kegiatan = b.id_kegiatan')
+                  ->join('periode_lkd c','a.id_periode = c.id_periode')
                   ->where('a.id_bkd=', 1)
                   ->where('a.nip=', $id)
+                  ->where('c.status', 1);
+  $query=$this->db->get()->result();
+  return $query;
+}
+
+function show_rencana_penelitian_rk($id)
+{
+  $this->db->select('a.*,b.*,c.*, (a.status) AS statuslaporan')
+                  ->from('bkd_subkegiatan a')
+                  ->join('bkd_kegiatan b','a.id_kegiatan = b.id_kegiatan')
+                  ->join('periode_lkd c','b.id_periode = c.id_periode','LEFT')
+                  ->where('a.id_bkd=', 2)
+                  ->where('a.nip=', $id)
+                  ->where('c.status', 1);
+  $query=$this->db->get()->result();
+  return $query;
+}
+
+function show_rencana_pengabdian_rk($id)
+{
+  $this->db->select('a.*,b.*,c.*, (a.status) AS statuslaporan')
+                  ->from('bkd_subkegiatan a')
+                  ->join('bkd_kegiatan b','a.id_kegiatan = b.id_kegiatan')
+                  ->join('periode_lkd c','b.id_periode = c.id_periode','LEFT')
+                  ->where('a.id_bkd=', 3)
+                  ->where('a.nip=', $id)
+                  ->where('c.status', 1);
+  $query=$this->db->get()->result();
+  return $query;
+}
+
+function show_rencana_penunjang_rk($id)
+{
+  $this->db->select('a.*,b.*,c.*, (a.status) AS statuslaporan')
+                  ->from('bkd_subkegiatan a')
+                  ->join('bkd_kegiatan b','a.id_kegiatan = b.id_kegiatan')
+                  ->join('periode_lkd c','b.id_periode = c.id_periode','LEFT')
+                  ->where('a.id_bkd=', 4)
+                  ->where('a.nip=', $id)
+                  ->where('c.status', 1);
+  $query=$this->db->get()->result();
+  return $query;
+}
+
+function show_rencana($id)
+{
+  $this->db->select('*, (a.status_laporan) AS statuslaporan')
+  // $this->db->select('*')
+                  ->from('bkd_subkegiatan_laporan a')
+                  ->join('bkd_kegiatan b','a.id_kegiatan = b.id_kegiatan')
+                  ->join('periode_lkd c','a.id_periode = c.id_periode')
+                  // ->join('verifikator d','a.nip = d.nip')
+                  ->where('a.id_bkd=', 1)
+                  ->where('a.nip=', $id)
+                  // ->where('a.lp_dosen', 1)
                   ->where('c.status', 1);
   $query=$this->db->get()->result();
   return $query;
@@ -446,7 +578,7 @@ function show_rencana_penelitian($id)
   //                 ->where('bkd_subkegiatan.nip=', $this->session->userdata('nipp'))
   //                 ->order_by('bkd_subkegiatan.id_subkegiatan');
   $this->db->select('a.*,b.*,c.*, (a.status) AS statuslaporan')
-                  ->from('bkd_subkegiatan a')
+                  ->from('bkd_subkegiatan_laporan a')
                   ->join('bkd_kegiatan b','a.id_kegiatan = b.id_kegiatan')
                   ->join('periode_lkd c','b.id_periode = c.id_periode','LEFT')
                   ->where('a.id_bkd=', 2)
@@ -465,7 +597,7 @@ function show_rencana_pengabdian($id)
   //                 ->where('bkd_subkegiatan.nip=', $this->session->userdata('nipp'))
   //                 ->order_by('bkd_subkegiatan.id_subkegiatan');
   $this->db->select('a.*,b.*,c.*, (a.status) AS statuslaporan')
-                  ->from('bkd_subkegiatan a')
+                  ->from('bkd_subkegiatan_laporan a')
                   ->join('bkd_kegiatan b','a.id_kegiatan = b.id_kegiatan')
                   ->join('periode_lkd c','b.id_periode = c.id_periode','LEFT')
                   ->where('a.id_bkd=', 3)
@@ -484,7 +616,7 @@ function show_rencana_penunjang($id)
   //                 ->where('bkd_subkegiatan.nip=', $this->session->userdata('nipp'))
   //                 ->order_by('bkd_subkegiatan.id_subkegiatan');
   $this->db->select('a.*,b.*,c.*, (a.status) AS statuslaporan')
-                  ->from('bkd_subkegiatan a')
+                  ->from('bkd_subkegiatan_laporan a')
                   ->join('bkd_kegiatan b','a.id_kegiatan = b.id_kegiatan')
                   ->join('periode_lkd c','b.id_periode = c.id_periode','LEFT')
                   ->where('a.id_bkd=', 4)
@@ -503,6 +635,18 @@ function show_verifikator()
                   ->where('verifikasi.nip',$this->session->userdata('nipp'))
                   ->where('periode_lkd.status',1)
                   ->order_by('verifikasi.id_verifikator');
+  $query=$this->db->get()->result();
+  return $query;
+}
+
+//Baru Ditambah
+function show_dilaporkan()
+{
+  $this->db->select('di_laporkan')
+                  ->from('bkd_subkegiatan a')
+                  ->join('periode_lkd b','a.id_periode = b.id_periode')
+                  ->where('a.nip',$this->session->userdata('nipp'))
+                  ->where('b.status',1);
   $query=$this->db->get()->result();
   return $query;
 }

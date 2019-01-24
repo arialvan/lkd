@@ -29,6 +29,7 @@ public function index()
   $data['nipp'] = $this->session->userdata('nipp');
   $data['level'] = $this->session->userdata('user_level');
   $data['pegawai'] = $this->M_pegawai->show_viewpages();
+  $data['katdosen'] = $this->M_pegawai->show_kategori_dosen();
   $data['title'] = 'Data Pegawai';
   $this->load->view('layout/header_datatables',$data);
   $this->load->view('layout/side_menu');
@@ -40,6 +41,7 @@ public function resetPassword($id){
 	$this->db->query("update tb_pegawai_profil set password=md5(nip) where nip='$id' limit 1");
 	redirect('./pegawai');
 }
+
 public function PegawaiAll()
 {
   $ids = $this->session->userdata('nipp');
@@ -143,9 +145,11 @@ public function EditPegawai($id)
   	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
         $data['name'] = $this->session->userdata('username');
         $data['nipp'] = $this->session->userdata('nipp');
-        $where = array('nip' => $id);
-        $data['pegawai'] = $this->M_pegawai->edit_pegawai($where, 'tb_pegawai')->result();
-        $data['views'] = $this->M_pegawai->show_viewpages_edit($where, 'pegview')->result();
+        // $where = array('nip' => $id);
+        // $data['pegawai'] = $this->M_pegawai->edit_pegawai($where, 'tb_pegawai')->result();
+        // $data['views'] = $this->M_pegawai->show_viewpages_edit($where, 'pegview')->result();
+        $data['pegawai'] = $this->M_pegawai->edit_pegawai($id);
+        $data['views'] = $this->M_pegawai->show_viewpages_edit($id);
         $data['golongan'] = $this->M_master->show_golongan();
         $data['agama'] = $this->M_master->show_agama();
         $data['mapel'] = $this->M_master->show_mapel();
@@ -461,12 +465,11 @@ public function ProfilPegawai($id) {
 	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
         $data['name'] = $this->session->userdata('username');
         $data['nipp'] = $this->session->userdata('nipp');
-        $where = array('nip' => $id);
-        $data['pegawai'] = $this->M_pegawai->edit_pegawai($where, 'tb_pegawai')->result();
+        $data['pegawai'] = $this->M_pegawai->edit_pegawai($id);
         $data['riw_pendidikan'] = $this->M_pegawai->riwayatpendidikan($id);
         $data['riw_jabatan'] = $this->M_pegawai->riwayatjabatan($id);
-        $data['riw_diklat'] = $this->M_pegawai->riwayatdiklat($where, 'tb_riwayatdiklat')->result();
-        $data['riw_seminar'] = $this->M_pegawai->riwayatseminar($where, 'tb_riwayatseminar')->result();
+        $data['riw_diklat'] = $this->M_pegawai->riwayatdiklat($id);
+        $data['riw_seminar'] = $this->M_pegawai->riwayatseminar($id);
         $data['title'] = 'Profil Pegawai';
         $this->load->view('layout/header_datatables',$data);
         $this->load->view('layout/side_menu');
@@ -543,11 +546,29 @@ public function PegawaiPassword($id) {
 			$this->load->view('pages/pegawai/password');
 			$this->load->view('layout/footer');
 }
+
 function UpdatePassword() {
 			$data = array('password' => md5($this->input->post('password')));
       $where = array('nip' => $this->input->post('nip'));
+      // var_dump($data);
       $this->M_pegawai->update_password($where, $data, 'profil_dosen');
-      echo "Update Succes"; redirect('Dashboard','refresh');
+      echo "Update Succes"; redirect('Pegawai','refresh');
+}
+
+function RubahPassword() {
+      $pass = md5($this->input->post('password'));
+			$data = array('password' => $pass);
+      $where = array('nip' => $this->input->post('id'));
+      // var_dump($data);
+      $this->M_pegawai->update_pass($where, $data, 'profil_dosen');
+      echo "Update Succes"; redirect('Pegawai','refresh');
+}
+
+function UpdateKatDosen() {
+			$data = array('id_kat_dosen' => $this->input->post('kategori_dosen'));
+      $where = array('nip' => $this->input->post('nip'));
+      $this->M_pegawai->update_kat_dosen($where, $data, 'profil_dosen');
+      echo "Update Succes"; redirect('Pegawai','refresh');
 }
 
 function Success() {
@@ -660,6 +681,21 @@ function HapusPegawai($id) {
     $where = array('nip' => $id);
     $this->M_pegawai->hapus_pegawai($where, 'tb_pegawai');
     redirect('Pegawai');
+}
+
+public function LoginAs($id) {
+    if( empty($id)){ // Username atau Password
+        echo '<h2>Maaf Nip tidak di temukan di database. <a href="'.base_url().'Pegawai">Kembali</a></h2>';
+    }else {
+        $respone = $this->M_pegawai->model_loginas($id);
+
+        if( $respone == 'success'){
+            redirect(base_url().'Dashboard');
+        }else {
+            redirect(base_url().'Pegawai');
+        }
+    }
+
 }
 
 //LOGOUT

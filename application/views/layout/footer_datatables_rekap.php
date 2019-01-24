@@ -25,19 +25,26 @@
     <script src="<?php echo base_url(); ?>assets/vendors/datatables.net-buttons-bs/js/buttons.flash.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/vendors/datatables.net-buttons-bs/js/buttons.html5.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/vendors/datatables.net-buttons-bs/js/buttons.print.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/vendors/introjs/intro.js"></script>
     <!-- Custom Theme Scripts -->
     <script src="<?php echo base_url(); ?>assets/build/js/custom.min.js"></script>
 
 <script>
 $(document).ready(function() {
     $('.myTable').DataTable( {
-        "scrollX": true,
-        "dom": 'Bfrtip',
-         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-        buttons: [
-            // 'copy', 'csv', 'excel', 'pdf', 'print'
-            'copy', 'excel'
-        ]
+      // "scrollY": 400,
+      "scrollX": true,
+      "dom": 'Bfrtip',
+       "lengthMenu": [[15, 75, 100, -1], [15, 75, 100, "All"]],
+       buttons: [ {
+           extend: 'excelHtml5',
+           customize: function( xlsx ) {
+               var sheet = xlsx.xl.worksheets['sheet1.xml'];
+               $('row c[r^="C"]', sheet).each( function () {
+                    $(this).attr( 's', '50' );
+                });
+           }
+       } ]
     } );
 } );
 

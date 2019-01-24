@@ -17,7 +17,7 @@
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
-                    <table id="datatable-buttons" class="table table-striped table-bordered">
+                    <table class="table table-striped table-bordered">
                       <thead>
                         <tr>
                           <th>#</th>
@@ -30,11 +30,18 @@
                         <?php
                         $no = 1;
                         foreach($subkegiatan as $dt){
+                          $nom = $no++;
                         ?>
                         <tr>
-                          <th scope="row"><?php echo $no++; ?></th>
+                          <th scope="row"><?php echo $nom; ?></th>
                           <td><?php echo $dt->nama_file; ?></td>
-                          <td><?php echo $dt->file; ?></td>
+                          <td>
+                            <?php
+                              // echo $dt->file;
+                              $atts = array('width'=> 800,'height'=> 600,'scrollbars'=>'yes','status'=>'yes','resizable'=>'yes','screenx'=>0,'screeny'=>0,'window_name' =>'_blank');
+                              echo anchor_popup('Verifikator/LihatFile/'.$dt->id,'<span>Lihat File '.$nom.' </span><br />',$atts);
+                            ?>
+                          </td>
                           <td>
                             <a href="javascript:;"
                                 data-id_file="<?php echo $dt->id ?>"

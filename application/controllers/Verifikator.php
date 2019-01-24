@@ -29,13 +29,32 @@ public function index()
 		$id = $this->session->userdata('nipp');
     $data['name'] = $this->session->userdata('username');
 		$data['nipp'] = $this->session->userdata('nipp');
-    $data['verifikator'] = $this->M_verifikator->show_verifikator();
+    $data['verifikator'] = $this->M_verifikator->show_verifikator_aktif();
 		$data['verifikator_noset'] = $this->M_verifikator->show_verifikator_noset();
 		$data['filter'] = $this->M_dosen->filter($id);
-    $data['title'] = 'Verifikator';
+    $data['title'] = 'Setting Verifikator';
     $this->load->view('layout/header_datatables',$data);
     $this->load->view('layout/side_menu');
     $this->load->view('pages/verifikator/verifikator_view');
+    $this->load->view('layout/footer_datatables');
+}
+
+public function DataInfo()
+{
+	$ids = $this->session->userdata('nipp');
+	$data['filter'] = $this->M_dosen->filter($ids);
+	// $data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
+		$id = $this->session->userdata('nipp');
+    $data['name'] = $this->session->userdata('username');
+		$data['nipp'] = $this->session->userdata('nipp');
+		$data['ketuaprodi'] = $this->M_verifikator->show_ketuaprodi_aktif();
+		$data['asse1'] = $this->M_verifikator->show_asse1_aktif();
+		$data['asse2'] = $this->M_verifikator->show_asse2_aktif();
+		$data['filter'] = $this->M_dosen->filter($id);
+    $data['title'] = 'Setting Verifikator';
+    $this->load->view('layout/header_datatables',$data);
+    $this->load->view('layout/side_menu');
+    $this->load->view('pages/verifikator/verifikator_data');
     $this->load->view('layout/footer_datatables');
 }
 
@@ -70,6 +89,7 @@ public function FormVerifikator()
         $this->load->view('layout/footer');
     }
 }
+
 function InsertVerifikator()
 {
     foreach($this->input->post('nip') as $nip => $key)
@@ -93,6 +113,94 @@ function InsertVerifikator()
 
             redirect('Verifikator');
 }
+
+function ApprovalKetuaProdi()
+{
+    foreach($this->input->post('cekbox') as $id => $key)
+        {
+        //Update tabel sub_kegiatan
+            $data  = array('app_ketuaprodi' => 1, 'status' => 1);
+						$where = array('id_subkegiatan' => $key);
+            //var_dump($where);
+            $this->M_verifikator->update_approval($where, $data, 'bkd_subkegiatan');
+
+				//Update Tabel verifikator
+						$nip    = $this->input->post('nip');
+            $data1  = array('p_kaprodi' => 1);
+            $where1 = array('nip' => $nip);
+						//var_dump($where1);
+            $this->M_verifikator->update_approval($where1, $data1, 'verifikator');
+        }
+				echo "Update Succes";
+				redirect('Verifikator/PeriksaLaporanDetail/'.$nip);
+}
+
+function ApprovalKetuaProdi1()
+{
+    foreach($this->input->post('cekbox1') as $id => $key)
+        {
+        //Update tabel sub_kegiatan
+            $data  = array('app_ketuaprodi' => 1, 'status' => 1);
+						$where = array('id_subkegiatan' => $key);
+            //var_dump($where);
+            $this->M_verifikator->update_approval($where, $data, 'bkd_subkegiatan');
+
+				//Update Tabel verifikator
+						$nip    = $this->input->post('nip');
+            $data1  = array('p_kaprodi' => 1);
+            $where1 = array('nip' => $nip);
+						//var_dump($where1);
+            $this->M_verifikator->update_approval($where1, $data1, 'verifikator');
+        }
+
+						echo "Update Succes";
+						redirect('Verifikator/PeriksaLaporanDetail/'.$nip);
+}
+
+function ApprovalKetuaProdi2()
+{
+    foreach($this->input->post('cekbox2') as $id => $key)
+        {
+        //Update tabel sub_kegiatan
+            $data  = array('app_ketuaprodi' => 1, 'status' => 1);
+						$where = array('id_subkegiatan' => $key);
+            //var_dump($where);
+            $this->M_verifikator->update_approval($where, $data, 'bkd_subkegiatan');
+
+				//Update Tabel verifikator
+						$nip    = $this->input->post('nip');
+            $data1  = array('p_kaprodi' => 1);
+            $where1 = array('nip' => $nip);
+						//var_dump($where1);
+            $this->M_verifikator->update_approval($where1, $data1, 'verifikator');
+        }
+
+						echo "Update Succes";
+						redirect('Verifikator/PeriksaLaporanDetail/'.$nip);
+}
+
+function ApprovalKetuaProdi3()
+{
+    foreach($this->input->post('cekbox3') as $id => $key)
+        {
+        //Update tabel sub_kegiatan
+            $data  = array('app_ketuaprodi' => 1, 'status' => 1);
+						$where = array('id_subkegiatan' => $key);
+            //var_dump($where);
+            $this->M_verifikator->update_approval($where, $data, 'bkd_subkegiatan');
+
+				//Update Tabel verifikator
+						$nip    = $this->input->post('nip');
+            $data1  = array('p_kaprodi' => 1);
+            $where1 = array('nip' => $nip);
+						//var_dump($where1);
+            $this->M_verifikator->update_approval($where1, $data1, 'verifikator');
+        }
+
+						echo "Update Succes";
+						redirect('Verifikator/PeriksaLaporanDetail/'.$nip);
+}
+
 public function EditVerifikator($id)
 {
   if($this->session->userdata('user_level')==1)
@@ -161,6 +269,19 @@ function HapusVerifikator($id) {
 //PENILAIAN
 public function PeriksaRencana()
 {
+	// $ids = $this->session->userdata('nipp');
+	// $data['filter'] = $this->M_dosen->filter($ids);
+	// $data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
+  // $data['name'] = $this->session->userdata('username');
+  // $data['nipp'] = $this->session->userdata('nipp');
+  // $data['level'] = $this->session->userdata('user_level');
+  // $data['pegawai'] = $this->M_verifikator->show_viewpages2();
+  // $data['title'] = 'Data Dosen';
+  // $this->load->view('layout/header_datatables',$data);
+  // $this->load->view('layout/side_menu');
+  // $this->load->view('pages/verifikator/periksa_rencanakerja');
+  // $this->load->view('layout/footer_datatables');
+	$this->load->library('Pustaka');
 	$ids = $this->session->userdata('nipp');
 	$data['filter'] = $this->M_dosen->filter($ids);
 	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
@@ -168,9 +289,11 @@ public function PeriksaRencana()
   $data['nipp'] = $this->session->userdata('nipp');
   $data['level'] = $this->session->userdata('user_level');
   $data['pegawai'] = $this->M_verifikator->show_viewpages2();
+	$data['profildosen'] = $this->M_verifikator->profil();
   $data['title'] = 'Data Dosen';
   $this->load->view('layout/header_datatables',$data);
   $this->load->view('layout/side_menu');
+  //$this->load->view('pages/verifikator/periksa_laporan');
   $this->load->view('pages/verifikator/periksa_rencanakerja');
   $this->load->view('layout/footer_datatables');
 }
@@ -363,32 +486,13 @@ public function PeriksaLaporanDetail($id)
 	$data['name'] = $this->session->userdata('username');
 	$data['nipp'] = $this->session->userdata('nipp');
 	$data['level'] = $this->session->userdata('user_level');
-
 	$data['count'] = $this->M_verifikator->count_subkegiatan($id);
 	$data['namadosen'] = $this->M_verifikator->profil_dosen_diperiksa($id);
 	$data['profildosen1'] = $this->M_verifikator->profil2($id);
 	$data['profildosen'] = $this->M_verifikator->profil_remunerasi($id);
-	$data['bkd_syarat'] = $this->M_verifikator->syaratbkd($id);
-	$data['bkd_syarat_ds'] = $this->M_rencanakerja->syaratbkd_ds($id);
-	$data['bkd_syarat_dt'] = $this->M_rencanakerja->syaratbkd_dt($id);
-	$data['rencanakerja'] = $this->M_rencanakerja->show_rencana($id);
-	$data['penelitian'] = $this->M_rencanakerja->show_rencana_penelitian($id);
-	$data['pengabdian'] = $this->M_rencanakerja->show_rencana_pengabdian($id);
-	$data['penunjang'] = $this->M_rencanakerja->show_rencana_penunjang($id);
 	$data['verifikator'] = $this->M_verifikator->show_verifikator_laporandetail($id);
-	$data['bkdkegiatan'] = $this->M_rencanakerja->show_bkdkegiatan();
-	$data['syaratbkd'] = $this->M_rencanakerja->show_syarat_bkd();
-	$data['syaratsubbkd'] = $this->M_rencanakerja->show_syarat_subbkd($id);
-	$data['syt_pendidikan'] = $this->M_rencanakerja->show_syarat_pendidikan($id);
-	$data['syt_penelitian'] = $this->M_rencanakerja->show_syarat_penelitian($id);
-	$data['syt_pengabdian'] = $this->M_rencanakerja->show_syarat_pengabdian($id);
-	$data['syt_penunjang'] = $this->M_rencanakerja->show_syarat_penunjang($id);
-	$data['tanpa_syt_penunjang'] = $this->M_verifikator->show_tanpa_syarat_penunjang($id);
-	$data['syt_penunjang_poin'] = $this->M_rencanakerja->show_syarat_penunjang_poin($id);
-	$data['poinremunerasi'] = $this->M_rencanakerja->show_poin_remunerasi($id);
-	$data['poinmaks'] = $this->M_rencanakerja->poin_terbesar($id);
-	$data['poinmin'] = $this->M_rencanakerja->poin_terendah($id);
-	$data['sksxpoin'] = $this->M_rencanakerja->sksxpoin($id);
+	$data['syaratbkd'] = $this->M_verifikator->show_syarat_bkd_rk($id);
+	$data['rekap_dosen'] = $this->M_verifikator->show_rekap_dosen_rk($id);
 	$data['sum_poin_pendidikan'] = $this->M_verifikator->show_syarat_subbkd_poin($id);
 	$data['pendidikan'] = $this->M_verifikator->show_pendidikan($id);
 	$data['penelitian'] = $this->M_verifikator->show_rencana_penelitian($id);
@@ -396,11 +500,22 @@ public function PeriksaLaporanDetail($id)
 	$data['penunjang'] = $this->M_verifikator->show_rencana_penunjang($id);
 	$data['files'] = $this->M_verifikator->show_file($id);
 	$data['title'] = 'Rekap Laporan Kerja Dosen';
+	// if($this->M_verifikator->show_rekap_dosen_rk($id)>0){
+	// 	$data['rekap_dosen'] = $this->M_verifikator->show_rekap_dosen_rk($id);
+	// }else{
+	// 	$dt = array('Pendidikan' => 0, 'Penelitian' => 0, 'Pengabdian' => 0, 'Penunjang' => 0);
+	// 	$data['rekap_dosen'] = $dt;
+	// }
 	$this->load->view('layout/header_datatables',$data);
 	$this->load->view('layout/side_menu');
 	$this->load->view('pages/verifikator/periksa_laporan_detail');
 	$this->load->view('layout/footer_datatables');
 	//return $a;
+}
+
+function Appketuaprodi(){
+	$data=$this->M_verifikator->update_periksa_ketuaprodi();
+	echo json_encode($data);
 }
 
 public function PeriksaLaporanDetailPDF($id)
@@ -425,7 +540,18 @@ public function PeriksaLaporanDetailPDF($id)
 			readfile($filename);
 }
 
+public function LihatFile($id)
+{
+	$datas=$this->M_verifikator->show_file2($id);
+	foreach ($datas as $keys);
+			$p = explode('_',$keys->file);
+			$nip = $p[0];
+			echo $filename = "./uploads/".$nip."/".$keys->file;
 
+			//New Tabbrowser
+			header("Content-type: application/pdf");
+			readfile($filename);
+}
 //Komentar Tolak
 function KomentarTolak()
 {

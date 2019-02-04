@@ -95,6 +95,17 @@ function show_periode_aktif()
     return $query;
 }
 
+function filter_button()
+{
+    $this->db->select('rk_dosen')
+                    ->from('verifikator a')
+                    ->join('periode_lkd b', 'a.id_periode = b.id_periode')
+                    ->where('a.nip=', $this->session->userdata('nipp'))
+                    ->where('b.status=', 1);
+    $query=$this->db->get()->result();
+    return $query;
+}
+
 // CEK KETUA PRODI
 function cek_ketuaprodi($id)
 {
@@ -376,6 +387,17 @@ function insert_rencanakerja($data,$table)
         return $msg;
 }
 
+function insert_laporan($data,$table)
+{
+    $msg = '<i class="fa fa-check text-success"></i> Simpan Data Berhasil';
+    $this->db->insert($table, $data);
+    if($this->db->affected_rows() < 1 )
+        {
+            $msg = '<i class="fa fa-close text-danger"></i> Simpan data gagal.';
+        }
+        return $msg;
+}
+
 //show edit
 function edit_bkdsubkegiatan($where,$table)
 {
@@ -405,6 +427,10 @@ function edit_subkegiatan($id)
 }
 
 function edit_poin($where,$table){
+    return $this->db->get_where($table,$where);
+}
+
+function show_rbkd_to_laporan($where,$table){
     return $this->db->get_where($table,$where);
 }
 
@@ -480,7 +506,7 @@ function show_listrbkd($id)
                   ->join('bkd_kegiatan b','a.id_kegiatan = b.id_kegiatan')
                   ->join('periode_lkd c','a.id_periode = c.id_periode')
                   ->where('a.nip=', $id)
-                  ->where('a.di_laporkan=', 0)
+                  // ->where('a.di_laporkan=', 0)
                   ->where('c.status', 1);
   $query=$this->db->get()->result();
   return $query;
@@ -688,6 +714,17 @@ function hapus_bkdkegiatan($where,$table)
         {
             $msg = '<i class="fa fa-close text-danger"></i> Hapus data gagal.';
         }
+}
+
+function cek_survey()
+{
+  $this->db->select('isi_survey')
+                  ->from('verifikator')
+                  ->join('periode_lkd','verifikator.id_periode = periode_lkd.id_periode')
+                  ->where('verifikator.nip',$this->session->userdata('nipp'))
+                  ->where('periode_lkd.status',1);
+  $query=$this->db->get()->result();
+  return $query;
 }
 
 }//Close Class

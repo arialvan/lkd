@@ -59,7 +59,7 @@ public function index()
 		$data['bkd'] = $this->M_rencanakerja->show_bkd();
 		$data['bkdkegiatan'] = $this->M_rencanakerja->show_bkdkegiatan();
 		$data['periode_aktif'] = $this->M_rencanakerja->show_periode_aktif();
-
+		$data['filter_button'] = $this->M_rencanakerja->filter_button();
 		$data['title'] = 'Beban Kinerja Dosen';
 		$this->load->view('layout/header_datatables',$data);
 		$this->load->view('layout/side_menu');
@@ -69,32 +69,68 @@ public function index()
 
 	public function Laporan()
 		{
-			$ids = $this->session->userdata('nipp');
-			$this->load->library('Pustaka');
-			$data['filter'] = $this->M_dosen->filter($ids);
-			$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
-			$id = $this->session->userdata('nipp');
-			$data['name'] = $this->session->userdata('username');
-			$data['nipp'] = $this->session->userdata('nipp');
-			$data['ids'] = $this->session->userdata('kat_dosen');
-			$data['syaratbkd'] = $this->M_verifikator->show_syarat_bkd();
-			$data['rekap_dosen'] = $this->M_verifikator->show_rekap_dosen($id);
-			$data['rencanakerja'] = $this->M_rencanakerja->show_rencana($id);
-			$data['penelitian'] = $this->M_rencanakerja->show_rencana_penelitian($id);
-			$data['pengabdian'] = $this->M_rencanakerja->show_rencana_pengabdian($id);
-			$data['penunjang'] = $this->M_rencanakerja->show_rencana_penunjang($id);
-			$data['verifikator'] = $this->M_rencanakerja->show_verifikator();
-			$data['dilaporkan'] = $this->M_rencanakerja->show_dilaporkan();
-			// $data['bkdkegiatan'] = $this->M_rencanakerja->show_bkdkegiatan();
-			// $data['syaratsubbkd'] = $this->M_rencanakerja->show_syarat_subbkd($id);
-			// $data['bkd'] = $this->M_rencanakerja->show_bkd();
-			$data['listrbkd'] = $this->M_rencanakerja->show_listrbkd($id);
-			$data['listlaporan'] = $this->M_rencanakerja->show_listlaporan($id);
-			$data['title'] = 'Rekap Rencana Kerja Dosen';
-			$this->load->view('layout/header_datatables',$data);
-			$this->load->view('layout/side_menu');
-			$this->load->view('pages/bkd/bkd_laporan');
-			$this->load->view('layout/footer_datatables');
+			$auth=$this->M_rencanakerja->cek_survey();
+			foreach ($auth as $keys);
+
+			if($keys->isi_survey > 0){
+					$ids = $this->session->userdata('nipp');
+					$this->load->library('Pustaka');
+					$data['filter'] = $this->M_dosen->filter($ids);
+					$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
+					$id = $this->session->userdata('nipp');
+					$data['name'] = $this->session->userdata('username');
+					$data['nipp'] = $this->session->userdata('nipp');
+					$data['ids'] = $this->session->userdata('kat_dosen');
+					$data['syaratbkd'] = $this->M_verifikator->show_syarat_bkd();
+					$data['rekap_dosen'] = $this->M_verifikator->show_rekap_dosen($id);
+					$data['rencanakerja'] = $this->M_rencanakerja->show_rencana($id);
+					$data['penelitian'] = $this->M_rencanakerja->show_rencana_penelitian($id);
+					$data['pengabdian'] = $this->M_rencanakerja->show_rencana_pengabdian($id);
+					$data['penunjang'] = $this->M_rencanakerja->show_rencana_penunjang($id);
+					$data['verifikator'] = $this->M_rencanakerja->show_verifikator();
+					$data['dilaporkan'] = $this->M_rencanakerja->show_dilaporkan();
+					// $data['bkdkegiatan'] = $this->M_rencanakerja->show_bkdkegiatan();
+					// $data['syaratsubbkd'] = $this->M_rencanakerja->show_syarat_subbkd($id);
+					// $data['bkd'] = $this->M_rencanakerja->show_bkd();
+					$data['listrbkd'] = $this->M_rencanakerja->show_listrbkd($id);
+					$data['listlaporan'] = $this->M_rencanakerja->show_listlaporan($id);
+					$data['title'] = 'Rekap Rencana Kerja Dosen';
+					$this->load->view('layout/header_datatables',$data);
+					$this->load->view('layout/side_menu');
+					$this->load->view('pages/bkd/bkd_laporan');
+					$this->load->view('layout/footer_datatables');
+
+				}else{
+
+					require FCPATH.'vendor/autoload.php';
+					$key = "KQYsG4Hi201ajyEzOSGzr4MVfw==";
+					$token = array(
+					    "email" => $this->session->userdata('email'),
+					    "fullname" => $this->session->userdata('username'),
+					    "nip" => $this->session->userdata('nipp'),
+					    "appAlias" => "bkd"
+					);
+
+					$jwt = \Firebase\JWT\JWT::encode($token, $key);
+					$decode = \Firebase\JWT\JWT::decode($jwt, $key, array('HS256'));
+					//print_r ($decode);
+
+
+						$ids = $this->session->userdata('nipp');
+						$this->load->library('Pustaka');
+						$data['filter'] = $this->M_dosen->filter($ids);
+						$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
+						$id = $this->session->userdata('nipp');
+						$data['name'] = $this->session->userdata('username');
+						$data['nipp'] = $this->session->userdata('nipp');
+						$data['ids'] = $this->session->userdata('kat_dosen');
+						$data['token_sso'] = \Firebase\JWT\JWT::encode($token, $key);
+						$data['title'] = 'Survey';
+						$this->load->view('layout/header_datatables',$data);
+						$this->load->view('layout/side_menu');
+						$this->load->view('pages/bkd/isi_survey');
+						$this->load->view('layout/footer_datatables');
+				}
 		}
 
 /*RENCANA KERJA*/
@@ -404,13 +440,13 @@ function InsertLaporan()
 
                 // Konfigurasi Upload File
 								//Cek Direktori
-									$directoryname = $this->session->userdata('nipp');
+									$directoryname = $this->session->userdata('nipp').'/'.date("Y").'/'.date("m");
 									if (!is_dir('./uploads/'.$directoryname)) { //Jika Folder Belum Ada Maka Buat Folder Baru
-										  mkdir('./uploads/'.$this->session->userdata('nipp').'/'.date("Y"), 0777, TRUE); //Folder Baru
+										  mkdir('./uploads/'.$this->session->userdata('nipp').'/'.date("Y").'/'.date("m"), 0777, TRUE); //Folder Baru
 									}
 
 									// Nama Direktori File
-	                $uploadPath = 'uploads/'.$this->session->userdata('nipp').'/';
+	                $uploadPath = 'uploads/'.$this->session->userdata('nipp').'/'.date("Y").'/'.date("m");
 	                $config['upload_path'] = $uploadPath;
 	                $config['allowed_types'] = 'pdf';
 
@@ -453,10 +489,64 @@ function InsertLaporan()
 							}else{
 									$lsb==0;
 							}
-								$data = array('status_laporan' => 1, 'lapor_sebagai_bkd' => $lsb);
+							//Update bkd_subkegiatan(Rencana Kerja)
+								$data = array('status_laporan' => 1, 'di_laporkan' => 2, 'lapor_sebagai_bkd' => $lsb);
 							  $where = array('id_subkegiatan' => $this->input->post('id_subkegiatan'));
 							  $this->M_rencanakerja->update_rencana($where, $data, 'bkd_subkegiatan');
-								redirect('RencanaKerja/Laporan');
+
+							//Insert Laporan
+							$where2 = array('id_subkegiatan' => $this->input->post('id_subkegiatan'));
+							$data2 = $this->M_rencanakerja->show_rbkd_to_laporan($where2, 'bkd_subkegiatan')->result();
+							foreach ($data2 as $keys);
+
+							$dl = array(
+												'id_subkegiatan' => $keys->id_subkegiatan,
+												'id_periode' => $keys->id_periode,
+												'nip' => $keys->nip,
+												'id_bkd' => $keys->id_bkd,
+												'id_kegiatan' => $keys->id_kegiatan,
+												'sub_kegiatan' => $keys->sub_kegiatan,
+												'sks_post' => $keys->sks_post,
+												'sks_subkegiatan' => $keys->sks_subkegiatan,
+												'poin_subkegiatan' => $keys->poin_subkegiatan,
+												'app_ketuaprodi' => $keys->app_ketuaprodi,
+												'app_assesor1' => $keys->app_assesor1,
+												'app_assesor2' => $keys->app_assesor2,
+												'status' => $keys->status,
+												'user_create' => $keys->user_create,
+												'status_laporan' => $keys->status_laporan,
+												'timecreate' => $keys->timecreate,
+												'komentar' => $keys->komentar,
+												'lapor_sebagai_bkd' => $keys->lapor_sebagai_bkd
+							);
+							$this->M_rencanakerja->insert_rencanakerja($dl, 'bkd_subkegiatan_laporan');
+
+							$dl2 = array(
+												'id_subkegiatan' => 'OK',
+												'id_periode' => 'OK',
+												'nip' => 'OK',
+												'id_bkd' => 'OK',
+												'id_kegiatan' => 'OK',
+												'sub_kegiatan' => 'OK',
+												'sks_post' => 'OK',
+												'sks_subkegiatan' => 'OK',
+												'poin_subkegiatan' => 'OK',
+												'app_ketuaprodi' => 'OK',
+												'status' => $keys->status,
+												'user_create' => $keys->user_create,
+												'status_laporan' => 'OK',
+												'timecreate' => $keys->timecreate,
+												'komentar' => 'OK',
+												'lapor_sebagai_bkd' => 'OK'
+							);
+
+							echo '<pre>' . var_export($dl2, true) . ' .................<br />................. <br />OK <br /></pre>';
+							echo '<h2>
+												Upload File Selesai....
+										</h2>';
+										echo '<h2><a href="'.base_url().'RencanaKerja/Laporan">KEMBALI</a></h2>';
+							// echo '<h2><a href="#" onclick="window.close()">CLOSE TAB</a></h2>';
+							// redirect('RencanaKerja/Laporan');
         }else{
 								redirect('RencanaKerja/EditLaporan/',$this->input->post('id_subkegiatan'));
 				}
@@ -465,6 +555,21 @@ function InsertLaporan()
 }
 
 //UPDATE
+
+function UpdateSurvey()
+{
+	//Cari Periode Aktif
+	$periode = $this->M_rencanakerja->show_periode_aktif();
+	foreach ($periode as $keys);
+	$id_periode   = $keys->id_periode; //Periode Aktif
+
+	$data = array('isi_survey' => 1);
+
+  $where = array('nip' => $this->session->userdata('nipp'), 'id_periode' => $id_periode);
+  $this->M_rencanakerja->update_rencana($where, $data, 'verifikator');
+	redirect('RencanaKerja/Laporan');
+}
+
 function UpdateRencana()
 {
 	//Cari SKS dan Poin Master

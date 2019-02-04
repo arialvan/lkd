@@ -20,9 +20,9 @@
                   <div class="col-md-6 col-sm-6 col-xs-6">
                     <fieldset>
                       <legend>Rencana Kerja</legend>
-                        <a href="<?php echo base_url() ?>MasterBkd/UpdateStatusRencanaAll/<?php echo $p->id_periode.'/'. 0; ?>" class="btn btn-md btn-danger" title="Tutup Pengisian Rencana Kerja Dosen" onclick="return confirm('Apakah Anda Ingin Menonaktifkan Seluruh Pengisian Rencana Kerja?')"><i class="fa fa-eye-slash"></i> >> Nonaktfikan Semua Pengisian Rencana Kerja</a>
+                        <a href="<?php echo base_url() ?>MasterBkd/UpdateStatusRencanaAll/<?php echo $p->id_periode.'/'. 0; ?>" class="btn btn-md btn-danger" title="Tutup Pengisian Rencana Kerja Dosen" onclick="return confirm('Apakah Anda Ingin Menutup Seluruh Pengisian Rencana Kerja?')"><i class="fa fa-eye-slash"></i> >> Tutup Semua Pengisian Rencana Kerja</a>
                         <br />
-                        <a href="<?php echo base_url() ?>MasterBkd/UpdateStatusRencanaAll/<?php echo $p->id_periode.'/'. 1; ?>" class="btn btn-md btn-primary" title="Tutup Pengisian Rencana Kerja Dosen" onclick="return confirm('Apakah Anda Ingin Mengaktifkan Seluruh Pengisian Rencana Kerja?')"><i class="fa fa-eye"></i> >> Aktifkan Semua Pengisian Rencana Kerja</a>
+                        <a href="<?php echo base_url() ?>MasterBkd/UpdateStatusRencanaAll/<?php echo $p->id_periode.'/'. 1; ?>" class="btn btn-md btn-primary" title="Buka Pengisian Rencana Kerja Dosen" onclick="return confirm('Apakah Anda Ingin Mengaktifkan Seluruh Pengisian Rencana Kerja?')"><i class="fa fa-eye"></i> >> Aktifkan Semua Pengisian Rencana Kerja</a>
                     </fieldset>
                   </div>
 
@@ -30,9 +30,9 @@
                   <div class="col-md-6 col-sm-6 col-xs-6">
                     <fieldset>
                       <legend>Upload Laporan</legend>
-                        <a href="<?php echo base_url() ?>MasterBkd/UpdateStatusLaporanAll/<?php echo $p->id_periode.'/'. 0; ?>" class="btn btn-md btn-danger" title="Tutup Pengisian Rencana Kerja Dosen" onclick="return confirm('Apakah Anda Ingin Menonaktifkan Seluruh Pengisian Rencana Kerja?')"><i class="fa fa-eye-slash"></i> >> Nonaktfikan Semua Upload Laporan</a>
+                        <a href="<?php echo base_url() ?>MasterBkd/UpdateStatusLaporanAll/<?php echo $p->id_periode.'/'. 0; ?>" class="btn btn-md btn-danger" title="Tutup Pengisian Laporan" onclick="return confirm('Apakah Anda Ingin Menonaktifkan Seluruh Pengisian Laporan?')"><i class="fa fa-eye-slash"></i> >> Tutup Semua Upload Laporan</a>
                         <br />
-                        <a href="<?php echo base_url() ?>MasterBkd/UpdateStatusLaporanAll/<?php echo $p->id_periode.'/'. 1; ?>" class="btn btn-md btn-primary" title="Tutup Pengisian Rencana Kerja Dosen" onclick="return confirm('Apakah Anda Ingin Mengaktifkan Seluruh Pengisian Rencana Kerja?')"><i class="fa fa-eye"></i> >> Aktifkan Semua Upload Laporan</a>
+                        <a href="<?php echo base_url() ?>MasterBkd/UpdateStatusLaporanAll/<?php echo $p->id_periode.'/'. 1; ?>" class="btn btn-md btn-primary" title="Buka Pengisian Laporan" onclick="return confirm('Apakah Anda Ingin Mengaktifkan Seluruh Pengisian Laporan?')"><i class="fa fa-eye"></i> >> Aktifkan Semua Upload Laporan</a>
                     </fieldset>
                   </div>
                 </div>

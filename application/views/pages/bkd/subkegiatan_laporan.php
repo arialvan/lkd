@@ -11,13 +11,14 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
                   <div class="x_panel" style="">
                   <div class="x_title">
-                    <h3>Upload File PDF (Max 5Mb)</h3>
+                    <h3 data-step="2" data-intro="File harus PDF dan besar file Max 5MB">Upload File PDF (Max 5Mb)</h3>
+                    <a class="" href="javascript:void(0);" onclick="javascript:introJs().start();"> <span class="btn btn-md btn-danger">BACA Petunjuk Upload Laporan >></span> </a>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                     </ul>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="x_content" data-step="1" data-intro="Ini adalah syarat file yang harus di upload">
                     <br />
                     <?php foreach ($subkegiatan as $key); ?>
                     <form class="form form-horizontal" role="form" method="post" action="<?php echo base_url(); ?>RencanaKerja/InsertLaporan" enctype="multipart/form-data">
@@ -47,20 +48,20 @@
                                    </div>
                                </div>
                       <?php } ?>
-                      <div class="form-group">
+                      <div class="form-group" data-step="3" data-intro="Centang apabila di laporkan untuk Kewajiban BKD Dosen">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">
-                            Centang Sebagai Syarat Laporan BKD <br />
+                            Centang Sebagai Kewajiban BKD Dosen <br />
                         </label>
                           <div class="col-md-6 col-sm-6 col-xs-12">
                               <input type="checkbox" name="lapor_sebagai_bkd" value="1" style="width:30px; height:30px;" /><br />
-                              <span class="text text-danger small">*Kosongkan saja apabila tidak di laporkan untuk syarat BKD</span>
+                              <span class="text text-danger small">*Centang apabila di laporkan untuk Kewajiban BKD Dosen</span>
                           </div>
                       </div>
                       <div class="ln_solid"></div>
                       <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                           <button class="btn btn-primary" type="reset">Reset</button>
-                          <button type="submit" id="i_submit" class="btn btn-success simpan">Submit</button>
+                          <button type="submit" id="i_submit" class="btn btn-success simpan" data-step="4" data-intro="Klik Submit untuk Upload Laporan">Submit</button>
                         </div>
                       </div>
                     </form>

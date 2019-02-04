@@ -309,6 +309,45 @@
   </div>
 </div>
 
+
+<div class="modal fade" id="TutupRencana" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Rencana Kerja</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+          <div id="field">
+          <div id="field0">
+
+          <div class="form-group">
+            <div class="col-sm-12">
+              <h4>Pengisian Rencana Kerja sudah tutup. Silahkan ke Menu bantuan untuk menghubungi Admin.</h4>
+            </div>
+          </div>
+
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-4">
+            <!-- <button id="add-more" name="add-more" class="btn btn-primary">+ Tambah Form</button> -->
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
                 <div class="form-group">
                   <div class="col-sm-12 col-md-12 col-xs-12" data-step="1" data-intro="Ini adalah Tab Menu Rencana Kerja yang sudah di kategorikan">
                       <ul class="nav nav-tabs" id="myTab">
@@ -331,9 +370,18 @@
                                         <a class="" href="javascript:void(0);" onclick="javascript:introJs().start();">Silahkan <i class="btn btn-sm btn-danger">BACA</i> Petunjuk Pengisian Rencana Kerja >></a>
                                         <hr />
                                     </fieldset>
-                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" data-step="2" data-intro="Klik tombol ini untuk mengisi rencana kerja.">
-                                      + Isi Kegiatan
-                                    </button>
+                                    <?php
+                                      foreach ($filter_button as $bt);
+                                      if($bt->rk_dosen==1){
+                                    ?>
+                                      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" data-step="2" data-intro="Klik tombol ini untuk mengisi rencana kerja.">
+                                        + Isi Kegiatan
+                                      </button>
+                                    <?php }else{ ?>
+                                      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#TutupRencana" data-step="2" data-intro="Klik tombol ini untuk mengisi rencana kerja.">
+                                        + Isi Kegiatan
+                                      </button>
+                                    <?php } ?>
                                     <ul class="nav navbar-right panel_toolbox">
                                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                                     </ul>
@@ -418,9 +466,18 @@
                               <div id="penelitian_tab" class="tab-pane fade">
                                 <div class="x_panel">
                                   <div class="x_title">
-                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
-                                      + Isi Kegiatan
-                                    </button>
+                                    <?php
+                                      foreach ($filter_button as $bt);
+                                      if($bt->rk_dosen==1){
+                                    ?>
+                                      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" data-step="2" data-intro="Klik tombol ini untuk mengisi rencana kerja.">
+                                        + Isi Kegiatan
+                                      </button>
+                                    <?php }else{ ?>
+                                      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#TutupRencana" data-step="2" data-intro="Klik tombol ini untuk mengisi rencana kerja.">
+                                        + Isi Kegiatan
+                                      </button>
+                                    <?php } ?>
                                     <ul class="nav navbar-right panel_toolbox">
                                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                                     </ul>
@@ -506,9 +563,18 @@
                               <div id="pengabdian_tab" class="tab-pane fade">
                                 <div class="x_panel">
                                   <div class="x_title">
-                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
-                                      + Isi Kegiatan
-                                    </button>
+                                    <?php
+                                      foreach ($filter_button as $bt);
+                                      if($bt->rk_dosen==1){
+                                    ?>
+                                      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" data-step="2" data-intro="Klik tombol ini untuk mengisi rencana kerja.">
+                                        + Isi Kegiatan
+                                      </button>
+                                    <?php }else{ ?>
+                                      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#TutupRencana" data-step="2" data-intro="Klik tombol ini untuk mengisi rencana kerja.">
+                                        + Isi Kegiatan
+                                      </button>
+                                    <?php } ?>
                                     <ul class="nav navbar-right panel_toolbox">
                                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                                     </ul>
@@ -593,9 +659,18 @@
                               <div id="penunjang_tab" class="tab-pane fade">
                                 <div class="x_panel">
                                   <div class="x_title">
-                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
-                                      + Isi Kegiatan
-                                    </button>
+                                    <?php
+                                      foreach ($filter_button as $bt);
+                                      if($bt->rk_dosen==1){
+                                    ?>
+                                      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" data-step="2" data-intro="Klik tombol ini untuk mengisi rencana kerja.">
+                                        + Isi Kegiatan
+                                      </button>
+                                    <?php }else{ ?>
+                                      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#TutupRencana" data-step="2" data-intro="Klik tombol ini untuk mengisi rencana kerja.">
+                                        + Isi Kegiatan
+                                      </button>
+                                    <?php } ?>
                                     <ul class="nav navbar-right panel_toolbox">
                                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                                     </ul>

@@ -142,6 +142,7 @@
                             <li><a data-toggle="tab" href="#penelitian_tab" class="bg-primary">PENELITIAN</a></li>
                             <li><a data-toggle="tab" href="#pengabdian_tab" class="bg-primary">PENGABDIAN</a></li>
                             <li><a data-toggle="tab" href="#penunjang_tab" class="bg-primary">PENUNJANG</a></li>
+                            <li><a data-toggle="tab" href="#selesai_tab" class="bg-primary">SELESAI</a></li>
                         </ul>
                       </div>
                   </div>
@@ -298,9 +299,16 @@
                                <input type="button" onclick="uncek_pendidikan(this.form.cekbox)" value="Clear All" class="btn btn-sm btn-danger" /> <br /><br />
                                <input type="hidden" name="nip" value="<?php echo $this->uri->segment(3) ?>" />
                             </div>
-                            </form>
 
-                            <button type="submit" form="nameform" class="btn btn-lg btn-success" value="Submit" data-step="5" data-intro="Tekan tombol Approved untuk menyetujui Rencana Kerja.">Approved Rencana Kerja</button>
+                              <?php
+                                foreach($cek_approve as $ca);
+                                if($ca->p_kaprodi==0){
+                              ?>
+                                <button type="submit" form="nameform" class="btn btn-lg btn-success" value="Submit" data-step="5" data-intro="Tekan tombol Approved untuk menyetujui Rencana Kerja.">Approved Rencana Kerja</button>
+                              <?php
+                              }else{ echo '<h3>Sudah Diperiksa</h3>';}
+                              ?>
+                              </form>
                             <div id="result"></div>
                           </div>
                           <div class="clearfix"></div>
@@ -455,7 +463,14 @@
                                <input type="button" onclick="cek_penelitian(this.form.cekbox1)" value="Select All"  class="btn btn-sm btn-danger" />
                                <input type="button" onclick="uncek_penelitian(this.form.cekbox1)" value="Clear All" class="btn btn-sm btn-danger" /> <br /><br />
                                <input type="hidden" name="nip" value="<?php echo $this->uri->segment(3) ?>" />
-                               <button type="submit" class="btn btn-lg btn-success">Approved Rencana Kerja</button>
+                               <?php
+                                 foreach($cek_approve as $ca);
+                                 if($ca->p_kaprodi==0){
+                               ?>
+                                 <button type="submit" class="btn btn-lg btn-success">Approved Rencana Kerja</button>
+                               <?php
+                               }else{ echo '<h3>Sudah Diperiksa</h3>';}
+                               ?>
                             </form>
                           </div>
                           <div class="clearfix"></div>
@@ -610,7 +625,15 @@
                                <input type="button" onclick="cek_pengabdian(this.form.cekbox2)" value="Select All"  class="btn btn-sm btn-danger" />
                                <input type="button" onclick="uncek_pengabdian(this.form.cekbox2)" value="Clear All" class="btn btn-sm btn-danger" /> <br /><br />
                                <input type="hidden" name="nip" value="<?php echo $this->uri->segment(3) ?>" />
-                               <button type="submit" class="btn btn-lg btn-success">Approved Rencana Kerja</button>
+                               <?php
+                                 foreach($cek_approve as $ca);
+                                 if($ca->p_kaprodi==0){
+                               ?>
+                                 <button type="submit" class="btn btn-lg btn-success">Approved Rencana Kerja</button>
+                               <?php
+                               }else{ echo '<h3>Sudah Diperiksa</h3>';}
+                               ?>
+
                             </form>
                           </div>
                           <div class="clearfix"></div>
@@ -765,10 +788,39 @@
                                <input type="button" onclick="cek_penunjang(this.form.cekbox3)" value="Select All"  class="btn btn-sm btn-danger" />
                                <input type="button" onclick="uncek_penunjang(this.form.cekbox3)" value="Clear All" class="btn btn-sm btn-danger" /> <br /><br />
                                <input type="hidden" name="nip" value="<?php echo $this->uri->segment(3) ?>" />
-                               <button type="submit" class="btn btn-lg btn-success">Approved Rencana Kerja</button>
+
+                               <?php
+                                 foreach($cek_approve as $ca);
+                                 if($ca->p_kaprodi==0){
+                               ?>
+                                 <button type="submit" class="btn btn-lg btn-success">Approved Rencana Kerja</button>
+                               <?php
+                               }else{ echo '<h3>Sudah Diperiksa</h3>';}
+                               ?>
                             </form>
                           </div>
                           <div class="clearfix"></div>
+                        </div>
+                      </div>
+
+                      <div id="selesai_tab" class="tab-pane fade">
+                        <div class="x_panel">
+                          <div class="x_title">
+                            <ul class="nav navbar-right panel_toolbox">
+                              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                          </div>
+                          <div class="x_content">
+                            <?php
+                              foreach($cek_approve as $ca);
+                              if($ca->p_kaprodi==0){
+                            ?>
+                              <a href="<?php echo base_url() ?>Verifikator/ProdiApproved/<?php echo $this->uri->segment(3) ?>" class="btn btn-md btn-success">Klik >> Selesai Memeriksa</a>
+                            <?php }else{ ?>
+                              <a href="<?php echo base_url() ?>Verifikator/ProdiReset/<?php echo $this->uri->segment(3).'/'.$ca->id_periode ?>" class="btn btn-md btn-danger">Klik >> Reset Semua Pemeriksaan</a>
+                            <?php } ?>
+                          </div>
                         </div>
                       </div>
                   </div>

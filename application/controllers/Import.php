@@ -10,6 +10,7 @@ class Import extends CI_Controller
                     //$this->load->model('upload_model');//To Upload file in a directory
                     $this->load->model('M_excel_data_insert_model');
                     $this->load->model('M_dosen');
+                    $this->load->model('M_rencanakerja');
                     $this->acl = $this->session->userdata('acl');
         }
 
@@ -274,6 +275,51 @@ public	function ExcelDataAssesor()	{
                                 );
             //echo '<pre>' . var_export($data_user, true) . '</pre>';
             $this->M_excel_data_insert_model->Add_Assesor($data_user);
+
+          }
+            unlink('././uploads/excel/'.$file_name); //File Deleted After uploading in database .
+             //redirect(base_url() . "Import");
+
+}
+
+public	function ExcelUpdateAssesor()	{
+  $periode = $this->M_rencanakerja->show_periode_aktif();
+  foreach ($periode as $keys);
+  $id_periode   = $keys->id_periode; //Periode Aktif
+//Path of files were you want to upload on localhost (C:/xampp/htdocs/ProjectName/uploads/excel/)
+         $configUpload['upload_path'] = FCPATH.'uploads/excel/';
+         $configUpload['allowed_types'] = 'xls|xlsx|csv';
+         $configUpload['max_size'] = '10000';
+         $this->load->library('upload', $configUpload);
+         $this->upload->do_upload('userfile');
+         $upload_data = $this->upload->data(); //Returns array of containing all of the data related to the file you uploaded.
+         $file_name = $upload_data['file_name']; //uploded file name
+         $extension=$upload_data['file_ext'];    // uploded file extension
+
+    //$objReader =PHPExcel_IOFactory::createReader('Excel5');     //For excel 2003
+        $objReader= PHPExcel_IOFactory::createReader('Excel2007');	// For excel 2007
+    //Set to read only
+        $objReader->setReadDataOnly(true);
+    //Load excel file
+        $objPHPExcel=$objReader->load(FCPATH.'uploads/excel/'.$file_name);
+        $totalrows=$objPHPExcel->setActiveSheetIndex(0)->getHighestRow();   //Count Numbe of rows avalable in excel
+        $objWorksheet=$objPHPExcel->setActiveSheetIndex(0);
+    //loop from first data untill last data
+          for($i=2;$i<=$totalrows;$i++)
+          {
+                $nip            =$objWorksheet->getCellByColumnAndRow(0,$i)->getValue();
+                $assesor_1      =$objWorksheet->getCellByColumnAndRow(1,$i)->getValue();
+                $assesor_2      =$objWorksheet->getCellByColumnAndRow(2,$i)->getValue();
+                $ketua_prodi    =$objWorksheet->getCellByColumnAndRow(3,$i)->getValue();
+
+                $data_user=array(   'assesor_1'=>$assesor_1,
+                                    'assesor_2'=>$assesor_2,
+                                    'ketua_prodi'=>$ketua_prodi
+                                );
+                $where = array('nip' => $nip, 'id_periode' => $id_periode);
+            echo '<pre>' . var_export($data_user, true) . '</pre>';
+            $this->M_rencanakerja->update_rencana($where, $data_user, 'verifikator');
+            //$this->M_excel_data_insert_model->Add_Assesor($data_user);
 
           }
             unlink('././uploads/excel/'.$file_name); //File Deleted After uploading in database .

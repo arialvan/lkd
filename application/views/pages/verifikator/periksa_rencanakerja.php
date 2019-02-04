@@ -65,6 +65,8 @@
                                                 echo '<span class="text text-danger"><b>Disetujui Assesor 2</b></span>';
                                             }elseif($dt->statuslaporan==1){
                                                 echo '<span class="text text-danger"><b>Sudah Upload Laporan</b></span>';
+                                            }elseif($dt->p_kaprodi==1){
+                                                echo '<span class="text text-danger"><b>Selesai Di Periksa Prodi</b></span>';
                                             }else{echo '<span><b>Diperiksa Prodi</b></span>';}
                             ?>
                           </td>

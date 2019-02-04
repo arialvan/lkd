@@ -385,6 +385,16 @@ function show_viewpages2(){
   return $query;
 }
 
+function cek_sudah_approve($id){
+  $this->db->select('verifikator.id_periode,verifikator.p_kaprodi')
+                  ->from('verifikator')
+                  ->join('periode_lkd','verifikator.id_periode=periode_lkd.id_periode')
+                  ->where('periode_lkd.status=', 1)
+                  ->where('verifikator.nip=', $id);
+  $query=$this->db->get()->result();
+  return $query;
+}
+
 function show_file($id)
 {
   // $ex = explode('#',$id);
@@ -535,7 +545,14 @@ function show_tanpa_syarat_penunjang($id)
 
 
 //Update
+
 function update_pegawai($where,$data,$table)
+{
+    $this->db->where($where);
+    $this->db->update($table,$data);
+}
+
+function update_bkdkegiatan($where,$data,$table)
 {
     $this->db->where($where);
     $this->db->update($table,$data);
@@ -563,6 +580,11 @@ function update_periksa_ketuaprodi(){
   }
 }
 
+function update_kprodi($where,$data,$table)
+{
+    $this->db->where($where);
+    $this->db->update($table,$data);
+}
 
 function syaratbkd($id)
 {

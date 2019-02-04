@@ -117,21 +117,9 @@
 
                   <fieldset>
                     <legend></legend>
-                        <h5>Apabila sudah selesai melakukan seluruh Pelaporan(Upload File) atau selesai melakukan perbaikan laporan, <br />Silahkan Tekan tombol <b>"Selesai Laporan"</b> di bawah ini.</h5><br />
-                        <?php
-                          foreach($dilaporkan as $dl);
-                          foreach($verifikator as $vr);
-                        ?>
-                            <?php if ($dl->di_laporkan==1 && $vr->statuslaporan==0) { ?>
-                                <a href="<?php echo base_url() ?>RencanaKerja/SelesaiLaporan" class="btn btn-md btn-danger" onClick="return confirm('Apakah anda sudah selesai input laporan?')"> <b>Selesai Laporan</b> </a>
-                            <?php }elseif ($vr->p_assesor1==2) { ?>
-                                <a href="<?php echo base_url() ?>RencanaKerja/SelesaiLaporan_1" class="btn btn-md btn-danger" onClick="return confirm('Apakah anda sudah selesai memperbaiki laporan?')"> <b>Selesai Perbaikan Laporan</b> </a>
-                            <?php }elseif ($vr->p_assesor2==2) { ?>
-                                <a href="<?php echo base_url() ?>RencanaKerja/SelesaiLaporan_2" class="btn btn-md btn-danger" onClick="return confirm('Apakah anda sudah selesai memperbaiki laporan?')"> <b>Selesai Perbaikan Laporan</b> </a>
-                            <?php }else{ ?>
-                                <a href="#" class="btn btn-md btn-danger" onClick="return confirm('Maaf Laporan Masih di Tutup')"> <b>Selesai Laporan</b> </a>
-                            <?php } ?>
+                      <a class="" href="javascript:void(0);" onclick="javascript:introJs().start();"> <span class="btn btn-md btn-danger">BACA Petunjuk Upload Laporan >></span> </a>
                     </fieldset>
+
               </div>
             </div>
 
@@ -149,9 +137,9 @@
                       </ul>
                       <div class="clearfix"></div>
                     </div>
-                    <div class="x_content">
+                    <div class="x_content" data-step="2" data-intro="Pilih All untuk menampilkan seluruh Rencana Kerja">
                       <div class="form-group">
-                        <table class="table table-striped table-bordered myTable display nowrap" style="width:100%">
+                        <table class="table table-striped table-bordered myTable display nowrap" style="width:100%" data-step="1" data-intro="Ini adalah seluruh List Rencana Kerja Anda">
                           <thead>
                             <tr>
                               <th>#</th>
@@ -165,24 +153,29 @@
                                 <tr>
                                   <th scope="row"><?php echo $no++; ?></th>
                                   <td><?php echo $option->kegiatan; ?></td>
-                                  <td>
+                                  <td data-step="3" data-intro="Jika Laporan telah dibuka, maka status pada kolom ini adalah (Pelaporan BKD telah di buka)">
                                     <?php
                                     if($option->app_ketuaprodi==1 && $option->di_laporkan==1){
                                         echo '<span class="text text-success">Pelaporan BKD telah di buka</span>';
                                     }elseif($option->app_ketuaprodi==1 && $option->di_laporkan==0){
                                         echo '<span class="text text-primary">Telah di setujui Ketua Prodi</span>';
+                                    }elseif($option->app_ketuaprodi==1 && $option->di_laporkan==2){
+                                        echo '<span class="text text-danger text-sm">Sudah Upload Laporan</span>';
                                     }else{
                                         echo '<span class="text text-danger">Menunggu persetujuan Ketua Prodi</span>';
                                     }
                                     ?>
                                   </td>
-                                  <td>
+                                  <td data-step="4" data-intro="Dan, akan muncul icon panah berwarna Biru. Klik untuk menuju link upload Berkas">
                                     <?php
                                     if($option->app_ketuaprodi==1 && $option->di_laporkan==1){
                                         $attr = array('target'=>'_blank');
                                         echo anchor('RencanaKerja/EditLaporan/'.$option->id_subkegiatan,'<span class="text text-primary" title="Upload Berkas"><i class="glyphicon glyphicon-arrow-right"></i></span>',$attr);
                                     }elseif($option->app_ketuaprodi==1 && $option->di_laporkan==0){ ?>
                                         <a href="#" onClick="return confirm('Maaf Laporan Periode Aktif masih di tutup')"><i class="fa fa-files-o" title="Laporan periode ini masih di tutup"></i></a>
+                                    <?php
+                                    }elseif($option->app_ketuaprodi==1 && $option->di_laporkan==2){ ?>
+                                        <a href="#" onClick="return confirm('Laporan telah di upload, silahkan lihat pada tabel di bawah sesuai kategori BKD')"><i class="fa fa-check-square-o" title="Sudah Upload Laporan"></i></a>
                                     <?php
                                     }else{
                                         echo '<span class="text text-danger"><i class="fa fa-times" title="Menunggu Persetujuan Ketua Prodi"></i></span>';
@@ -193,6 +186,23 @@
                               <?php } ?>
                           </tbody>
                         </table>
+                        <fieldset>
+                          <legend></legend>
+                              <h5>Apabila sudah selesai melakukan seluruh Pelaporan(Upload File) atau selesai melakukan perbaikan laporan, <br />Silahkan Tekan tombol <b>"Selesai Laporan"</b> di bawah ini.</h5><br />
+                              <?php
+                                foreach($dilaporkan as $dl);
+                                foreach($verifikator as $vr);
+                              ?>
+                                  <?php if ($dl->di_laporkan==1 && $vr->statuslaporan==0) { ?>
+                                      <a href="<?php echo base_url() ?>RencanaKerja/SelesaiLaporan" class="btn btn-md btn-danger" data-step="5" data-intro="Terakhir, Apabila sudah selesai upload seluruh berkas Rencana Kerja" onClick="return confirm('Apakah anda sudah selesai input seluruh laporan?')"> <b>Selesai Upload Seluruh Laporan</b> </a>
+                                  <?php }elseif ($vr->p_assesor1==2) { ?>
+                                      <a href="<?php echo base_url() ?>RencanaKerja/SelesaiLaporan_1" class="btn btn-md btn-danger" onClick="return confirm('Apakah anda sudah selesai memperbaiki laporan?')"> <b>Selesai Perbaikan Laporan</b> </a>
+                                  <?php }elseif ($vr->p_assesor2==2) { ?>
+                                      <a href="<?php echo base_url() ?>RencanaKerja/SelesaiLaporan_2" class="btn btn-md btn-danger" onClick="return confirm('Apakah anda sudah selesai memperbaiki laporan?')"> <b>Selesai Perbaikan Laporan</b> </a>
+                                  <?php }else{ ?>
+                                      <a href="#" class="btn btn-md btn-danger" data-step="5" data-intro="Terakhir, Apabila sudah selesai upload seluruh berkas Rencana Kerja. Silahkan Tekan Tombol ini." onClick="return confirm('Maaf Laporan Masih di Tutup')"> <b>Selesai Upload Seluruh Laporan</b> </a>
+                                  <?php } ?>
+                          </fieldset>
                         </div>
                     </div>
                     <div class="clearfix"></div>
@@ -204,6 +214,10 @@
 <!-- TAB PANEL  -->
 <br /><br />
         <div class="row">
+          <fieldset>
+            <legend></legend>
+                <h2>List Laporan Periode Aktif</h2><br />
+            </fieldset>
           <div class="form-group">
             <div class="col-sm-12 col-md-12 col-xs-12">
                 <ul class="nav nav-tabs" id="myTab">

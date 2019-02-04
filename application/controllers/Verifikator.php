@@ -116,6 +116,7 @@ function InsertVerifikator()
 
 function ApprovalKetuaProdi()
 {
+		$nip    = $this->input->post('nip');
     foreach($this->input->post('cekbox') as $id => $key)
         {
         //Update tabel sub_kegiatan
@@ -125,11 +126,11 @@ function ApprovalKetuaProdi()
             $this->M_verifikator->update_approval($where, $data, 'bkd_subkegiatan');
 
 				//Update Tabel verifikator
-						$nip    = $this->input->post('nip');
-            $data1  = array('p_kaprodi' => 1);
-            $where1 = array('nip' => $nip);
-						//var_dump($where1);
-            $this->M_verifikator->update_approval($where1, $data1, 'verifikator');
+
+            // $data1  = array('p_kaprodi' => 1);
+            // $where1 = array('nip' => $nip);
+						// //var_dump($where1);
+            // $this->M_verifikator->update_approval($where1, $data1, 'verifikator');
         }
 				echo "Update Succes";
 				redirect('Verifikator/PeriksaLaporanDetail/'.$nip);
@@ -137,6 +138,7 @@ function ApprovalKetuaProdi()
 
 function ApprovalKetuaProdi1()
 {
+	$nip    = $this->input->post('nip');
     foreach($this->input->post('cekbox1') as $id => $key)
         {
         //Update tabel sub_kegiatan
@@ -146,11 +148,11 @@ function ApprovalKetuaProdi1()
             $this->M_verifikator->update_approval($where, $data, 'bkd_subkegiatan');
 
 				//Update Tabel verifikator
-						$nip    = $this->input->post('nip');
-            $data1  = array('p_kaprodi' => 1);
-            $where1 = array('nip' => $nip);
-						//var_dump($where1);
-            $this->M_verifikator->update_approval($where1, $data1, 'verifikator');
+
+            // $data1  = array('p_kaprodi' => 1);
+            // $where1 = array('nip' => $nip);
+						// //var_dump($where1);
+            // $this->M_verifikator->update_approval($where1, $data1, 'verifikator');
         }
 
 						echo "Update Succes";
@@ -159,6 +161,7 @@ function ApprovalKetuaProdi1()
 
 function ApprovalKetuaProdi2()
 {
+	$nip    = $this->input->post('nip');
     foreach($this->input->post('cekbox2') as $id => $key)
         {
         //Update tabel sub_kegiatan
@@ -168,11 +171,11 @@ function ApprovalKetuaProdi2()
             $this->M_verifikator->update_approval($where, $data, 'bkd_subkegiatan');
 
 				//Update Tabel verifikator
-						$nip    = $this->input->post('nip');
-            $data1  = array('p_kaprodi' => 1);
-            $where1 = array('nip' => $nip);
-						//var_dump($where1);
-            $this->M_verifikator->update_approval($where1, $data1, 'verifikator');
+
+            // $data1  = array('p_kaprodi' => 1);
+            // $where1 = array('nip' => $nip);
+						// //var_dump($where1);
+            // $this->M_verifikator->update_approval($where1, $data1, 'verifikator');
         }
 
 						echo "Update Succes";
@@ -181,6 +184,7 @@ function ApprovalKetuaProdi2()
 
 function ApprovalKetuaProdi3()
 {
+	$nip    = $this->input->post('nip');
     foreach($this->input->post('cekbox3') as $id => $key)
         {
         //Update tabel sub_kegiatan
@@ -190,11 +194,11 @@ function ApprovalKetuaProdi3()
             $this->M_verifikator->update_approval($where, $data, 'bkd_subkegiatan');
 
 				//Update Tabel verifikator
-						$nip    = $this->input->post('nip');
-            $data1  = array('p_kaprodi' => 1);
-            $where1 = array('nip' => $nip);
-						//var_dump($where1);
-            $this->M_verifikator->update_approval($where1, $data1, 'verifikator');
+
+            // $data1  = array('p_kaprodi' => 1);
+            // $where1 = array('nip' => $nip);
+						// //var_dump($where1);
+            // $this->M_verifikator->update_approval($where1, $data1, 'verifikator');
         }
 
 						echo "Update Succes";
@@ -499,6 +503,7 @@ public function PeriksaLaporanDetail($id)
 	$data['pengabdian'] = $this->M_verifikator->show_rencana_pengabdian($id);
 	$data['penunjang'] = $this->M_verifikator->show_rencana_penunjang($id);
 	$data['files'] = $this->M_verifikator->show_file($id);
+	$data['cek_approve'] = $this->M_verifikator->cek_sudah_approve($id);
 	$data['title'] = 'Rekap Laporan Kerja Dosen';
 	// if($this->M_verifikator->show_rekap_dosen_rk($id)>0){
 	// 	$data['rekap_dosen'] = $this->M_verifikator->show_rekap_dosen_rk($id);
@@ -533,7 +538,7 @@ public function PeriksaLaporanDetailPDF($id)
 	foreach ($datas as $keys);
 			$p = explode('_',$keys->file);
 			$nip = $p[0];
-			$filename = "./uploads/".$nip."/".$keys->file;
+			$filename = "./uploads/".$nip."/".date("Y")."/".date("m")."/".$keys->file;
 
 			//New Tabbrowser
 			header("Content-type: application/pdf");
@@ -666,6 +671,29 @@ function UpdateStatusLaporan($id)
 	$data2  = array('statuslaporan' => 0);
 	$where2 = array('id_periode' => 2);
 	$this->M_verifikator->UpdateSL($where2, $data2, 'verifikator');
+}
+
+function ProdiApproved($id)
+{
+	$data  = array('p_kaprodi' => 1);
+	$where = array('nip' => $id);
+	$this->M_verifikator->update_kprodi($where, $data, 'verifikator');
+	redirect('Verifikator/PeriksaLaporanDetail/'.$id);
+}
+
+function ProdiReset($id,$ids)
+{
+
+	$data  = array('p_kaprodi' => 0);
+	$where = array('nip' => $id, 'id_periode' => $ids);
+	$this->M_verifikator->update_kprodi($where, $data, 'verifikator');
+
+	//Reset Sub Kegiatan
+
+	$data2  = array('app_ketuaprodi' => 0, 'status' => 0);
+	$where2 = array('nip' => $id, 'id_periode' => $ids);
+	$this->M_verifikator->update_bkdkegiatan($where2, $data2, 'bkd_subkegiatan');
+	redirect('Verifikator/PeriksaLaporanDetail/'.$id);
 }
 
 //LOGOUT

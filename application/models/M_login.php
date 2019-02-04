@@ -15,8 +15,8 @@ class M_login extends CI_Model {
         // foreach ($querys->result() as $row);
         //           $status_profesi = $row->status_profesi;
         // if($status_profesi==2 || $status_profesi==0){
-            $this->db->select('a.nip,a.password,a.user_level,a.id_kat_dosen,b.nama_peg');
-            $this->db->from('uinar_lkd.profil_dosen a');
+            $this->db->select('a.nip,a.email,a.password,a.user_level,a.id_kat_dosen,b.nama_peg');
+            $this->db->from('uinar_lkd2.profil_dosen a');
             $this->db->join('simpeg.tb_pegawai b', 'a.nip = b.nip', 'left');
             $this->db->where('a.nip', $username);
             $this->db->where('a.password', md5($password));
@@ -30,6 +30,7 @@ class M_login extends CI_Model {
                                     $sess = array(
                                                     'nipp' => $query->nip,
                                                     'username' => $query->nama_peg,
+                                                    'email' => $query->email,
                                                     'user_level' => $query->user_level,
                                                     'kat_dosen' => $query->id_kat_dosen,
                                                     'is_login' => TRUE

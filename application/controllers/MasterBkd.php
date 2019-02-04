@@ -91,9 +91,16 @@ public function index()
 
 	function UpdateStatusLaporanAll()
 	{
+		
 		$data = array('lp_dosen' => $this->uri->segment(4));
 		$where = array('id_periode' =>$this->uri->segment(3));
 		$this->M_master->update_status_lp($where,$data, 'verifikator');
+
+		//Buka semua laporan periode Aktif
+		$data2 = array('di_laporkan' => $this->uri->segment(4));
+		$where2 = array('id_periode' =>$this->uri->segment(3));
+		$this->M_master->update_status_lp($where2,$data2, 'bkd_subkegiatan');
+
 		echo "Update Succes"; redirect('MasterBkd/SettingRencana','refresh');
 	}
 /*BKD*/
@@ -293,6 +300,8 @@ function UpdateSubBkd()
 									'poin' => $this->input->post('poin')
                 );
 	}
+
+	  // echo '<pre>' . var_export($data, true) . '</pre>';
 
 				        $where = array('id_kegiatan' => $this->input->post('id_kegiatan'));
 				        $res   = $this->M_masterbkd->update_subbkd($where, $data, 'bkd_kegiatan');

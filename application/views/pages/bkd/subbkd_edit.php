@@ -95,6 +95,26 @@
                         </div>
 
                         <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Syarat Bukti Fisik(File)<span class="required">*</span>
+                          </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                                  <?php
+                                    $syarat = explode('#',$key->syarat_file);
+                                    $arr_syarat = count($syarat);
+                                    
+                                    for($i=0;$i<=$arr_syarat;$i++)
+                                    {
+                                  ?>
+                                  <input type="checkbox" class="largerCheckbox" name="syarat_file[]" value="<?php echo @$syarat[$i]; ?>" checked="checked" /><?php echo  @$syarat[$i]; ?> <br />
+                                  <?php
+                                    }
+                                  ?>
+
+
+                          </div>
+                        </div>
+
+                        <div class="form-group">
                           <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Pilih Syarat untuk Bukti Fisik<span class="required">*</span>
                           </label>
                           <div class="col-md-6 col-sm-6 col-xs-12">

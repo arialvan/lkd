@@ -101,11 +101,11 @@
                                   <?php
                                     $syarat = explode('#',$key->syarat_file);
                                     $arr_syarat = count($syarat);
-                                    
+
                                     for($i=0;$i<=$arr_syarat;$i++)
                                     {
                                   ?>
-                                  <input type="checkbox" class="largerCheckbox" name="syarat_file[]" value="<?php echo @$syarat[$i]; ?>" checked="checked" /><?php echo  @$syarat[$i]; ?> <br />
+                                  <input type="checkbox" class="largerCheckbox" name="syarat_file[]" value="<?php echo @$syarat[$i]; ?>" checked /><?php echo  @$syarat[$i]; ?> <br />
                                   <?php
                                     }
                                   ?>

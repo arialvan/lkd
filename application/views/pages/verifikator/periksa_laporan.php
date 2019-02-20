@@ -50,9 +50,8 @@
                                             if($dt->p_assesor1==1 && $dt->p_assesor2==1){
                                                 echo '<span class="text text-danger"><b>Disetujui Assesor 1</b></span> <br />
                                                       <span class="text text-danger"><b>Disetujui Assesor 2</b></span>';
-                                            }elseif($dt->p_assesor1==2){
-                                                echo '<span class="text text-danger"><b>Ditolak Assesor 1</b></span>';
-                                            }elseif($dt->p_assesor2==2){
+                                            }elseif($dt->p_assesor1==2 && $dt->p_assesor2==2){
+                                                echo '<span class="text text-danger"><b>Ditolak Assesor 1</b></span><br />';
                                                 echo '<span class="text text-danger"><b>Ditolak Assesor 2</b></span>';
                                             }elseif($dt->p_assesor1==1 && ($dt->p_assesor2==2 || $dt->p_assesor2==0)){
                                                 echo '<span class="text text-danger"><b>Disetujui Assesor 1</b></span><br />
@@ -60,13 +59,11 @@
                                             }elseif($dt->p_assesor2==1 && ($dt->p_assesor1==2 || $dt->p_assesor1==0)){
                                               echo '<span class="text text-danger"><b>Disetujui Assesor 2</b></span><br />
                                                     <span class="text text-danger"><b>Proses Assesor 1</b></span>';
-                                            }elseif($dt->p_assesor1==1){
-                                                echo '<span class="text text-danger"><b>Disetujui Assesor 1</b></span>';
-                                            }elseif($dt->p_assesor2==1){
-                                                echo '<span class="text text-danger"><b>Disetujui Assesor 2</b></span>';
                                             }elseif($dt->statuslaporan==1){
                                                 echo '<span class="text text-danger"><b>Sudah Upload Laporan</b></span>';
-                                            }else{echo '<span><b>Diperiksa Prodi</b></span>';}
+                                            }else{
+                                                echo '<span><b>Sedang Proses Upload Berkas</b></span>';
+                                            }
                             ?>
                           </td>
                           <td>
@@ -76,13 +73,13 @@
                             ?>
                           </td>
                           <td>
-                              <?php
-                                if($dt->statuslaporan==1){
-                                  echo anchor('Verifikator/PeriksaLaporanDetail/'.$dt->nip,'<span class="btn btn-sm btn-primary" title="Lihat Data">Lihat Data</span>');
-                                }else{
-                                  echo '-';
-                                }
-                              ?>
+                            <?php
+                              if($dt->statuslaporan==1){
+                                echo anchor('Verifikator/PeriksaLaporanDetailAssesor/'.$dt->nip,'<span class="btn btn-sm btn-primary" title="Lihat Data">Lihat Data</span>');
+                              }else{
+                                echo '-';
+                              }
+                            ?>
                           </td>
                         </tr>
                         <?php } ?>

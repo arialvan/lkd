@@ -114,6 +114,39 @@ function InsertVerifikator()
             redirect('Verifikator');
 }
 
+
+function AssesorSelesaiMemeriksa($id)
+{
+	$id = $this->uri->segment(3);
+	$nip = $this->session->userdata('nipp');
+	//Cek session
+	$cek = $this->M_verifikator->CekAssesor_1($nip);
+	foreach($cek as $key);
+	//echo $key->assesor_1;
+	if($key->assesor_1==$nip){
+		$data = array('p_assesor1' => 1);
+		$where = array('nip' => $id, 'id_periode' => $key->id_periode);
+		$this->M_verifikator->selesai_laporan($where, $data, 'verifikator');
+		redirect('Verifikator/PeriksaLaporan');
+		//var_dump($where);
+	}elseif($key->assesor_2==$nip){
+		$data = array('p_assesor2' => 1);
+		$where = array('nip' => $id, 'id_periode' => $key->id_periode);
+		$this->M_verifikator->selesai_laporan($where, $data, 'verifikator');
+		redirect('Verifikator/PeriksaLaporan');
+		//var_dump($where);
+	}else{
+		echo '<h2>
+							Error....
+							Anda tidak berhak mengakses.
+					</h2>';
+		echo '<h2><a href="'.base_url().'Verifikator/PeriksaLaporan">KEMBALI</a></h2>';
+		exit;
+	}
+
+
+}
+
 function ApprovalKetuaProdi()
 {
 		$nip    = $this->input->post('nip');
@@ -133,7 +166,7 @@ function ApprovalKetuaProdi()
             // $this->M_verifikator->update_approval($where1, $data1, 'verifikator');
         }
 				echo "Update Succes";
-				redirect('Verifikator/PeriksaLaporanDetail/'.$nip);
+				redirect('Verifikator/PeriksaRencanaKerjaDetail/'.$nip);
 }
 
 function ApprovalKetuaProdi1()
@@ -156,7 +189,7 @@ function ApprovalKetuaProdi1()
         }
 
 						echo "Update Succes";
-						redirect('Verifikator/PeriksaLaporanDetail/'.$nip);
+						redirect('Verifikator/PeriksaRencanaKerjaDetail/'.$nip);
 }
 
 function ApprovalKetuaProdi2()
@@ -179,7 +212,7 @@ function ApprovalKetuaProdi2()
         }
 
 						echo "Update Succes";
-						redirect('Verifikator/PeriksaLaporanDetail/'.$nip);
+						redirect('Verifikator/PeriksaRencanaKerjaDetail/'.$nip);
 }
 
 function ApprovalKetuaProdi3()
@@ -202,7 +235,7 @@ function ApprovalKetuaProdi3()
         }
 
 						echo "Update Succes";
-						redirect('Verifikator/PeriksaLaporanDetail/'.$nip);
+						redirect('Verifikator/PeriksaRencanaKerjaDetail/'.$nip);
 }
 
 public function EditVerifikator($id)
@@ -273,18 +306,6 @@ function HapusVerifikator($id) {
 //PENILAIAN
 public function PeriksaRencana()
 {
-	// $ids = $this->session->userdata('nipp');
-	// $data['filter'] = $this->M_dosen->filter($ids);
-	// $data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
-  // $data['name'] = $this->session->userdata('username');
-  // $data['nipp'] = $this->session->userdata('nipp');
-  // $data['level'] = $this->session->userdata('user_level');
-  // $data['pegawai'] = $this->M_verifikator->show_viewpages2();
-  // $data['title'] = 'Data Dosen';
-  // $this->load->view('layout/header_datatables',$data);
-  // $this->load->view('layout/side_menu');
-  // $this->load->view('pages/verifikator/periksa_rencanakerja');
-  // $this->load->view('layout/footer_datatables');
 	$this->load->library('Pustaka');
 	$ids = $this->session->userdata('nipp');
 	$data['filter'] = $this->M_dosen->filter($ids);
@@ -297,9 +318,59 @@ public function PeriksaRencana()
   $data['title'] = 'Data Dosen';
   $this->load->view('layout/header_datatables',$data);
   $this->load->view('layout/side_menu');
-  //$this->load->view('pages/verifikator/periksa_laporan');
   $this->load->view('pages/verifikator/periksa_rencanakerja');
   $this->load->view('layout/footer_datatables');
+}
+
+public function PeriksaLaporanProdi()
+{
+	$this->load->library('Pustaka');
+	$ids = $this->session->userdata('nipp');
+	$data['filter'] = $this->M_dosen->filter($ids);
+	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
+  $data['name'] = $this->session->userdata('username');
+  $data['nipp'] = $this->session->userdata('nipp');
+  $data['level'] = $this->session->userdata('user_level');
+  $data['pegawai'] = $this->M_verifikator->periksa_laporan_prodi();
+	$data['profildosen'] = $this->M_verifikator->profil();
+  $data['title'] = 'Data Dosen';
+  $this->load->view('layout/header_datatables',$data);
+  $this->load->view('layout/side_menu');
+  //$this->load->view('pages/verifikator/periksa_laporan');
+  $this->load->view('pages/verifikator/periksa_laporan_prodi');
+  $this->load->view('layout/footer_datatables');
+}
+
+public function PeriksaLaporanDetailKaprodi($id)
+{
+	$ids = $this->session->userdata('nipp');
+	$data['filter'] = $this->M_verifikator->filter($id);
+	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
+	$this->load->library('Pustaka');
+	$data['name'] = $this->session->userdata('username');
+	$data['nipp'] = $this->session->userdata('nipp');
+	$data['level'] = $this->session->userdata('user_level');
+	$data['count'] = $this->M_verifikator->count_subkegiatan($id);
+	$data['namadosen'] = $this->M_verifikator->profil_dosen_diperiksa($id);
+	$data['profildosen1'] = $this->M_verifikator->profil2($id);
+	$data['profildosen'] = $this->M_verifikator->profil_remunerasi($id);
+	$data['verifikator'] = $this->M_verifikator->show_verifikator_laporandetail($id);
+	$data['syaratbkd'] = $this->M_verifikator->show_syarat_bkd_rk($id);
+	$data['rekap_dosen'] = $this->M_verifikator->show_rekap_dosen_rk($id);
+	$data['sum_poin_pendidikan'] = $this->M_verifikator->show_syarat_subbkd_poin($id);
+	$data['pendidikan'] = $this->M_verifikator->show_pendidikan_prodi($id);
+	$data['penelitian'] = $this->M_verifikator->show_rencana_penelitian_prodi($id);
+	$data['pengabdian'] = $this->M_verifikator->show_rencana_pengabdian_prodi($id);
+	$data['penunjang'] = $this->M_verifikator->show_rencana_penunjang_prodi($id);
+	$data['files'] = $this->M_verifikator->show_file($id);
+	$data['cek_approve'] = $this->M_verifikator->cek_sudah_approve($id);
+	$data['title'] = 'Rekap Laporan Kerja Dosen';
+
+	$this->load->view('layout/header_datatables',$data);
+	$this->load->view('layout/side_menu');
+	$this->load->view('pages/verifikator/periksa_laporan_detail_prodi');
+	$this->load->view('layout/footer_datatables');
+	//return $a;
 }
 
 public function PeriksaRencanaDetail($id)
@@ -361,13 +432,9 @@ function LaporanApproved_1($id)
 
 		$data = array('app_assesor1' => 1);
 	  $where = array('id_subkegiatan' => $id_sub);
-	  $this->M_verifikator->update_appassesor1($where, $data, 'bkd_subkegiatan');
+	  $this->M_verifikator->update_appassesor1($where, $data, 'bkd_subkegiatan_laporan');
 
-		$data2  = array('p_assesor1' => 1);
- 	  $where2 = array('nip' => $nip);
-		$this->M_verifikator->update_statuslaporan($where2, $data2, 'verifikator');
-
-echo "Update Succes"; redirect('Verifikator/PeriksaLaporanDetail/'.$nip);
+echo "Update Succes"; redirect('Verifikator/PeriksaLaporanDetailAssesor/'.$nip);
 }
 
 function LaporanApproved_2($id)
@@ -379,13 +446,23 @@ function LaporanApproved_2($id)
 
 		$data = array('app_assesor2' => 1);
 	  $where = array('id_subkegiatan' => $id_sub);
-	  $this->M_verifikator->update_appassesor1($where, $data, 'bkd_subkegiatan');
+	  $this->M_verifikator->update_appassesor1($where, $data, 'bkd_subkegiatan_laporan');
 
-		$data2  = array('p_assesor2' => 1);
- 	  $where2 = array('nip' => $nip);
-		$this->M_verifikator->update_statuslaporan($where2, $data2, 'verifikator');
+echo "Update Succes"; redirect('Verifikator/PeriksaLaporanDetailAssesor/'.$nip);
+}
 
-echo "Update Succes"; redirect('Verifikator/PeriksaLaporanDetail/'.$nip);
+function LaporanApproved_Kaprodi($id)
+{
+	$ex = explode("-",$id);
+	$id_sub = $ex[0];
+	$nip    = $ex[1];
+	$status = $ex[2];
+
+		$data = array('applaporan_ketuaprodi' => 1);
+	  $where = array('id_subkegiatan' => $id_sub);
+	  $this->M_verifikator->update_appassesor1($where, $data, 'bkd_subkegiatan_laporan');
+
+echo "Update Succes"; redirect('Verifikator/PeriksaLaporanDetailKaprodi/'.$nip);
 }
 
 // function SelesaiLaporan($id)
@@ -467,12 +544,24 @@ public function PeriksaLaporan()
 {
 	$this->load->library('Pustaka');
 	$ids = $this->session->userdata('nipp');
+	//Cek Assesor
+	$cek = $this->M_verifikator->CekAssesor($ids);
+	foreach($cek as $key);
+	if($key->assesor_1==$ids || $key->assesor_2==$ids){
+			$pegawai = $this->M_verifikator->show_viewpages();
+	}elseif($key->assesor_1==$ids){
+			$pegawai = $this->M_verifikator->show_viewpages_1();
+	}elseif($key->assesor_2==$ids){
+			$pegawai = $this->M_verifikator->show_viewpages_2();
+	}else{
+			$pegawai = $this->M_verifikator->show_viewpages();
+	}
 	$data['filter'] = $this->M_dosen->filter($ids);
 	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
   $data['name'] = $this->session->userdata('username');
   $data['nipp'] = $this->session->userdata('nipp');
   $data['level'] = $this->session->userdata('user_level');
-  $data['pegawai'] = $this->M_verifikator->show_viewpages();
+  $data['pegawai'] = $pegawai;
 	$data['profildosen'] = $this->M_verifikator->profil();
   $data['title'] = 'Data Dosen';
   $this->load->view('layout/header_datatables',$data);
@@ -481,7 +570,77 @@ public function PeriksaLaporan()
   $this->load->view('layout/footer_datatables');
 }
 
+//PERIKSA RENCANA KERJA OLEH KETUA PRODI
+public function PeriksaRencanaKerjaDetail($id)
+{
+	$ids = $this->session->userdata('nipp');
+	$data['filter'] = $this->M_verifikator->filter($id);
+	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
+	$this->load->library('Pustaka');
+	$data['name'] = $this->session->userdata('username');
+	$data['nipp'] = $this->session->userdata('nipp');
+	$data['level'] = $this->session->userdata('user_level');
+	$data['count'] = $this->M_verifikator->count_subkegiatan($id);
+	$data['namadosen'] = $this->M_verifikator->profil_dosen_diperiksa($id);
+	$data['profildosen1'] = $this->M_verifikator->profil2($id);
+	$data['profildosen'] = $this->M_verifikator->profil_remunerasi($id);
+	$data['verifikator'] = $this->M_verifikator->show_verifikator_laporandetail($id);
+	$data['syaratbkd'] = $this->M_verifikator->show_syarat_bkd_rk($id);
+	$data['rekap_dosen'] = $this->M_verifikator->show_rekap_dosen_rk($id);
+	$data['sum_poin_pendidikan'] = $this->M_verifikator->show_syarat_subbkd_poin($id);
+	$data['pendidikan'] = $this->M_verifikator->rk_pendidikan_prodi($id);
+	$data['penelitian'] = $this->M_verifikator->rk_penelitian_prodi($id);
+	$data['pengabdian'] = $this->M_verifikator->rk_pengabdian_prodi($id);
+	$data['penunjang'] = $this->M_verifikator->rk_penunjang_prodi($id);
+	$data['files'] = $this->M_verifikator->show_file($id);
+	$data['cek_approve'] = $this->M_verifikator->cek_sudah_approve($id);
+	$data['title'] = 'Rencana Kerja Dosen';
+	$this->load->view('layout/header_datatables',$data);
+	$this->load->view('layout/side_menu');
+	$this->load->view('pages/verifikator/periksa_rencana_kerja_prodi');
+	$this->load->view('layout/footer_datatables');
+	//return $a;
+}
+
+//PERIKSA laporan OLEH KETUA PRODI
 public function PeriksaLaporanDetail($id)
+{
+	$ids = $this->session->userdata('nipp');
+	$data['filter'] = $this->M_verifikator->filter($id);
+	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
+	$this->load->library('Pustaka');
+	$data['name'] = $this->session->userdata('username');
+	$data['nipp'] = $this->session->userdata('nipp');
+	$data['level'] = $this->session->userdata('user_level');
+	$data['count'] = $this->M_verifikator->count_subkegiatan($id);
+	$data['namadosen'] = $this->M_verifikator->profil_dosen_diperiksa($id);
+	$data['profildosen1'] = $this->M_verifikator->profil2($id);
+	$data['profildosen'] = $this->M_verifikator->profil_remunerasi($id);
+	$data['verifikator'] = $this->M_verifikator->show_verifikator_laporandetail($id);
+	$data['syaratbkd'] = $this->M_verifikator->show_syarat_bkd_rk($id);
+	$data['rekap_dosen'] = $this->M_verifikator->show_rekap_dosen_rk($id);
+	$data['sum_poin_pendidikan'] = $this->M_verifikator->show_syarat_subbkd_poin($id);
+	$data['pendidikan'] = $this->M_verifikator->show_pendidikan_prodi($id);
+	$data['penelitian'] = $this->M_verifikator->show_rencana_penelitian_prodi($id);
+	$data['pengabdian'] = $this->M_verifikator->show_rencana_pengabdian_prodi($id);
+	$data['penunjang'] = $this->M_verifikator->show_rencana_penunjang_prodi($id);
+	$data['files'] = $this->M_verifikator->show_file($id);
+	$data['cek_approve'] = $this->M_verifikator->cek_sudah_approve($id);
+	$data['title'] = 'Rekap Laporan Kerja Dosen';
+	// if($this->M_verifikator->show_rekap_dosen_rk($id)>0){
+	// 	$data['rekap_dosen'] = $this->M_verifikator->show_rekap_dosen_rk($id);
+	// }else{
+	// 	$dt = array('Pendidikan' => 0, 'Penelitian' => 0, 'Pengabdian' => 0, 'Penunjang' => 0);
+	// 	$data['rekap_dosen'] = $dt;
+	// }
+	$this->load->view('layout/header_datatables',$data);
+	$this->load->view('layout/side_menu');
+	$this->load->view('pages/verifikator/periksa_laporan_detail');
+	$this->load->view('layout/footer_datatables');
+	//return $a;
+}
+
+public function PeriksaLaporanDetailAssesor($id)
 {
 	$ids = $this->session->userdata('nipp');
 	$data['filter'] = $this->M_verifikator->filter($id);
@@ -503,17 +662,11 @@ public function PeriksaLaporanDetail($id)
 	$data['pengabdian'] = $this->M_verifikator->show_rencana_pengabdian($id);
 	$data['penunjang'] = $this->M_verifikator->show_rencana_penunjang($id);
 	$data['files'] = $this->M_verifikator->show_file($id);
-	$data['cek_approve'] = $this->M_verifikator->cek_sudah_approve($id);
+	$data['cek_approve'] = $this->M_verifikator->CekAssesor($id);
 	$data['title'] = 'Rekap Laporan Kerja Dosen';
-	// if($this->M_verifikator->show_rekap_dosen_rk($id)>0){
-	// 	$data['rekap_dosen'] = $this->M_verifikator->show_rekap_dosen_rk($id);
-	// }else{
-	// 	$dt = array('Pendidikan' => 0, 'Penelitian' => 0, 'Pengabdian' => 0, 'Penunjang' => 0);
-	// 	$data['rekap_dosen'] = $dt;
-	// }
 	$this->load->view('layout/header_datatables',$data);
 	$this->load->view('layout/side_menu');
-	$this->load->view('pages/verifikator/periksa_laporan_detail');
+	$this->load->view('pages/verifikator/periksa_laporan_detail_assesor');
 	$this->load->view('layout/footer_datatables');
 	//return $a;
 }
@@ -538,6 +691,7 @@ public function PeriksaLaporanDetailPDF($id)
 	foreach ($datas as $keys);
 			$p = explode('_',$keys->file);
 			$nip = $p[0];
+			// $filename = "./uploads/".$nip."/".$keys->file;
 			$filename = "./uploads/".$nip."/".date("Y")."/".date("m")."/".$keys->file;
 
 			//New Tabbrowser
@@ -551,13 +705,14 @@ public function LihatFile($id)
 	foreach ($datas as $keys);
 			$p = explode('_',$keys->file);
 			$nip = $p[0];
-			echo $filename = "./uploads/".$nip."/".$keys->file;
+			// echo $filename = "./uploads/".$nip."/".$keys->file;
+			$filename = "./uploads/".$nip."/".date("Y")."/".date("m")."/".$keys->file;
 
 			//New Tabbrowser
 			header("Content-type: application/pdf");
 			readfile($filename);
 }
-//Komentar Tolak
+//Komentar Tolak Assesor
 function KomentarTolak()
 {
 	$ex = explode("-",$this->input->post('id_kegiatan'));
@@ -573,45 +728,80 @@ function KomentarTolak()
 	 if($Assesor1==$this->session->userdata('nipp') && $status==2){
  		$data = array('app_assesor1' => 2, 'komentar' => $this->input->post('komentar_assesor'));
  	  $where = array('id_subkegiatan' => $id_sub);
- 	  $this->M_verifikator->update_appassesor1($where, $data, 'bkd_subkegiatan');
+ 	  $this->M_verifikator->update_appassesor1($where, $data, 'bkd_subkegiatan_laporan');
 
 		$data2  = array('p_assesor1' => 2);
- 	  $where2 = array('nip' => $nip);
+ 	  $where2 = array('nip' => $nip, 'id_periode' => $keys->id_periode);
 		$this->M_verifikator->update_statuslaporan($where2, $data2, 'verifikator');
 
  	}elseif($Assesor2==$this->session->userdata('nipp') && $status==2){
 		$data = array('app_assesor2' => 2, 'komentar' => $this->input->post('komentar_assesor'));
  	  $where = array('id_subkegiatan' => $id_sub);
- 	  $this->M_verifikator->update_appassesor1($where, $data, 'bkd_subkegiatan');
+ 	  $this->M_verifikator->update_appassesor1($where, $data, 'bkd_subkegiatan_laporan');
 
 		$data2  = array('p_assesor2' => 2);
- 	  $where2 = array('nip' => $nip);
+ 	  $where2 = array('nip' => $nip, 'id_periode' => $keys->id_periode);
 		$this->M_verifikator->update_statuslaporan($where2, $data2, 'verifikator');
 
 	}elseif($Assesor1==$this->session->userdata('nipp') && $status==1){
 		$data = array('app_assesor1' => 1);
 		$where = array('id_subkegiatan' => $id_sub);
-		$this->M_verifikator->update_appassesor1($where, $data, 'bkd_subkegiatan');
+		$this->M_verifikator->update_appassesor1($where, $data, 'bkd_subkegiatan_laporan');
 
-		$data2  = array('p_assesor1' => 1);
-		$where2 = array('nip' => $nip);
-		$this->M_verifikator->update_statuslaporan($where2, $data2, 'verifikator');
+		// $data2  = array('p_assesor1' => 1);
+		// $where2 = array('nip' => $nip);
+		// $this->M_verifikator->update_statuslaporan($where2, $data2, 'verifikator');
 
 	}elseif($Assesor2==$this->session->userdata('nipp') && $status==1){
 		$data = array('app_assesor2' => 1);
 		$where = array('id_subkegiatan' => $id_sub);
-		$this->M_verifikator->update_appassesor1($where, $data, 'bkd_subkegiatan');
+		$this->M_verifikator->update_appassesor1($where, $data, 'bkd_subkegiatan_laporan');
 
-		$data2  = array('p_assesor2' => 1);
-		$where2 = array('nip' => $nip);
-		$this->M_verifikator->update_statuslaporan($where2, $data2, 'verifikator');
+		// $data2  = array('p_assesor2' => 1);
+		// $where2 = array('nip' => $nip);
+		// $this->M_verifikator->update_statuslaporan($where2, $data2, 'verifikator');
 
  	}else{
  		exit;
  	}
 
-	redirect('Verifikator/PeriksaLaporanDetail/'.$nip);
+	redirect('Verifikator/PeriksaLaporanDetailAssesor/'.$nip);
 }
+
+//Komentar Tolak Ketua Prodi
+function KomentarTolakProdi()
+{
+	$ex = explode("-",$this->input->post('id_kegiatan'));
+	 $id_sub = $ex[0];
+	 $nip    = $ex[1];
+	 $status = $ex[2];
+
+	$datas=$this->M_verifikator->show_verifikator_app($nip);
+ 	foreach ($datas as $keys);
+ 					 $Kp = $keys->ketua_prodi;
+					 $periode = $keys->id_periode;
+
+	 if($Kp==$this->session->userdata('nipp') && $status==2){
+ 		$data = array('applaporan_ketuaprodi' => $status, 'komentar' => $this->input->post('komentar_prodi'));
+ 	  $where = array('id_subkegiatan' => $id_sub);
+ 	  $this->M_verifikator->update_appassesor1($where, $data, 'bkd_subkegiatan_laporan');
+
+		$data2  = array('laporan_app_kaprodi' => 2);
+ 	  $where2 = array('nip' => $nip, 'id_periode' => $periode);
+		$this->M_verifikator->update_statuslaporan($where2, $data2, 'verifikator');
+
+	}elseif($Kp==$this->session->userdata('nipp') && $status==1){
+		$data = array('applaporan_ketuaprodi' => $status);
+		$where = array('id_subkegiatan' => $id_sub);
+		$this->M_verifikator->update_appassesor1($where, $data, 'bkd_subkegiatan_laporan');
+
+ 	}else{
+ 		exit;
+ 	}
+
+	redirect('Verifikator/PeriksaLaporanDetailKaprodi/'.$nip);
+}
+
 
 //REKAP
 public function RekapRencana()
@@ -694,6 +884,29 @@ function ProdiReset($id,$ids)
 	$where2 = array('nip' => $id, 'id_periode' => $ids);
 	$this->M_verifikator->update_bkdkegiatan($where2, $data2, 'bkd_subkegiatan');
 	redirect('Verifikator/PeriksaLaporanDetail/'.$id);
+}
+
+function ProdiApprovedLaporan($id)
+{
+	$data  = array('laporan_app_kaprodi' => 1);
+	$where = array('nip' => $id);
+	$this->M_verifikator->update_kprodi($where, $data, 'verifikator');
+	redirect('Verifikator/PeriksaLaporanDetailKaprodi/'.$id);
+}
+
+function ProdiResetLaporan($id,$ids)
+{
+
+	$data  = array('laporan_app_kaprodi' => 0);
+	$where = array('nip' => $id, 'id_periode' => $ids);
+	$this->M_verifikator->update_kprodi($where, $data, 'verifikator');
+
+	//Reset Sub Kegiatan
+
+	$data2  = array('applaporan_ketuaprodi' => 0, 'status' => 0);
+	$where2 = array('nip' => $id, 'id_periode' => $ids);
+	$this->M_verifikator->update_bkdkegiatan($where2, $data2, 'bkd_subkegiatan_laporan');
+	redirect('Verifikator/PeriksaLaporanDetailKaprodi/'.$id);
 }
 
 //LOGOUT

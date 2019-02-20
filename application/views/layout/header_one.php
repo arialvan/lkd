@@ -28,7 +28,45 @@
     <!-- Custom Theme Style -->
     <link href="<?php echo base_url(); ?>assets/build/css/custom.min.css" rel="stylesheet">
     <style>
-        /* .canvas {width:750px; height:300px;} */
+    .counter
+    {
+        background-color: #ffffff;
+        text-align: center;
+
+        }
+        .employees,.customer,.design,.order
+        {
+        margin-top: 70px;
+        margin-bottom: 70px;
+        align: center;
+        }
+        
+        .counter-count-kegiatan
+        {
+        font-size: 45px;
+        background-color: #38b9c7;
+        border-radius: 50%;
+        position: relative;
+        color: #ffffff;
+        text-align: center;
+        line-height: 200px;
+        width: 200px;
+        height: 200px;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        -ms-border-radius: 50%;
+        -o-border-radius: 50%;
+        display: inline-block;
+
+        }
+
+        .employee-p,.customer-p,.order-p,.design-p
+        {
+        font-size: 18px;
+        color: #000000;
+        line-height: 34px;
+        text-align: center;
+    }
     </style>
   </head>
     <body class="nav-md">

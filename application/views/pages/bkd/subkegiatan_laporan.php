@@ -20,6 +20,15 @@
                   </div>
                   <div class="x_content" data-step="1" data-intro="Ini adalah syarat file yang harus di upload">
                     <br />
+                    <?php foreach ($kegiatan as $dt); ?>
+                    <div class="form-group">
+                      <div class="col-md-12 col-sm-12 col-xs-12">
+                        <h4 ><?php echo $text = $dt->kegiatan; ?></h4>
+                        <h4><?php echo $dt->sub_kegiatan; ?></h4>
+                      </div>
+                    </div>
+                    <br /><br />
+                    <div class="ln_solid"></div>
                     <?php foreach ($subkegiatan as $key); ?>
                     <form class="form form-horizontal" role="form" method="post" action="<?php echo base_url(); ?>RencanaKerja/InsertLaporan" enctype="multipart/form-data">
                        <input type="hidden" name="id_subkegiatan" id="id_subkegiatan" value="<?php echo $key->id_subkegiatan; ?>">
@@ -58,6 +67,38 @@
                           </div>
                       </div>
                       <div class="ln_solid"></div>
+
+                      <?php
+                        if(preg_match("/Menulis/i", $text)) {
+                      ?>
+                      <div class="form-group">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                          <h4 >Data ini di perlukan untuk EMIS (Education Management Information System) KEMENAG.</h4>
+                        </div>
+                      </div>
+                      <br />
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">
+                           Judul Buku/Artikel/Jurnal <br />
+                        </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" name="judul" class="form-control col-md-7 col-xs-12" placeholder="Boleh kosong jika tidak ada" />
+                          </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">
+                           Link Buku/Artikel/Jurnal <br />
+                        </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" name="link" class="form-control col-md-7 col-xs-12" placeholder="Boleh kosong jika tidak ada" />
+                          </div>
+                      </div>
+                      <?php
+                        }else{
+                          echo " ";
+                        }
+                      ?>
+
                       <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                           <button class="btn btn-primary" type="reset">Reset</button>

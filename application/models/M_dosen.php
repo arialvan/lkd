@@ -76,9 +76,9 @@ function filterketuaprodi($id)
 function show_dosen()
 {
         $this->db->select('a.nip,a.nidn,a.id_kat_dosen,b.nama_peg,c.kategori_dosen')
-                 ->from('uinar_lkd2.profil_dosen a')
-                 ->join('simpeg.tb_pegawai b','a.nip = b.nip')
-                 ->join('uinar_lkd2.master_kategori_dosen c','a.id_kat_dosen = c.id_kat_dosen','left')
+                 ->from('uinar_elkd.profil_dosen a')
+                 ->join('uinar_simpeg.tb_pegawai b','a.nip = b.nip')
+                 ->join('uinar_elkd.master_kategori_dosen c','a.id_kat_dosen = c.id_kat_dosen','left')
                  ->where('a.nip!=007')
                  ->where('a.id_kat_dosen!=0')
                  ->order_by('b.nama_peg ASC');
@@ -89,7 +89,7 @@ function show_dosen()
 function show_dosen_profil()
 {
   $this->db->select('a.nip,a.id_kat_dosen,b.nama_peg')
-           ->from('uinar_lkd2.profil_dosen a')
+           ->from('uinar_elkd.profil_dosen a')
            ->join('simpeg.tb_pegawai b','a.nip = b.nip')
            ->where('a.nip!=007')
            ->where('a.id_kat_dosen=0')
@@ -158,8 +158,8 @@ function update_dosen($where,$data,$table)
 
 function edit_pegawai(){
   $this->db->select('*')
-                  ->from('simpeg.tb_pegawai a')
-                  ->join('uinar_lkd2.profil_dosen b','a.nip = b.nip')
+                  ->from('uinar_simpeg.tb_pegawai a')
+                  ->join('uinar_elkd.profil_dosen b','a.nip = b.nip')
                   ->where('b.nip=', $this->session->userdata('nipp'));
   $query=$this->db->get()->result();
   return $query;

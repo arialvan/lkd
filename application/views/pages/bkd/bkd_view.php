@@ -50,7 +50,8 @@
                                         }elseif($profil->id_kat_dosen==1 || $profil->id_kat_dosen==2 || $profil->id_kat_dosen==4){
                                             $syaratBKD= $x->sks_bkd;
                                         }elseif($profil->id_kat_dosen==6 || $profil->id_kat_dosen==8){
-                                            $syaratBKD= $x->sks_bkd+$x->sks_remun;
+                                          // $syaratBKD= $x->sks_bkd+$x->sks_remun;
+                                          $syaratBKD= $x->sks_bkd;
                                         }else{
                                             $syaratBKD= $x->sks_bkd;
                                         }

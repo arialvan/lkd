@@ -11,7 +11,7 @@
             <hr />
                 <div class="x_panel">
                   <div class="x_title">
-                    <b>REKAP LAPORAN KINERJA DOSEN</b>
+                    <b>REKAP LAPORAN YANG DI SETUJUI ASSESOR 1 DAN 2</b>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                     </ul>
@@ -21,8 +21,8 @@
                     <table class="table table-striped table-bordered myTable display nowrap" style="width:100%">
                       <thead>
                         <tr>
-                          <th rowspan="2">NIP</th>
-                          <th rowspan="2">Nama</th>
+                          <!-- <th rowspan="2">NIP</th>
+                          <th rowspan="2">Nama</th> -->
                           <th colspan="4">Syarat BKD</th>
                           <th colspan="4">Laporan(Volume/SKS)</th>
                           <th colspan="1">Kesimupulan</th>
@@ -87,8 +87,8 @@
                             }
                         ?>
                           <tr>
-                              <th scope="row"><?php echo $dt['nip']; ?></th>
-                              <td bgcolor="#FFFFF0"><?php echo $dt['nama_peg']; ?></td>
+                              <!-- <th scope="row"><?php //echo $dt['nip']; ?></th>
+                              <td bgcolor="#FFFFF0"><?php //echo $dt['nama_peg']; ?></td> -->
                                   <td><?php echo $dt['Syt_Pendidikan']; ?></td>
                                   <td><?php echo $dt['Syt_Penelitian']; ?></td>
                                   <td><?php echo $dt['Syt_Pengabdian']; ?></td>

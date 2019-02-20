@@ -103,8 +103,8 @@ public function ambil_tb_kegiatan()
       // $query=$this->db->get()->result();
       // return $query;
       $this->db->select('*');
-      $this->db->from('uinar_lkd2.profil_dosen a');
-      $this->db->join('simpeg.tb_pegawai b', 'a.nip = b.nip', 'left');
+      $this->db->from('uinar_elkd.profil_dosen a');
+      $this->db->join('uinar_simpeg.tb_pegawai b', 'a.nip = b.nip', 'left');
       $this->db->where('a.nip', $this->session->userdata('nipp'));
       $query=$this->db->get()->result();
       return $query;
@@ -418,13 +418,49 @@ function show_rekap_dosen($id){
                       SUM(CASE WHEN a.id_bkd = 4 THEN a.sks_subkegiatan/4 END) AS Penunjang,
                       FORMAT(SUM(CASE WHEN a.id_bkd IN ("1","4") THEN a.poin_subkegiatan/4 END)-8 ,2) AS Points
                     ');
-  $this->db->from('uinar_lkd2.bkd_subkegiatan a');
-  $this->db->join('simpeg.tb_pegawai b','a.nip=b.nip');
-  $this->db->join('uinar_lkd2.profil_dosen c','a.nip=c.nip');
-  $this->db->join('uinar_lkd2.bkd_remun_dosen d','c.id_kat_dosen=d.id_kat_dosen', 'INNER');
+  $this->db->from('uinar_elkd.bkd_subkegiatan a');
+  $this->db->join('uinar_simpeg.tb_pegawai b','a.nip=b.nip');
+  $this->db->join('uinar_elkd.profil_dosen c','a.nip=c.nip');
+  $this->db->join('uinar_elkd.bkd_remun_dosen d','c.id_kat_dosen=d.id_kat_dosen', 'INNER');
   $this->db->where('a.app_assesor1', 1);
   $this->db->where('a.app_assesor2', 1);
   $this->db->where('a.nip', $id);
+  $this->db->group_by('a.nip');
+
+  $query=$this->db->get()->result_array();
+  return $query;
+
+}
+
+
+//LAPORAN DOSEN
+function show_laporan_rekap($id){
+  $this->db->select('a.nip,b.nama_peg,c.id_kat_dosen,
+                      MAX(CASE WHEN d.id_bkd = 1 THEN d.sks_bkd ELSE 0 END) AS Syt_Pendidikan,
+                      MAX(CASE WHEN d.id_bkd = 2 THEN d.sks_bkd ELSE 0 END) AS Syt_Penelitian,
+                      MAX(CASE WHEN d.id_bkd = 3 THEN d.sks_bkd ELSE 0 END) AS Syt_Pengabdian,
+                      MAX(CASE WHEN d.id_bkd = 4 THEN d.sks_bkd ELSE 0 END) AS Syt_Penunjang,
+
+                      FORMAT(SUM(CASE WHEN a.id_bkd = 1 THEN a.poin_subkegiatan/8 END),2) AS DetailPendidikan,
+                      FORMAT(SUM(CASE WHEN a.id_bkd = 2 THEN a.poin_subkegiatan/8 END),2) AS DetailPenelitian,
+                      FORMAT(SUM(CASE WHEN a.id_bkd = 3 THEN a.poin_subkegiatan/8 END),2) AS DetailPengabdian,
+                      FORMAT(SUM(CASE WHEN a.id_bkd = 4 THEN a.poin_subkegiatan/8 END),2) AS DetailPenunjang,
+
+                      FORMAT(SUM(CASE WHEN a.id_bkd = 1 THEN a.sks_subkegiatan/8 END),2) AS Pendidikan,
+                      SUM(CASE WHEN a.id_bkd = 2 THEN a.sks_subkegiatan/8 END) AS Penelitian,
+                      SUM(CASE WHEN a.id_bkd = 3 THEN a.sks_subkegiatan/8 END) AS Pengabdian,
+                      SUM(CASE WHEN a.id_bkd = 4 THEN a.sks_subkegiatan/8 END) AS Penunjang,
+                      FORMAT(SUM(CASE WHEN a.id_bkd IN ("1","4") THEN a.poin_subkegiatan/8 END)-8 ,2) AS Points
+                    ');
+  $this->db->from('uinar_elkd.bkd_subkegiatan_laporan a');
+  $this->db->join('uinar_simpeg.tb_pegawai b','a.nip=b.nip');
+  $this->db->join('uinar_elkd.profil_dosen c','a.nip=c.nip');
+  $this->db->join('uinar_elkd.bkd_remun_dosen d','c.id_kat_dosen=d.id_kat_dosen', 'INNER');
+  $this->db->join('uinar_elkd.periode_lkd e','a.id_periode=e.id_periode');
+  $this->db->where('a.app_assesor1', 1);
+  $this->db->where('a.app_assesor2', 1);
+  $this->db->where('a.nip', $id);
+  $this->db->where('e.status', 1);
   $this->db->group_by('a.nip');
 
   $query=$this->db->get()->result_array();
@@ -503,14 +539,16 @@ function show_rekap_asessor(){
                       SUM(CASE WHEN a.id_bkd = 4 THEN a.sks_subkegiatan/4 END) AS Penunjang,
                       FORMAT(SUM(CASE WHEN a.id_bkd IN ("1","4") THEN a.poin_subkegiatan/4 END)-8 ,2) AS Points
                     ');
-  $this->db->from('uinar_lkd2.bkd_subkegiatan_laporan a');
-  $this->db->join('simpeg.tb_pegawai b','a.nip=b.nip');
+  $this->db->from('uinar_elkd.bkd_subkegiatan_laporan a');
+  $this->db->join('uinar_simpeg.tb_pegawai b','a.nip=b.nip');
   $this->db->join('profil_dosen c','a.nip=c.nip');
   $this->db->join('bkd_remun_dosen d','c.id_kat_dosen=d.id_kat_dosen', 'INNER');
   $this->db->join('tbl_mst_fakultas e','c.id_fakultas=e.id_fakultas', 'LEFT');
   $this->db->join('master_kategori_dosen f','c.id_kat_dosen=f.id_kat_dosen', 'LEFT');
+  $this->db->join('uinar_elkd.periode_lkd g','a.id_periode=g.id_periode', 'LEFT');
   $this->db->where('a.app_assesor1', 1);
   $this->db->where('a.app_assesor2', 1);
+  $this->db->where('g.status', 1);
   $this->db->group_by('a.nip');
 
   $query=$this->db->get()->result_array();
@@ -537,14 +575,16 @@ function show_rekap_asessor_id($id_fak,$id){
                       SUM(CASE WHEN a.id_bkd = 4 THEN a.sks_subkegiatan/4 END) AS Penunjang,
                       FORMAT(SUM(CASE WHEN a.id_bkd IN ("1","4") THEN a.poin_subkegiatan/4 END)-8 ,2) AS Points
                     ');
-  $this->db->from('uinar_lkd2.bkd_subkegiatan_laporan a');
-  $this->db->join('simpeg.tb_pegawai b','a.nip=b.nip');
-  $this->db->join('uinar_lkd2.profil_dosen c','a.nip=c.nip');
-  $this->db->join('uinar_lkd2.bkd_remun_dosen d','c.id_kat_dosen=d.id_kat_dosen', 'INNER');
-  $this->db->join('uinar_lkd2.tbl_mst_fakultas e','c.id_fakultas=e.id_fakultas', 'LEFT');
-  $this->db->join('uinar_lkd2.master_kategori_dosen f','c.id_kat_dosen=f.id_kat_dosen', 'LEFT');
+  $this->db->from('uinar_elkd.bkd_subkegiatan_laporan a');
+  $this->db->join('uinar_simpeg.tb_pegawai b','a.nip=b.nip');
+  $this->db->join('uinar_elkd.profil_dosen c','a.nip=c.nip');
+  $this->db->join('uinar_elkd.bkd_remun_dosen d','c.id_kat_dosen=d.id_kat_dosen', 'INNER');
+  $this->db->join('uinar_elkd.tbl_mst_fakultas e','c.id_fakultas=e.id_fakultas', 'LEFT');
+  $this->db->join('uinar_elkd.master_kategori_dosen f','c.id_kat_dosen=f.id_kat_dosen', 'LEFT');
+  $this->db->join('uinar_elkd.periode_lkd g','a.id_periode=g.id_periode', 'LEFT');
   $this->db->where('a.app_assesor1', 1);
   $this->db->where('a.app_assesor2', 1);
+  $this->db->where('g.status', 1);
   $this->db->where('c.id_fakultas', $id_fak);
   $this->db->like('c.id_kat_dosen', $id);
   $this->db->group_by('a.nip');
@@ -571,13 +611,15 @@ function show_rekap_asessor1(){
                       SUM(CASE WHEN a.id_bkd = 4 THEN a.sks_subkegiatan/4 END) AS Penunjang,
                       FORMAT(SUM(CASE WHEN a.id_bkd IN ("1","4") THEN a.poin_subkegiatan/4 END)-8 ,2) AS Points
                     ');
-  $this->db->from('uinar_lkd2.bkd_subkegiatan_laporan a');
-  $this->db->join('simpeg.tb_pegawai b','a.nip=b.nip');
-  $this->db->join('uinar_lkd2.profil_dosen c','a.nip=c.nip');
-  $this->db->join('uinar_lkd2.bkd_remun_dosen d','c.id_kat_dosen=d.id_kat_dosen', 'INNER');
-  $this->db->join('uinar_lkd2.tbl_mst_fakultas e','c.id_fakultas=e.id_fakultas', 'LEFT');
-  $this->db->join('uinar_lkd2.master_kategori_dosen f','c.id_kat_dosen=f.id_kat_dosen', 'LEFT');
+  $this->db->from('uinar_elkd.bkd_subkegiatan_laporan a');
+  $this->db->join('uinar_simpeg.tb_pegawai b','a.nip=b.nip');
+  $this->db->join('uinar_elkd.profil_dosen c','a.nip=c.nip');
+  $this->db->join('uinar_elkd.bkd_remun_dosen d','c.id_kat_dosen=d.id_kat_dosen', 'INNER');
+  $this->db->join('uinar_elkd.tbl_mst_fakultas e','c.id_fakultas=e.id_fakultas', 'LEFT');
+  $this->db->join('uinar_elkd.master_kategori_dosen f','c.id_kat_dosen=f.id_kat_dosen', 'LEFT');
+  $this->db->join('uinar_elkd.periode_lkd g','a.id_periode=g.id_periode', 'LEFT');
   $this->db->where('a.app_assesor1', 1);
+  $this->db->where('g.status', 1);
   $this->db->group_by('a.nip');
 
   $query=$this->db->get()->result_array();
@@ -602,13 +644,15 @@ function show_rekap_asessor1_id($id_fak,$id){
                       SUM(CASE WHEN a.id_bkd = 4 THEN a.sks_subkegiatan/4 END) AS Penunjang,
                       FORMAT(SUM(CASE WHEN a.id_bkd IN ("1","4") THEN a.poin_subkegiatan/4 END)-8 ,2) AS Points
                     ');
-  $this->db->from('uinar_lkd2.bkd_subkegiatan_laporan a');
-  $this->db->join('simpeg.tb_pegawai b','a.nip=b.nip');
-  $this->db->join('uinar_lkd2.profil_dosen c','a.nip=c.nip');
-  $this->db->join('uinar_lkd2.bkd_remun_dosen d','c.id_kat_dosen=d.id_kat_dosen', 'INNER');
-  $this->db->join('uinar_lkd2.tbl_mst_fakultas e','c.id_fakultas=e.id_fakultas', 'LEFT');
-  $this->db->join('uinar_lkd2.master_kategori_dosen f','c.id_kat_dosen=f.id_kat_dosen', 'LEFT');
+  $this->db->from('uinar_elkd.bkd_subkegiatan_laporan a');
+  $this->db->join('uinar_simpeg.tb_pegawai b','a.nip=b.nip');
+  $this->db->join('uinar_elkd.profil_dosen c','a.nip=c.nip');
+  $this->db->join('uinar_elkd.bkd_remun_dosen d','c.id_kat_dosen=d.id_kat_dosen', 'INNER');
+  $this->db->join('uinar_elkd.tbl_mst_fakultas e','c.id_fakultas=e.id_fakultas', 'LEFT');
+  $this->db->join('uinar_elkd.master_kategori_dosen f','c.id_kat_dosen=f.id_kat_dosen', 'LEFT');
+  $this->db->join('uinar_elkd.periode_lkd g','a.id_periode=g.id_periode', 'LEFT');
   $this->db->where('a.app_assesor1', 1);
+  $this->db->where('g.status', 1);
   $this->db->where('c.id_fakultas', $id_fak);
   $this->db->like('c.id_kat_dosen', $id);
   $this->db->group_by('a.nip');
@@ -636,13 +680,15 @@ function show_rekap_asessor2(){
                       SUM(CASE WHEN a.id_bkd = 4 THEN a.sks_subkegiatan/4 END) AS Penunjang,
                       FORMAT(SUM(CASE WHEN a.id_bkd IN ("1","4") THEN a.poin_subkegiatan/4 END)-8 ,2) AS Points
                     ');
-  $this->db->from('uinar_lkd2.bkd_subkegiatan_laporan a');
-  $this->db->join('simpeg.tb_pegawai b','a.nip=b.nip');
-  $this->db->join('uinar_lkd2.profil_dosen c','a.nip=c.nip');
-  $this->db->join('uinar_lkd2.bkd_remun_dosen d','c.id_kat_dosen=d.id_kat_dosen', 'INNER');
-  $this->db->join('uinar_lkd2.tbl_mst_fakultas e','c.id_fakultas=e.id_fakultas', 'LEFT');
-  $this->db->join('uinar_lkd2.master_kategori_dosen f','c.id_kat_dosen=f.id_kat_dosen', 'LEFT');
+  $this->db->from('uinar_elkd.bkd_subkegiatan_laporan a');
+  $this->db->join('uinar_simpeg.tb_pegawai b','a.nip=b.nip');
+  $this->db->join('uinar_elkd.profil_dosen c','a.nip=c.nip');
+  $this->db->join('uinar_elkd.bkd_remun_dosen d','c.id_kat_dosen=d.id_kat_dosen', 'INNER');
+  $this->db->join('uinar_elkd.tbl_mst_fakultas e','c.id_fakultas=e.id_fakultas', 'LEFT');
+  $this->db->join('uinar_elkd.master_kategori_dosen f','c.id_kat_dosen=f.id_kat_dosen', 'LEFT');
+  $this->db->join('uinar_elkd.periode_lkd g','a.id_periode=g.id_periode', 'LEFT');
   $this->db->where('a.app_assesor2', 1);
+  $this->db->where('g.status', 1);
   $this->db->group_by('a.nip');
 
   $query=$this->db->get()->result_array();
@@ -667,13 +713,15 @@ function show_rekap_asessor2_id($id_fak,$id){
                       SUM(CASE WHEN a.id_bkd = 4 THEN a.sks_subkegiatan/4 END) AS Penunjang,
                       FORMAT(SUM(CASE WHEN a.id_bkd IN ("1","4") THEN a.poin_subkegiatan/4 END)-8 ,2) AS Points
                     ');
-  $this->db->from('uinar_lkd2.bkd_subkegiatan_laporan a');
-  $this->db->join('simpeg.tb_pegawai b','a.nip=b.nip');
-  $this->db->join('uinar_lkd2.profil_dosen c','a.nip=c.nip');
-  $this->db->join('uinar_lkd2.bkd_remun_dosen d','c.id_kat_dosen=d.id_kat_dosen', 'INNER');
-  $this->db->join('uinar_lkd2.tbl_mst_fakultas e','c.id_fakultas=e.id_fakultas', 'LEFT');
-  $this->db->join('uinar_lkd2.master_kategori_dosen f','c.id_kat_dosen=f.id_kat_dosen', 'LEFT');
+  $this->db->from('uinar_elkd.bkd_subkegiatan_laporan a');
+  $this->db->join('uinar_simpeg.tb_pegawai b','a.nip=b.nip');
+  $this->db->join('uinar_elkd.profil_dosen c','a.nip=c.nip');
+  $this->db->join('uinar_elkd.bkd_remun_dosen d','c.id_kat_dosen=d.id_kat_dosen', 'INNER');
+  $this->db->join('uinar_elkd.tbl_mst_fakultas e','c.id_fakultas=e.id_fakultas', 'LEFT');
+  $this->db->join('uinar_elkd.master_kategori_dosen f','c.id_kat_dosen=f.id_kat_dosen', 'LEFT');
+  $this->db->join('uinar_elkd.periode_lkd g','a.id_periode=g.id_periode', 'LEFT');
   $this->db->where('a.app_assesor2', 1);
+  $this->db->where('g.status', 1);
   $this->db->where('c.id_fakultas', $id_fak);
   $this->db->like('c.id_kat_dosen', $id);
   $this->db->group_by('a.nip');
@@ -713,12 +761,12 @@ function show_rekap_perubahan(){
                       SUM(CASE WHEN a.id_bkd = 4 THEN a.sks_subkegiatan/4 END) AS Penunjang,
                       FORMAT(SUM(CASE WHEN a.id_bkd IN ("1","4") THEN a.poin_subkegiatan/4 END)-8 ,2) AS Points
                     ');
-  $this->db->from('uinar_lkd2.bkd_subkegiatan_laporan a');
-  $this->db->join('simpeg.tb_pegawai b','a.nip=b.nip');
-  $this->db->join('uinar_lkd2.profil_dosen c','a.nip=c.nip');
-  $this->db->join('uinar_lkd2.bkd_remun_dosen d','c.id_kat_dosen=d.id_kat_dosen', 'INNER');
-  $this->db->join('uinar_lkd2.tbl_mst_fakultas e','c.id_fakultas=e.id_fakultas', 'LEFT');
-  $this->db->join('uinar_lkd2.master_kategori_dosen f','c.id_kat_dosen=f.id_kat_dosen', 'LEFT');
+  $this->db->from('uinar_elkd.bkd_subkegiatan_laporan a');
+  $this->db->join('uinar_simpeg.tb_pegawai b','a.nip=b.nip');
+  $this->db->join('uinar_elkd.profil_dosen c','a.nip=c.nip');
+  $this->db->join('uinar_elkd.bkd_remun_dosen d','c.id_kat_dosen=d.id_kat_dosen', 'INNER');
+  $this->db->join('uinar_elkd.tbl_mst_fakultas e','c.id_fakultas=e.id_fakultas', 'LEFT');
+  $this->db->join('uinar_elkd.master_kategori_dosen f','c.id_kat_dosen=f.id_kat_dosen', 'LEFT');
   $this->db->group_by('a.nip');
 
   $query=$this->db->get()->result_array();
@@ -743,12 +791,12 @@ function show_rekap_perubahan_id($id_fak,$id){
                       SUM(CASE WHEN a.id_bkd = 4 THEN a.sks_subkegiatan/4 END) AS Penunjang,
                       FORMAT(SUM(CASE WHEN a.id_bkd IN ("1","4") THEN a.poin_subkegiatan/4 END)-8 ,2) AS Points
                     ');
-  $this->db->from('uinar_lkd2.bkd_subkegiatan_laporan a');
-  $this->db->join('simpeg.tb_pegawai b','a.nip=b.nip');
-  $this->db->join('uinar_lkd2.profil_dosen c','a.nip=c.nip');
-  $this->db->join('uinar_lkd2.bkd_remun_dosen d','c.id_kat_dosen=d.id_kat_dosen', 'INNER');
-  $this->db->join('uinar_lkd2.tbl_mst_fakultas e','c.id_fakultas=e.id_fakultas', 'LEFT');
-  $this->db->join('uinar_lkd2.master_kategori_dosen f','c.id_kat_dosen=f.id_kat_dosen', 'LEFT');
+  $this->db->from('uinar_elkd.bkd_subkegiatan_laporan a');
+  $this->db->join('uinar_simpeg.tb_pegawai b','a.nip=b.nip');
+  $this->db->join('uinar_elkd.profil_dosen c','a.nip=c.nip');
+  $this->db->join('uinar_elkd.bkd_remun_dosen d','c.id_kat_dosen=d.id_kat_dosen', 'INNER');
+  $this->db->join('uinar_elkd.tbl_mst_fakultas e','c.id_fakultas=e.id_fakultas', 'LEFT');
+  $this->db->join('uinar_elkd.master_kategori_dosen f','c.id_kat_dosen=f.id_kat_dosen', 'LEFT');
   $this->db->where('c.id_fakultas', $id_fak);
   $this->db->like('c.id_kat_dosen', $id);
   $this->db->group_by('a.nip');
@@ -1001,8 +1049,8 @@ function filterketuaprodi($id)
 
 function edit_pegawai(){
   $this->db->select('*')
-                  ->from('simpeg.tb_pegawai a')
-                  ->join('uinar_lkd2.profil_dosen b','a.nip = b.nip')
+                  ->from('uinar_simpeg.tb_pegawai a')
+                  ->join('uinar_elkd.profil_dosen b','a.nip = b.nip')
                   ->where('b.nip=', $this->session->userdata('nipp'));
   $query=$this->db->get()->result();
   return $query;

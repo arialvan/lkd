@@ -20,6 +20,71 @@ class M_counting extends CI_Model{
 
     }
 
+    function all_rencanakerja_dosen($id){
+      $this->db->select("COUNT(*) As Totals");
+      $this->db->from('(SELECT DISTINCT a.id_subkegiatan
+                          FROM bkd_subkegiatan AS a
+                          INNER JOIN periode_lkd AS c ON a.id_periode=c.id_periode
+                          WHERE c.status=1 AND a.nip="'.$id.'") AS query
+                      ');
+
+      $result = $this->db->get()->result();
+      return $result;
+
+    }
+
+    function all_laporan_dosen($id){
+      $this->db->select("COUNT(*) As All_Laporan");
+      $this->db->from('(SELECT DISTINCT a.id_subkegiatan
+                          FROM bkd_subkegiatan_laporan AS a
+                          INNER JOIN periode_lkd AS c ON a.id_periode=c.id_periode
+                          WHERE c.status=1 AND a.nip="'.$id.'") AS query
+                      ');
+
+      $result = $this->db->get()->result();
+      return $result;
+
+    }
+
+    function app_assesor_1($id){
+      $this->db->select("COUNT(*) As app_as1");
+      $this->db->from('(SELECT DISTINCT a.id_subkegiatan
+                          FROM bkd_subkegiatan_laporan AS a
+                          INNER JOIN periode_lkd AS c ON a.id_periode=c.id_periode
+                          WHERE c.status=1 AND a.nip="'.$id.'" AND a.app_assesor1=1) AS query
+                      ');
+
+      $result = $this->db->get()->result();
+      return $result;
+
+    }
+
+    function app_assesor_2($id){
+      $this->db->select("COUNT(*) As app_as2");
+      $this->db->from('(SELECT DISTINCT a.id_subkegiatan
+                          FROM bkd_subkegiatan_laporan AS a
+                          INNER JOIN periode_lkd AS c ON a.id_periode=c.id_periode
+                          WHERE c.status=1 AND a.nip="'.$id.'" AND a.app_assesor2=1) AS query
+                      ');
+
+      $result = $this->db->get()->result();
+      return $result;
+
+    }
+
+    function app_kp($id){
+      $this->db->select("COUNT(*) As app_kp");
+      $this->db->from('(SELECT DISTINCT a.id_subkegiatan
+                          FROM bkd_subkegiatan_laporan AS a
+                          INNER JOIN periode_lkd AS c ON a.id_periode=c.id_periode
+                          WHERE c.status=1 AND a.nip="'.$id.'" AND a.applaporan_ketuaprodi=1) AS query
+                      ');
+
+      $result = $this->db->get()->result();
+      return $result;
+
+    }
+
 // Count All Assesor 1
     function all_assesor_1(){
       $this->db->select("COUNT(DISTINCT assesor_1) AS Assesor1");
@@ -95,6 +160,59 @@ class M_counting extends CI_Model{
       $query=$this->db->get()->result_array();
       return $query;
     }
+
+    function bar_kegiatan($id){
+      $this->db->select(' COUNT(CASE WHEN id_bkd = 1 THEN id_bkd END) AS pendidikan,
+                          COUNT(CASE WHEN id_bkd = 2 THEN id_bkd END) AS penelitian,
+                          COUNT(CASE WHEN id_bkd = 3 THEN id_bkd END) AS pengabdian,
+                          COUNT(CASE WHEN id_bkd = 4 THEN id_bkd END) AS penunjang
+                        ');
+      $this->db->from('bkd_subkegiatan_laporan a');
+      $this->db->join('periode_lkd b','a.id_periode=b.id_periode');
+      $this->db->where('a.nip', $id);
+      $this->db->where('b.status', 1);
+      $query=$this->db->get()->result_array();
+      return $query;
+    }
+
+function pie_ketuaprodi($id){
+$this->db->select(' COUNT(CASE WHEN applaporan_ketuaprodi = 1 THEN applaporan_ketuaprodi END) AS Setujui,
+                    COUNT(CASE WHEN applaporan_ketuaprodi = 2 THEN applaporan_ketuaprodi END) AS Tolak,
+                    COUNT(CASE WHEN applaporan_ketuaprodi = 0 THEN applaporan_ketuaprodi END) AS BelumPeriksa
+                  ');
+$this->db->from('bkd_subkegiatan_laporan a');
+$this->db->join('periode_lkd b','a.id_periode=b.id_periode');
+$this->db->where('a.nip', $id);
+$this->db->where('b.status', 1);
+$query=$this->db->get()->result_array();
+return $query;
+}
+
+function pie_assesor1($id){
+$this->db->select(' COUNT(CASE WHEN app_assesor1 = 1 THEN applaporan_ketuaprodi END) AS Setujui,
+                    COUNT(CASE WHEN app_assesor1 = 2 THEN applaporan_ketuaprodi END) AS Tolak,
+                    COUNT(CASE WHEN app_assesor1 = 0 THEN applaporan_ketuaprodi END) AS BelumPeriksa
+                  ');
+$this->db->from('bkd_subkegiatan_laporan a');
+$this->db->join('periode_lkd b','a.id_periode=b.id_periode');
+$this->db->where('a.nip', $id);
+$this->db->where('b.status', 1);
+$query=$this->db->get()->result_array();
+return $query;
+}
+
+function pie_assesor2($id){
+$this->db->select(' COUNT(CASE WHEN app_assesor2 = 1 THEN applaporan_ketuaprodi END) AS Setujui,
+                    COUNT(CASE WHEN app_assesor2 = 2 THEN applaporan_ketuaprodi END) AS Tolak,
+                    COUNT(CASE WHEN app_assesor2 = 0 THEN applaporan_ketuaprodi END) AS BelumPeriksa
+                  ');
+$this->db->from('bkd_subkegiatan_laporan a');
+$this->db->join('periode_lkd b','a.id_periode=b.id_periode');
+$this->db->where('a.nip', $id);
+$this->db->where('b.status', 1);
+$query=$this->db->get()->result_array();
+return $query;
+}
 
 // Count All Assesor
     function pie_setuju(){

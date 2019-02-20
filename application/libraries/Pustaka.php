@@ -206,4 +206,92 @@ return $p;
     }
 
 
+    public function StatusPemeriksaan($kp,$as1,$as2)
+      {
+        if($kp==0 && $as1==0 && $as2==0) {
+        $data='<span>Belum Diperiksa</span>';
+        }elseif($kp==0 && $as1==1 && $as2==0){
+        $data='<span class="text text-success">Approve Assesor 1</span>';
+        }elseif($kp==0 && $as1==1 && $as2==1){
+        $data='<span class="text text-success">Approve Assesor 1</span><br />
+               <span class="text text-success">Approve Assesor 2</span>';
+        }elseif($kp==0 && $as1==1 && $as2==2){
+        $data='<span class="text text-success">Approve Assesor 1</span><br />
+               <span class="text text-danger">Tolak Assesor 2</span>';
+        }elseif($kp==0 && $as1==2 && $as2==0){
+        $data='<span class="text text-danger">Tolak Assesor 1</span>';
+        }elseif($kp==0 && $as1==2 && $as2==1){
+        $data='<span class="text text-danger">Tolak Assesor 1</span><br />
+               <span class="text text-success">Approve Assesor 2</span>';
+        }elseif($kp==0 && $as1==2 && $as2==2){
+        $data='<span class="text text-danger">Tolak Assesor 1</span><br />
+               <span class="text text-danger">Tolak Assesor 2</span>';
+        }elseif($kp==1 && $as1==0 && $as2==0){
+        $data='<span class="text text-success">Approve Ka.Prodi</span>';
+        }elseif($kp==1 && $as1==0 && $as2==1){
+        $data='<span class="text text-success">Approve Ka.Prodi</span><br />
+              <span class="text text-danger">Approve Assesor 2</span>';
+        }elseif($kp==1 && $as1==0 && $as2==2){
+        $data='<span class="text text-success">Approve Ka.Prodi</span><br />
+              <span class="text text-danger">Tolak Assesor 2</span>';
+        }elseif($kp==1 && $as1==1 && $as2==0){
+        $data='<span class="text text-success">Approve Ka.Prodi</span><br />
+              <span class="text text-success">Approve Assesor 1</span>';
+        }elseif($kp==1 && $as1==1 && $as2==1){
+        $data='<span class="text text-success">Approve Ka.Prodi</span><br />
+              <span class="text text-success">Approve Assesor 1</span><br />
+              <span class="text text-success">Approve Assesor 2</span>';
+        }elseif($kp==1 && $as1==1 && $as2==2){
+        $data='<span class="text text-success">Approve Ka.Prodi</span><br />
+              <span class="text text-success">Approve Assesor 1</span><br />
+              <span class="text text-danger">Tolak Assesor 2</span>';
+        }elseif($kp==1 && $as1==2 && $as2==0){
+        $data='<span class="text text-success">Approve Ka.Prodi</span><br />
+              <span class="text text-danger">Tolak Assesor 1</span>';
+        }elseif($kp==1 && $as1==2 && $as2==1){
+        $data='<span class="text text-success">Approve Ka.Prodi</span><br />
+              <span class="text text-danger">Tolak Assesor 1</span><br />
+              <span class="text text-success">Approve Assesor 2</span>';
+        }elseif($kp==1 && $as1==2 && $as2==2){
+        $data='<span class="text text-success">Approve Ka.Prodi</span><br />
+              <span class="text text-danger">Tolak Assesor 1</span><br />
+              <span class="text text-danger">Tolak Assesor 2</span>';
+        }elseif($kp==2 && $as1==0 && $as2==0){
+        $data='<span class="text text-danger">Tolak Ka.Prodi</span>';
+        }elseif($kp==2 && $as1==0 && $as2==1){
+        $data='<span class="text text-danger">Tolak Ka.Prodi</span><br />
+              <span class="text text-success">Approve Assesor 2</span>';
+        }elseif($kp==2 && $as1==0 && $as2==2){
+        $data='<span class="text text-danger">Tolak Ka.Prodi</span><br />
+              <span class="text text-danger">Tolak Assesor 2</span>';
+        }elseif($kp==2 && $as1==1 && $as2==0){
+        $data='<span class="text text-danger">Tolak Ka.Prodi</span><br />
+              <span class="text text-success">Approve Assesor 1</span>';
+        }elseif($kp==2 && $as1==1 && $as2==1){
+        $data='<span class="text text-danger">Tolak Ka.Prodi</span><br />
+        <span class="text text-success">Approve Assesor 1</span><br />
+        <span class="text text-success">Approve Assesor 2</span>';
+        }elseif($kp==2 && $as1==1 && $as2==2){
+        $data='<span class="text text-success">Tolak Ka.Prodi</span><br />
+        <span class="text text-success">Approve Assesor 1</span><br />
+        <span class="text text-danger">Tolak Assesor 2</span>';
+        }elseif($kp==2 && $as1==2 && $as2==0){
+        $data='<span class="text text-danger">Tolak Ka.Prodi</span><br />
+        <span class="text text-danger">Tolak Assesor 1</span>';
+        }elseif($kp==2 && $as1==2 && $as2==1){
+        $data='<span class="text text-danger">Tolak Ka.Prodi</span><br />
+        <span class="text text-danger">Tolak Assesor 1</span><br />
+        <span class="text text-success">Approve Assesor 2</span>';
+        }elseif($kp==2 && $as1==2 && $as2==2){
+        $data='<span class="text text-danger">Tolak Ka.Prodi</span><br />
+        <span class="text text-danger">Tolak Assesor 1</span><br />
+        <span class="text text-danger">Tolak Assesor 2</span>';
+        }else{
+        $data='<span class="text text-success">-</span>';
+        }
+
+      return $data;
+      }
+
+
 }

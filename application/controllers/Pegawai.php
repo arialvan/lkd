@@ -560,7 +560,7 @@ function RubahPassword() {
 			$data = array('password' => $pass);
       $where = array('nip' => $this->input->post('id'));
       // var_dump($data);
-      $this->M_pegawai->update_pass($where, $data, 'profil_dosen');
+      $this->M_pegawai->update_password($where, $data, 'profil_dosen');
       echo "Update Succes"; redirect('Pegawai','refresh');
 }
 

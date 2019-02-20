@@ -60,6 +60,7 @@ public function index()
 		$data['bkdkegiatan'] = $this->M_rencanakerja->show_bkdkegiatan();
 		$data['periode_aktif'] = $this->M_rencanakerja->show_periode_aktif();
 		$data['filter_button'] = $this->M_rencanakerja->filter_button();
+
 		$data['title'] = 'Beban Kinerja Dosen';
 		$this->load->view('layout/header_datatables',$data);
 		$this->load->view('layout/side_menu');
@@ -73,6 +74,7 @@ public function index()
 			foreach ($auth as $keys);
 
 			if($keys->isi_survey > 0){
+
 					$ids = $this->session->userdata('nipp');
 					$this->load->library('Pustaka');
 					$data['filter'] = $this->M_dosen->filter($ids);
@@ -89,9 +91,8 @@ public function index()
 					$data['penunjang'] = $this->M_rencanakerja->show_rencana_penunjang($id);
 					$data['verifikator'] = $this->M_rencanakerja->show_verifikator();
 					$data['dilaporkan'] = $this->M_rencanakerja->show_dilaporkan();
-					// $data['bkdkegiatan'] = $this->M_rencanakerja->show_bkdkegiatan();
-					// $data['syaratsubbkd'] = $this->M_rencanakerja->show_syarat_subbkd($id);
-					// $data['bkd'] = $this->M_rencanakerja->show_bkd();
+          $data['periode_aktif'] = $this->M_rencanakerja->show_periode_aktif();
+					$data['bkd'] = $this->M_rencanakerja->show_bkd();
 					$data['listrbkd'] = $this->M_rencanakerja->show_listrbkd($id);
 					$data['listlaporan'] = $this->M_rencanakerja->show_listlaporan($id);
 					$data['title'] = 'Rekap Rencana Kerja Dosen';
@@ -105,10 +106,10 @@ public function index()
 					require FCPATH.'vendor/autoload.php';
 					$key = "KQYsG4Hi201ajyEzOSGzr4MVfw==";
 					$token = array(
-					    "email" => $this->session->userdata('email'),
-					    "fullname" => $this->session->userdata('username'),
-					    "nip" => $this->session->userdata('nipp'),
-					    "appAlias" => "bkd"
+							"email" => $this->session->userdata('email'),
+							"fullname" => $this->session->userdata('username'),
+							"nip" => $this->session->userdata('nipp'),
+							"appAlias" => "BKD"
 					);
 
 					$jwt = \Firebase\JWT\JWT::encode($token, $key);
@@ -189,7 +190,10 @@ function ambil_kegiatan()
     echo '<option value="">-- Pilih --</option>';
     foreach($query->result() as $row)
     {
-     echo "<option value='".$row->id_kegiatan."'>".$row->kegiatan."</option>";
+			if($row->bkd_hitung=='1' && $row->renum_hitung=='1'){ $kegiatans="<option value='".$row->id_kegiatan."' style='color: #32A759;' >".$row->kegiatan."</option>";}
+			if($row->bkd_hitung=='1' && $row->renum_hitung=='0'){ $kegiatans="<option value='".$row->id_kegiatan."' style='color: #C58626;' >".$row->kegiatan."</option>";}
+			if($row->bkd_hitung=='0' && $row->renum_hitung=='1'){ $kegiatans="<option value='".$row->id_kegiatan."' style='color: #C32323;' >".$row->kegiatan."</option>";}
+     echo $kegiatans;
     //echo "<option value='".$row->id_jabatan."'>".$row->jabatan_struktural."</option>";
     }
 }
@@ -286,23 +290,28 @@ foreach ($this->input->post('bkd_kegiatan') as $key => $value) {
 
 						$poin_db   = $poin[$bkd];
 						if($remunhitung[$bkd]==1){
-								$poin_kali = $sks_post * $poin_db;
+							$poin_kali = $sks_post * $poin_db;
 						}else{
 								$poin_kali = 0;
 						}
 
             $data = array(
+										'id_periode' => $this->input->post('id_periode'),
 										'nip' => $this->session->userdata('nipp'),
 										'id_bkd' => $this->input->post('bkd')[$bkd],
 		                'id_kegiatan' => $key,
 		                'sub_kegiatan' => $this->input->post('sub_kegiatan')[$bkd],
+										'sks_post' => $sks_post,
 										'sks_subkegiatan' => $sks_kali,
 										'poin_subkegiatan' => $poin_kali,
-		                'status' => 0,
+										'app_ketuaprodi' => 1,
+										'status' => 1,
+										'lp_dosen' => 1,
 		                'user_create' => $this->session->userdata('username')
             );
+						// var_dump($data);
 						//Insert
-            $this->M_rencanakerja->insert_rencanakerja($data, 'bkd_subkegiatan');
+            $this->M_rencanakerja->insert_rencanakerja($data, 'bkd_subkegiatan_laporan');
         }
 
             redirect('RencanaKerja/Laporan');
@@ -316,11 +325,28 @@ public function EditLaporan($id)
 	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
         $data['name'] = $this->session->userdata('username');
         $data['nipp'] = $this->session->userdata('nipp');
+				$data['kegiatan'] = $this->M_rencanakerja->get_subkegiatan($id);
         $data['subkegiatan'] = $this->M_rencanakerja->edit_subkegiatan($id);
         $data['title'] = 'Upload Laporan';
         $this->load->view('layout/header_datatables',$data);
         $this->load->view('layout/side_menu');
         $this->load->view('pages/bkd/subkegiatan_laporan');
+        $this->load->view('layout/footer_datatables');
+}
+
+public function EditLaporanTambahan($id)
+{
+	$ids = $this->session->userdata('nipp');
+	$data['filter'] = $this->M_dosen->filter($ids);
+	$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
+        $data['name'] = $this->session->userdata('username');
+        $data['nipp'] = $this->session->userdata('nipp');
+        $data['kegiatan'] = $this->M_rencanakerja->get_subkegiatan_laporan($id);
+        $data['subkegiatan'] = $this->M_rencanakerja->edit_subkegiatan_tambahan($id);
+        $data['title'] = 'Upload Laporan';
+        $this->load->view('layout/header_datatables',$data);
+        $this->load->view('layout/side_menu');
+        $this->load->view('pages/bkd/subkegiatan_laporan_tambahan');
         $this->load->view('layout/footer_datatables');
 }
 
@@ -371,12 +397,13 @@ function UpdateFile()
                 $_FILES['file']['size']     = $_FILES['files']['size'];
 
 								//Check Directory
-									$directoryname = $this->session->userdata('nipp');
+								  $directoryname = $this->session->userdata('nipp').'/'.date("Y").'/'.date("m");
 									if (!is_dir('uploads/'.$directoryname)) {
-										  mkdir('./uploads/' . $this->session->userdata('nipp'), 0777, TRUE);
+											mkdir('./uploads/'.$this->session->userdata('nipp').'/'.date("Y").'/'.date("m"), 0777, TRUE); //Folder Baru
 									}
 								// File upload configuration
-	                $uploadPath = 'uploads/'.$this->session->userdata('nipp').'/';
+	                // $uploadPath = 'uploads/'.$this->session->userdata('nipp').'/';
+									$uploadPath = 'uploads/'.$this->session->userdata('nipp').'/'.date("Y").'/'.date("m").'/';
 	                $config['upload_path'] = $uploadPath;
 	                $config['allowed_types'] = 'pdf';
 									unlink($uploadPath.$filenames);
@@ -440,13 +467,13 @@ function InsertLaporan()
 
                 // Konfigurasi Upload File
 								//Cek Direktori
-									$directoryname = $this->session->userdata('nipp').'/'.date("Y").'/'.date("m");
+                  $directoryname = $this->session->userdata('nipp').'/'.date("Y").'/'.date("m");
 									if (!is_dir('./uploads/'.$directoryname)) { //Jika Folder Belum Ada Maka Buat Folder Baru
-										  mkdir('./uploads/'.$this->session->userdata('nipp').'/'.date("Y").'/'.date("m"), 0777, TRUE); //Folder Baru
+											mkdir('./uploads/'.$this->session->userdata('nipp').'/'.date("Y").'/'.date("m"), 0777, TRUE); //Folder Baru
 									}
 
 									// Nama Direktori File
-	                $uploadPath = 'uploads/'.$this->session->userdata('nipp').'/'.date("Y").'/'.date("m");
+									$uploadPath = 'uploads/'.$this->session->userdata('nipp').'/'.date("Y").'/'.date("m");
 	                $config['upload_path'] = $uploadPath;
 	                $config['allowed_types'] = 'pdf';
 
@@ -487,66 +514,59 @@ function InsertLaporan()
 							{
 									$lsb=$this->input->post('lapor_sebagai_bkd');
 							}else{
-									$lsb==0;
+									$lsb=0;
 							}
-							//Update bkd_subkegiatan(Rencana Kerja)
-								$data = array('status_laporan' => 1, 'di_laporkan' => 2, 'lapor_sebagai_bkd' => $lsb);
-							  $where = array('id_subkegiatan' => $this->input->post('id_subkegiatan'));
-							  $this->M_rencanakerja->update_rencana($where, $data, 'bkd_subkegiatan');
+								// $data = array('status_laporan' => 1, 'lapor_sebagai_bkd' => $lsb);
+							  // $where = array('id_subkegiatan' => $this->input->post('id_subkegiatan'));
+							  // $this->M_rencanakerja->update_rencana($where, $data, 'bkd_subkegiatan');
+								// redirect('RencanaKerja/Laporan');
+								//Update bkd_subkegiatan(Rencana Kerja)
+									$data = array('status_laporan' => 1, 'di_laporkan' => 2, 'lapor_sebagai_bkd' => $lsb);
+								  $where = array('id_subkegiatan' => $this->input->post('id_subkegiatan'));
+								  $this->M_rencanakerja->update_rencana($where, $data, 'bkd_subkegiatan');
 
-							//Insert Laporan
-							$where2 = array('id_subkegiatan' => $this->input->post('id_subkegiatan'));
-							$data2 = $this->M_rencanakerja->show_rbkd_to_laporan($where2, 'bkd_subkegiatan')->result();
-							foreach ($data2 as $keys);
+								//Insert Laporan
+								$where2 = array('id_subkegiatan' => $this->input->post('id_subkegiatan'));
+								$data2 = $this->M_rencanakerja->show_rbkd_to_laporan($where2, 'bkd_subkegiatan')->result();
+								foreach ($data2 as $keys);
 
-							$dl = array(
-												'id_subkegiatan' => $keys->id_subkegiatan,
-												'id_periode' => $keys->id_periode,
-												'nip' => $keys->nip,
-												'id_bkd' => $keys->id_bkd,
-												'id_kegiatan' => $keys->id_kegiatan,
-												'sub_kegiatan' => $keys->sub_kegiatan,
-												'sks_post' => $keys->sks_post,
-												'sks_subkegiatan' => $keys->sks_subkegiatan,
-												'poin_subkegiatan' => $keys->poin_subkegiatan,
-												'app_ketuaprodi' => $keys->app_ketuaprodi,
-												'app_assesor1' => $keys->app_assesor1,
-												'app_assesor2' => $keys->app_assesor2,
-												'status' => $keys->status,
-												'user_create' => $keys->user_create,
-												'status_laporan' => $keys->status_laporan,
-												'timecreate' => $keys->timecreate,
-												'komentar' => $keys->komentar,
-												'lapor_sebagai_bkd' => $keys->lapor_sebagai_bkd
-							);
-							$this->M_rencanakerja->insert_rencanakerja($dl, 'bkd_subkegiatan_laporan');
+								$dl = array(
+													'id_subkegiatan' => $keys->id_subkegiatan,
+													'id_periode' => $keys->id_periode,
+													'nip' => $keys->nip,
+													'id_bkd' => $keys->id_bkd,
+													'id_kegiatan' => $keys->id_kegiatan,
+													'sub_kegiatan' => $keys->sub_kegiatan,
+													'sks_post' => $keys->sks_post,
+													'sks_subkegiatan' => $keys->sks_subkegiatan,
+													'poin_subkegiatan' => $keys->poin_subkegiatan,
+													'app_ketuaprodi' => $keys->app_ketuaprodi,
+													'app_assesor1' => $keys->app_assesor1,
+													'app_assesor2' => $keys->app_assesor2,
+													'status' => $keys->status,
+													'user_create' => $keys->user_create,
+													'status_laporan' => $keys->status_laporan,
+													'timecreate' => $keys->timecreate,
+													'komentar' => $keys->komentar,
+													'lapor_sebagai_bkd' => $keys->lapor_sebagai_bkd
+								);
+								$this->M_rencanakerja->insert_rencanakerja($dl, 'bkd_subkegiatan_laporan');
 
-							$dl2 = array(
-												'id_subkegiatan' => 'OK',
-												'id_periode' => 'OK',
-												'nip' => 'OK',
-												'id_bkd' => 'OK',
-												'id_kegiatan' => 'OK',
-												'sub_kegiatan' => 'OK',
-												'sks_post' => 'OK',
-												'sks_subkegiatan' => 'OK',
-												'poin_subkegiatan' => 'OK',
-												'app_ketuaprodi' => 'OK',
-												'status' => $keys->status,
-												'user_create' => $keys->user_create,
-												'status_laporan' => 'OK',
-												'timecreate' => $keys->timecreate,
-												'komentar' => 'OK',
-												'lapor_sebagai_bkd' => 'OK'
-							);
+								//Insert Data Jurnal/Buku
+								if(!empty($this->input->post('judul')) ){
+										$data = array('nip' => $this->session->userdata('nipp'),
+																	'id_subkegiatan' => $this->input->post('id_subkegiatan'),
+																	'judul' => $this->input->post('judul'),
+																	'link' => $this->input->post('link')
+																	);
+										$this->M_rencanakerja->insert_rencanakerja($data, 'emis_kemenag');
+								}
 
-							echo '<pre>' . var_export($dl2, true) . ' .................<br />................. <br />OK <br /></pre>';
-							echo '<h2>
-												Upload File Selesai....
-										</h2>';
-										echo '<h2><a href="'.base_url().'RencanaKerja/Laporan">KEMBALI</a></h2>';
-							// echo '<h2><a href="#" onclick="window.close()">CLOSE TAB</a></h2>';
-							// redirect('RencanaKerja/Laporan');
+								echo '<h2>
+													Upload File Berhasil....
+											</h2>';
+											echo '<h2><a href="'.base_url().'RencanaKerja/Laporan">KEMBALI</a></h2>';
+								// echo '<h2><a href="#" onclick="window.close()">CLOSE TAB</a></h2>';
         }else{
 								redirect('RencanaKerja/EditLaporan/',$this->input->post('id_subkegiatan'));
 				}
@@ -554,20 +574,135 @@ function InsertLaporan()
 
 }
 
-//UPDATE
 
+//INSERT KEGIATAN TAMBAHAN
+function InsertLaporanTambahan()
+{
+			$data = array();
+        // If file upload form submitted
+        if(!empty($_FILES['files']['name'])){
+            $filesCount = count($_FILES['files']['name']);
+            for($i = 0; $i < $filesCount; $i++){
+
+								//$filenames = $this->session->userdata('nipp').'_'.date('Y-m-d').'_'.rand(1, 100).'.pdf';
+								$filenames = $this->session->userdata('nipp').'_'.date('Y-m-d').'_'.$this->input->post('id_subkegiatan').'_'.$this->input->post('no')[$i].'.pdf';
+								$namafile[] = $filenames;
+
+                // $_FILES['file']['name']     = $_FILES['files']['name'][$i];
+
+								$_FILES['file']['name']     = $filenames;
+                $_FILES['file']['type']     = $_FILES['files']['type'][$i];
+                $_FILES['file']['tmp_name'] = $_FILES['files']['tmp_name'][$i];
+                $_FILES['file']['error']    = $_FILES['files']['error'][$i];
+                $_FILES['file']['size']     = $_FILES['files']['size'][$i];
+
+                // Konfigurasi Upload File
+								//Cek Direktori
+									$directoryname = $this->session->userdata('nipp').'/'.date("Y").'/'.date("m");
+									if (!is_dir('./uploads/'.$directoryname)) { //Jika Folder Belum Ada Maka Buat Folder Baru
+										  mkdir('./uploads/'.$this->session->userdata('nipp').'/'.date("Y").'/'.date("m"), 0777, TRUE); //Folder Baru
+									}
+
+									// Nama Direktori File
+	                $uploadPath = 'uploads/'.$this->session->userdata('nipp').'/'.date("Y").'/'.date("m");
+	                $config['upload_path'] = $uploadPath;
+	                $config['allowed_types'] = 'pdf';
+
+	                // Load and initialize upload library
+	                $this->load->library('upload', $config);
+	                $this->upload->initialize($config);
+
+                // Upload file to server
+                if($this->upload->do_upload('file')){
+                    // Uploaded file data
+                    $fileData = $this->upload->data();
+                    $uploadData[$i]['file_name'] = $this->session->userdata('nipp').'_'.time();
+                    $uploadData[$i]['uploaded_on'] = date("Y-m-d H:i:s");
+                }else{
+										echo '<h2>
+															Upload File Error...
+															Pastikan file Anda format PDF.
+													</h2>';
+										echo '<h2><a href="'.base_url().'RencanaKerja/EditLaporanTambahan/'.$this->input->post('id_subkegiatan').'">KEMBALI</a></h2>';
+										exit;
+								}
+            }
+
+                // Insert files data into the database
+								foreach ($this->input->post('nama_file') as $keys => $a) {
+										$namafile_db = $namafile[$keys];
+										$data = array(
+															'id_subkegiatan' => $this->input->post('id_subkegiatan'),
+															'nama_file' => $a,
+															'file' => $namafile_db
+										);
+										$this->M_rencanakerja->insert_rencanakerja($data, 'bkd_subkegiatan_file');
+										//var_dump($data);
+								}
+
+							//	Update Sub Kegiatan
+							if(!empty($this->input->post('lapor_sebagai_bkd')))
+							{
+									$lsb=$this->input->post('lapor_sebagai_bkd');
+							}else{
+									$lsb=0;
+							}
+							//Update bkd_subkegiatan(Rencana Kerja)
+								$data = array('status_laporan' => 1, 'lapor_sebagai_bkd' => $lsb, 'lp_dosen' => 0);
+							  $where = array('id_subkegiatan' => $this->input->post('id_subkegiatan'));
+							  $this->M_rencanakerja->update_rencana($where, $data, 'bkd_subkegiatan_laporan');
+
+											//Insert Data Jurnal/Buku
+											if(!empty($this->input->post('judul')) ){
+													$data = array('nip' => $this->session->userdata('nipp'),
+																				'id_subkegiatan' => $this->input->post('id_subkegiatan'),
+																				'judul' => $this->input->post('judul'),
+																				'link' => $this->input->post('link')
+																				);
+													$this->M_rencanakerja->insert_rencanakerja($data, 'emis_kemenag');
+											}
+
+
+								echo '<h2>
+												Upload File Selesai....
+										</h2>';
+										echo '<h2><a href="'.base_url().'RencanaKerja/Laporan">KEMBALI</a></h2>';
+        }else{
+								redirect('RencanaKerja/EditLaporanTambahan/',$this->input->post('id_subkegiatan'));
+				}
+
+}
+
+//UPDATE
 function UpdateSurvey()
 {
-	//Cari Periode Aktif
-	$periode = $this->M_rencanakerja->show_periode_aktif();
-	foreach ($periode as $keys);
-	$id_periode   = $keys->id_periode; //Periode Aktif
+	//From API Survey
+	require FCPATH.'vendor/autoload.php';
+	$key = "KQYsG4Hi201ajyEzOSGzr4MVfw==";
+	$jwt = $this->uri->segment(3);
+	$decode = \Firebase\JWT\JWT::decode($jwt, $key, array('HS256'));
+	//Cek Validasi
+	if($decode->appAlias=="BKD"){
+			$periode = $this->M_rencanakerja->show_periode_aktif();
+			foreach ($periode as $keys);
+			$id_periode   = $keys->id_periode; //Periode Aktif
 
-	$data = array('isi_survey' => 1);
+			$data = array('isi_survey' => 1);
 
-  $where = array('nip' => $this->session->userdata('nipp'), 'id_periode' => $id_periode);
-  $this->M_rencanakerja->update_rencana($where, $data, 'verifikator');
-	redirect('RencanaKerja/Laporan');
+			$where = array('nip' => $this->session->userdata('nipp'), 'id_periode' => $id_periode);
+			$this->M_rencanakerja->update_rencana($where, $data, 'verifikator');
+			echo '<h2>
+								Anda Sudah melakukan Survey Dosen... <br />
+								Selanjutnya Anda akan di bawa ke halaman pengisian Laporan. <br />
+								Bacalah petunjuk pada saat mengisi Laporan.
+						</h2>';
+			echo '<h2><a href="'.base_url().'RencanaKerja/Laporan">Dashboard Laporan</a></h2>';
+			exit;
+		}else{
+			echo "Pengisian Survey belum tuntas.";
+			echo '<h2><a href="'.base_url().'RencanaKerja/Laporan">Kembali ke Dashboard Laporan</a></h2>';
+		}
+
 }
 
 function UpdateRencana()
@@ -600,12 +735,13 @@ function UpdatePerbaikan($id)
   	foreach ($datas as $keys);
   					 $assesor1 = $keys->app_assesor1;
   					 $assesor2 = $keys->app_assesor2;
+						 $kaprodi  = $keys->applaporan_ketuaprodi;
 
 	if($assesor1 == $assesor){
 		//update sub kegiatan
 		$data = array('app_assesor1' => 0);
 		$where = array('id_subkegiatan' => $id_sub);
-		$this->M_rencanakerja->update_perbaikan($where, $data, 'bkd_subkegiatan');
+		$this->M_rencanakerja->update_perbaikan($where, $data, 'bkd_subkegiatan_laporan');
 		//update status verifikator
 		$data2  = array('p_assesor1' => 0);
  	  $where2 = array('nip' => $this->session->userdata('nipp'));
@@ -615,9 +751,19 @@ function UpdatePerbaikan($id)
 		//update sub kegiatan
 		$data = array('app_assesor2' => 0);
 		$where = array('id_subkegiatan' => $id_sub);
-		$this->M_rencanakerja->update_perbaikan($where, $data, 'bkd_subkegiatan');
+		$this->M_rencanakerja->update_perbaikan($where, $data, 'bkd_subkegiatan_laporan');
 		//update status verifikator
 		$data2  = array('p_assesor2' => 0);
+ 	  $where2 = array('nip' => $this->session->userdata('nipp'));
+		$this->M_verifikator->update_statuslaporan($where2, $data2, 'verifikator');
+
+	}elseif($kaprodi == $assesor){
+		//update sub kegiatan
+		$data = array('applaporan_ketuaprodi' => 0);
+		$where = array('id_subkegiatan' => $id_sub);
+		$this->M_rencanakerja->update_perbaikan($where, $data, 'bkd_subkegiatan_laporan');
+		//update status verifikator
+		$data2  = array('laporan_app_kaprodi' => 0);
  	  $where2 = array('nip' => $this->session->userdata('nipp'));
 		$this->M_verifikator->update_statuslaporan($where2, $data2, 'verifikator');
 
@@ -639,12 +785,22 @@ function UpdatePerbaikan2($id)
 
 function SelesaiLaporan()
 {
-	$id = $this->session->userdata('nipp');
-	$data = array('statuslaporan' => 1);
-
-  $where = array('nip' => $id);
-  $this->M_rencanakerja->selesai_laporan($where, $data, 'verifikator');
-	redirect('RencanaKerja/Laporan');
+	$id 			= $this->session->userdata('nipp');
+	$segment3 = $this->uri->segment(3);
+	if($segment3==1){
+		 	$data = array('statuslaporan' => $segment3);
+			$where = array('nip' => $id);
+			$this->M_rencanakerja->selesai_laporan($where, $data, 'verifikator');
+		 	redirect('RencanaKerja/Laporan');
+	}elseif($segment3==0){
+			$id = $this->session->userdata('nipp');
+			$data = array('statuslaporan' => $segment3);
+			$where = array('nip' => $id);
+			$this->M_rencanakerja->selesai_laporan($where, $data, 'verifikator');
+			redirect('RencanaKerja/Laporan');
+	}else{
+			echo '<h2><a href="'.base_url().'RencanaKerja/Laporan">No Segment, Kembali ke Dashboard Laporan</a></h2>';
+	}
 }
 
 function SelesaiLaporan_1()
@@ -672,6 +828,12 @@ function HapusSubkegiatan($id) {
     $where = array('id_subkegiatan' => $id);
     $this->M_rencanakerja->hapus_bkdsubkegiatan($where, 'bkd_subkegiatan');
     redirect('RencanaKerja','refresh');
+}
+
+function HapusLaporan($id) {
+    $where = array('id_subkegiatan' => $id);
+    $this->M_rencanakerja->hapus_bkdsubkegiatan($where, 'bkd_subkegiatan_laporan');
+    redirect('RencanaKerja/Laporan','refresh');
 }
 
 //LOGOUT

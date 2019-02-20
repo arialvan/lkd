@@ -1,112 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <!-- Meta, title, CSS, favicons, etc. -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+	<title>BKD</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="<?php echo base_url(); ?>assets/loginpage/images/icons/favicon.png"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/loginpage/vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/loginpage/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/loginpage/vendor/animate/animate.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/loginpage/vendor/select2/select2.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/loginpage/css/util.css">
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/loginpage/css/main.css">
+<!--===============================================================================================-->
+</head>
+<body>
 
-    <title>E-LKD</title>
 
-    <!-- Bootstrap -->
-    <link href="<?php echo base_url(); ?>assets/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link href="<?php echo base_url(); ?>assets/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <!-- NProgress -->
-    <link href="<?php echo base_url(); ?>assets/vendors/nprogress/nprogress.css" rel="stylesheet">
-    <!-- Animate.css -->
-    <link href="<?php echo base_url(); ?>assets/vendors/animate.css/animate.min.css" rel="stylesheet">
+	<div class="size1 bg0 where1-parent">
+		<!-- Coutdown -->
+		<div class="flex-c-m bg-img1 size2 where1 overlay1 where2 respon2" style="background-image: url('<?php echo base_url(); ?>assets/loginpage/images/bg01.jpg');">
+			<div class="wsize2 flex-w flex-c-m cd100 js-tilt">
+				<div class="flex-col-c-m size6 bor2 m-l-10 m-r-10 m-t-15">
+					<a href="http://uin.ar-raniry.ac.id/index.php/id"><span class="l2-txt1">Web</span></a>
+					<span class="s2-txt4"></span>
+				</div>
 
-    <!-- Custom Theme Style -->
-    <link href="<?php echo base_url(); ?>assets/build/css/custom.min.css" rel="stylesheet">
-  </head>
+				<div class="flex-col-c-m size6 bor2 m-l-10 m-r-10 m-t-15">
+          <a href="http://e-skp.ar-raniry.ac.id/"><span class="l2-txt1">E-SKP</span></a>
+					<span class="s2-txt4"></span>
+				</div>
 
-  <body class="login">
-    <div>
-      <a class="hiddenanchor" id="signup"></a>
-      <a class="hiddenanchor" id="signin"></a>
+				<div class="flex-col-c-m size6 bor2 m-l-10 m-r-10 m-t-15">
+          <a href="http://e-skp.ar-raniry.ac.id/"><span class="l2-txt1">SIAKAD</span></a>
+					<span class="s2-txt4"></span>
+				</div>
 
-      <div class="login_wrapper">
-        <div class="animate form login_form">
-            <center>
-            <div class="profile_img ">
-                <div id="crop-avatar">
-                <!-- Current avatar -->
-                <img class="img-responsive avatar-view" src="<?php echo base_url(); ?>assets/images/logo.png" alt="UIN" height="200" width="200">
-                </div>
-                <h1 class="center-block">UIN Ar-raniry</h1>
-            </div>
-            </center>
-          <section class="login_content">
-            <form action="<?php echo base_url()?>Login/login_auth" method="post" >
-              <h1>SIMPEG</h1>
-              <div>
-                  <input type="text" name="username" class="form-control" placeholder="Username" required="" />
-              </div>
-              <div>
-                  <input type="password" name="password" class="form-control" placeholder="Password" required="" />
-              </div>
-              <div>
-                <button type="submit" class="btn btn-success">Submit</button>
-                <a class="reset_pass" href="#">Lost your password?</a>
-              </div>
+				<div class="flex-col-c-m size6 bor2 m-l-10 m-r-10 m-t-15">
+					<a href="http://uin.ar-raniry.ac.id/index.php/id/video"><span class="l2-txt1">VIDEO</span></a>
+					<span class="s2-txt4"></span>
+				</div>
+			</div>
+		</div>
 
-              <div class="clearfix"></div>
+		<!-- Form -->
+		<div class="size3 flex-col-sb flex-w p-l-75 p-r-75 p-t-45 p-b-45 respon1">
+			<div class="wrap-pic1">
+				<img src="<?php echo base_url(); ?>assets/loginpage/images/icons/logouin.png" alt="LOGO" width="180" height="200">
+			</div>
 
-              <div class="separator">
-                <p class="change_link">New to site?
-                  <a href="#signup" class="to_register"> Create Account </a>
-                </p>
+			<div class="p-t-50 p-b-60">
+				<p class="m1-txt1 p-b-36">
+					SISTEM INFORMASI <span class="m1-txt2">BKD</span> <br />
+          UIN AR-RANIRY BANDA ACEH
+				</p>
 
-                <div class="clearfix"></div>
-                <br />
+				<form action="<?php echo base_url()?>Login/login_auth" method="post" >
+					<div class="wrap-input100 m-b-10 validate-input">
+						<input class="s2-txt1 placeholder0 input100" type="text" name="username" placeholder="NIP" required>
+						<span class="focus-input100"></span>
+					</div>
 
-                <div>
-<!--                  <h1><i class="fa fa-paw"></i> Gentelella Alela!</h1>
-                  <p>©2016 All Rights Reserved. Gentelella Alela! is a Bootstrap 3 template. Privacy and Terms</p>-->
-                </div>
-              </div>
-            </form>
-          </section>
-        </div>
+					<div class="wrap-input100 m-b-20 validate-input">
+						<input class="s2-txt1 placeholder0 input100" type="password" name="password" placeholder="PASSWORD" required>
+						<span class="focus-input100"></span>
+					</div>
 
-        <div id="register" class="animate form registration_form">
-          <section class="login_content">
-            <form>
-              <h1>Create Account</h1>
-              <div>
-                <input type="text" class="form-control" placeholder="Username" required="" />
-              </div>
-              <div>
-                <input type="email" class="form-control" placeholder="Email" required="" />
-              </div>
-              <div>
-                <input type="password" class="form-control" placeholder="Password" required="" />
-              </div>
-              <div>
-                <a class="btn btn-default submit" href="index.html">Submit</a>
-              </div>
+					<div class="w-full">
+						<button class="flex-c-m s2-txt2 size4 bg1 bor1 hov1 trans-04">
+							LOGIN
+						</button>
+					</div>
+				</form>
 
-              <div class="clearfix"></div>
+				<p class="s2-txt3 p-t-18">
+					<!-- And don’t worry, we hate spam too! You can unsubcribe at anytime. -->
+				</p>
+			</div>
 
-              <div class="separator">
-                <p class="change_link">Already a member ?
-                  <a href="#signin" class="to_register"> Log in </a>
-                </p>
+			<div class="flex-w">
+				<a href="https://www.facebook.com/UINArraniry/" class="flex-c-m size5 bg3 how1 trans-04 m-r-5" target="_blank">
+					<i class="fa fa-facebook"></i>
+				</a>
 
-                <div class="clearfix"></div>
-                <br />
+				<a href="https://www.instagram.com/uinarraniry/" class="flex-c-m size5 bg4 how1 trans-04 m-r-5" target="_blank">
+					<i class="fa fa-instagram"></i>
+				</a>
 
-                <div>
-<!--                  <h1><i class="fa fa-paw"></i> Gentelella Alela!</h1>
-                  <p>©2016 All Rights Reserved. Gentelella Alela! is a Bootstrap 3 template. Privacy and Terms</p>-->
-                </div>
-              </div>
-            </form>
-          </section>
-        </div>
-      </div>
-    </div>
-  </body>
+				<a href="https://www.youtube.com/channel/UCAQQ3UuUqbXKB_GnigY_JVg" class="flex-c-m size5 bg5 how1 trans-04 m-r-5" target="_blank">
+					<i class="fa fa-youtube-play"></i>
+				</a>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+<!--===============================================================================================-->
+	<script src="<?php echo base_url(); ?>assets/loginpage/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="<?php echo base_url(); ?>assets/loginpage/vendor/bootstrap/js/popper.js"></script>
+	<script src="<?php echo base_url(); ?>assets/loginpage/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="<?php echo base_url(); ?>assets/loginpage/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+	<script src="<?php echo base_url(); ?>assets/loginpage/vendor/countdowntime/moment.min.js"></script>
+	<script src="<?php echo base_url(); ?>assets/loginpage/vendor/countdowntime/moment-timezone.min.js"></script>
+	<script src="<?php echo base_url(); ?>assets/loginpage/vendor/countdowntime/moment-timezone-with-data.min.js"></script>
+	<script src="<?php echo base_url(); ?>assets/loginpage/vendor/countdowntime/countdowntime.js"></script>
+	<script>
+		$('.cd100').countdown100({
+			/*Set Endtime here*/
+			/*Endtime must be > current time*/
+			endtimeYear: 0,
+			endtimeMonth: 0,
+			endtimeDate: 35,
+			endtimeHours: 18,
+			endtimeMinutes: 0,
+			endtimeSeconds: 0,
+			timeZone: ""
+			// ex:  timeZone: "America/New_York"
+			//go to " http://momentjs.com/timezone/ " to get timezone
+		});
+	</script>
+<!--===============================================================================================-->
+	<script src="<?php echo base_url(); ?>assets/loginpage/vendor/tilt/tilt.jquery.min.js"></script>
+	<script >
+		$('.js-tilt').tilt({
+			scale: 1.1
+		})
+	</script>
+<!--===============================================================================================-->
+	<script src="js/main.js"></script>
+
+</body>
 </html>

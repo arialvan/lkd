@@ -21,27 +21,22 @@
     <!-- Custom Theme Scripts -->
     <script src="<?php echo base_url(); ?>assets/build/js/custom.min.js"></script>
     <script>
-       //Bar Chart
-       // $(document).ready(function () {
-       // $.getJSON("<?php echo base_url(); ?>Dashboard/BarChart", function (result) {
-       //     var chart = new CanvasJS.Chart("chartContainer", {
-       //         data: [
-       //                 {
-       //                     type: "bar",
-       //                     showInLegend: true,
-       //                     legendText: "Data Grafik",
-       //                     color: "rgba(79, 82, 186, 0.9)",
-       //                     dataPoints: result
-       //                 }
-       //               ]
-       //             });
-       //             chart.render();
-       //         });
-       //     });
+    $('.counter-count').each(function () {
+       $(this).prop('Counter',0).animate({
+           Counter: $(this).text()
+       }, {
+           duration: 1000,
+           easing: 'swing',
+           step: function (now) {
+               $(this).text(Math.ceil(now));
+           }
+       });
+    });
 
        //Bar Chart CanvasJS
        window.onload = function () {
          var d = new Date();
+
          $.getJSON("<?php echo base_url(); ?>Dashboard/BarChart", function (result) {
        		var chart = new CanvasJS.Chart("chartContainer", {
        			animationEnabled: true,
@@ -73,6 +68,100 @@
          		   });
        		   chart.render();
             });
+
+//BAR JENIS kegiatan
+            $.getJSON("<?php echo base_url(); ?>Dashboard/BarKegiatan", function (result) {
+             var chart = new CanvasJS.Chart("jenisKegiatan", {
+               animationEnabled: true,
+               title: {
+                 text: ""
+               },
+               axisX: {
+                 interval: 1
+               },
+               axisY: {
+                 title: "Tahun <?php echo date('Y'); ?>",
+                 scaleBreaks: {
+                   type: "wavy",
+                   customBreaks: [{
+                     startValue: 80,
+                     endValue: 210
+                     },
+                     {
+                       startValue: 230,
+                       endValue: 600
+                     }
+                 ]}
+               },
+                     data: [{
+                       type: "bar",
+                       dataPoints: result
+                     }]
+                  });
+                chart.render();
+               });
+
+//PIE APPROVALKETUA Prodi
+$.getJSON("<?php echo base_url(); ?>Dashboard/PieKetuaProdi", function (result) {
+  var chart = new CanvasJS.Chart("KetuaProdi", {
+    animationEnabled: true,
+    exportEnabled: true,
+    title: {
+      text: "KETUA PRODI",
+      horizontalAlign: "center"
+    },
+    data: [{
+      type: "pie",
+      startAngle: 100,
+      // yValueFormatString: "##0.00'%'",
+      indexLabel: "{label} {y}",
+      dataPoints: result
+    }]
+  });
+  chart.render();
+});
+
+
+//PIE APPROVAL Assesor1
+$.getJSON("<?php echo base_url(); ?>Dashboard/PieAssesor1", function (result) {
+  var chart = new CanvasJS.Chart("Assesor1", {
+    animationEnabled: true,
+    exportEnabled: true,
+    title: {
+      text: "ASSESOR 1",
+      horizontalAlign: "center"
+    },
+    data: [{
+      type: "pie",
+      startAngle: 100,
+      // yValueFormatString: "##0.00'%'",
+      indexLabel: "{label} {y}",
+      dataPoints: result
+    }]
+  });
+  chart.render();
+});
+
+//PIE APPROVAL Assesor2
+$.getJSON("<?php echo base_url(); ?>Dashboard/PieAssesor2", function (result) {
+  var chart = new CanvasJS.Chart("Assesor2", {
+    animationEnabled: true,
+    exportEnabled: true,
+    title: {
+      text: "ASSESOR 2",
+      horizontalAlign: "center"
+    },
+    data: [{
+      type: "pie",
+      startAngle: 100,
+      // yValueFormatString: "##0.00'%'",
+      indexLabel: "{label} {y}",
+      dataPoints: result
+    }]
+  });
+  chart.render();
+});
+
 
 //BAR CHART
           $.getJSON("<?php echo base_url(); ?>Dashboard/PieS", function (result) {

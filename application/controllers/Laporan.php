@@ -26,24 +26,24 @@ class Laporan extends CI_Controller {
 /*INDEX*/
 public function index()
 	{
-				$id = $this->session->userdata('nipp');
-				$this->load->library('Pustaka');
-				$ids = $this->session->userdata('nipp');
-				$data['filter'] = $this->M_laporan->filter($ids);
-				$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
-			 	$data['name'] = $this->session->userdata('username');
-				$data['nipp'] = $this->session->userdata('nipp');
-				$data['ids'] = $this->session->userdata('kat_dosen');
-				$data['profildosen'] = $this->M_laporan->profil();
-				$data['biodata'] = $this->M_laporan->biodata();
-				$data['verifikator'] = $this->M_laporan->show_verifikator();
-				$data['detail_rekap'] = $this->M_laporan->show_detail($id);
-				$data['datadosen'] = $this->M_laporan->show_rekap_dosen($id);
-				$data['title'] = 'Beban Kinerja Dosen';
-				$this->load->view('layout/header_datatables',$data);
-				$this->load->view('layout/side_menu');
-				$this->load->view('pages/bkd/laporan_rekap');
-				$this->load->view('layout/footer_datatables');
+		$id = $this->session->userdata('nipp');
+		$this->load->library('Pustaka');
+		$ids = $this->session->userdata('nipp');
+		$data['filter'] = $this->M_laporan->filter($ids);
+		$data['ketuaprodi'] = $this->M_dosen->filterketuaprodi($ids);
+	 	$data['name'] = $this->session->userdata('username');
+		$data['nipp'] = $this->session->userdata('nipp');
+		$data['ids'] = $this->session->userdata('kat_dosen');
+		$data['profildosen'] = $this->M_laporan->profil();
+		$data['biodata'] = $this->M_laporan->biodata();
+		$data['verifikator'] = $this->M_laporan->show_verifikator();
+		$data['detail_rekap'] = $this->M_laporan->show_detail($id);
+		$data['datadosen'] = $this->M_laporan->show_laporan_rekap($id);
+		$data['title'] = 'Laporan';
+		$this->load->view('layout/header_datatables',$data);
+		$this->load->view('layout/side_menu');
+		$this->load->view('pages/bkd/laporan_rekap');
+		$this->load->view('layout/footer_datatables');
 	}
 
 		// for generate pdf
@@ -149,6 +149,25 @@ function ambil_fakultas()
 	        );
 	        $this->M_pegawai->insert_pegawai($data, 'tb_pegawai');
 	        redirect('Pegawai');
+	}
+
+	function UpdateLaporan()
+	{
+		//Cari SKS dan Poin Master
+		$where = array('id_kegiatan' => $this->input->post('id_kegiatan'));
+		$data = $this->M_laporan->edit_poin($where, 'bkd_kegiatan')->result();
+		foreach ($data as $keys);
+		$sks   = $this->input->post('sks')*$keys->bkd_sks; //Poin Edit
+		$point = $this->input->post('sks')*$keys->poin; //Poin Edit
+
+		$data = array('sub_kegiatan' => $this->input->post('subkegiatan'),
+									'sks_post' => $this->input->post('sks'),
+									'sks_subkegiatan	' => $sks,
+									'poin_subkegiatan	' => $point);
+
+	  $where = array('id_subkegiatan' => $this->input->post('id_subkegiatan'));
+	  $this->M_laporan->update_rencana($where, $data, 'bkd_subkegiatan_laporan');
+		redirect('RencanaKerja/Laporan');
 	}
 
 //REKAP LAPORAN DOSEN

@@ -12,9 +12,9 @@ class M_master extends CI_Model{
 function show_admin()
     {
       $this->db->select('a.nip,a.id_fakultas,b.nama_peg,c.nama_fakultas')
-               ->from('uinar_lkd2.profil_dosen a')
-               ->join('simpeg.tb_pegawai b','a.nip=b.nip','LEFT')
-               ->join('uinar_lkd2.tbl_mst_fakultas c','a.id_fakultas = c.id_fakultas','LEFT')
+               ->from('uinar_elkd.profil_dosen a')
+               ->join('uinar_simpeg.tb_pegawai b','a.nip=b.nip','LEFT')
+               ->join('uinar_elkd.tbl_mst_fakultas c','a.id_fakultas = c.id_fakultas','LEFT')
                ->where('a.user_level=', 4)
                ->order_by('a.nip');
       $query = $this->db->get()->result();
@@ -70,7 +70,7 @@ function show_fakultas()
 /*Golongan*/
 function show_golongan()
 {
-    $query = $this->db->get('tb_golongan')->result();
+    $query = $this->dbsimpeg->get('tb_golongan')->result();
     return $query;
 }
 
@@ -107,9 +107,9 @@ function show_periode_nonaktif()
 function show_dosen()
 {
         $this->db->select('a.id_verifikator,a.nip,a.id_periode,a.rk_dosen,a.lp_dosen,b.nama_peg')
-                 ->from('uinar_lkd2.verifikator a')
-                 ->join('simpeg.tb_pegawai b','a.nip = b.nip')
-                 ->join('uinar_lkd2.periode_lkd c','a.id_periode = c.id_periode')
+                 ->from('uinar_elkd.verifikator a')
+                 ->join('uinar_simpeg.tb_pegawai b','a.nip = b.nip')
+                 ->join('uinar_elkd.periode_lkd c','a.id_periode = c.id_periode')
                  ->where('c.status=',1)
                  ->order_by('b.nama_peg ASC');
         $query = $this->db->get()->result();

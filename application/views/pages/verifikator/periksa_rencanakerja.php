@@ -67,14 +67,16 @@
                                                 echo '<span class="text text-danger"><b>Sudah Upload Laporan</b></span>';
                                             }elseif($dt->p_kaprodi==1){
                                                 echo '<span class="text text-danger"><b>Selesai Di Periksa Prodi</b></span>';
-                                            }else{echo '<span><b>Diperiksa Prodi</b></span>';}
+                                            }else{
+                                                echo '<span><b>Belum Diperiksa Prodi</b></span>';
+                                            }
                             ?>
                           </td>
                           <td>
                               <?php
                               if($dt->statuslaporan==0){
                                   $attr = array('target'=>'_blank');
-                                  echo anchor('Verifikator/PeriksaLaporanDetail/'.$dt->nip,'<span class="btn btn-sm btn-primary" title="Lihat Data">Lihat Data</span>',$attr);
+                                  echo anchor('Verifikator/PeriksaRencanaKerjaDetail/'.$dt->nip,'<span class="btn btn-sm btn-primary" title="Lihat Data">Lihat Data</span>',$attr);
                               }else{
                                   echo '<span class="btn btn-sm btn-success" title="Selesai">Selesai</span>';
                               }

@@ -33,7 +33,6 @@ class Login extends CI_Controller {
         $dSession = array(
                         'nipp',
                         'username',
-                        'email',
                         'user_level',
                         'kat_dosen',
                         'is_login'

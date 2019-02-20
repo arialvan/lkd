@@ -75,10 +75,6 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	// 'hostname' => '180.250.103.82',
-	// 'username' => 'project',
-	// 'password' => 'projectdev!!!',
-	// 'database' => 'uinar_simpeg',
 	'hostname' => 'localhost',
 	'username' => 'root',
 	'password' => '',
@@ -101,10 +97,6 @@ $db['default'] = array(
 
 $db['dbsimpeg'] = array(
 	'dsn'	=> '',
-	// 'hostname' => '180.250.103.82',
-	// 'username' => 'project',
-	// 'password' => 'projectdev!!!',
-	// 'database' => 'uinar_simpeg',
 	'hostname' => 'localhost',
 	'username' => 'root',
 	'password' => '',

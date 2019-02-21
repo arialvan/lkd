@@ -127,7 +127,7 @@
               </div>
                 <fieldset>
                   <legend></legend>
-
+                    <a class="btn btn-lg btn-danger" href="javascript:void(0);" onclick="javascript:introJs().start();">BACA Petunjuk Penggunaan Ketua Prodi</a>
                 </fieldset>
         </div>
         <br /><br />
@@ -152,24 +152,23 @@
                       <div id="pendidikan_tab" class="tab-pane fade in active">
                         <div class="x_panel">
                           <div class="x_title">
-                            <a class="btn btn-md btn-danger" href="javascript:void(0);" onclick="javascript:introJs().start();">BACA Petunjuk Periksa Laporan</a>
                             <ul class="nav navbar-right panel_toolbox">
                               <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                             </ul>
                             <div class="clearfix"></div>
                           </div>
-                          <div class="x_content" data-step="2" data-intro="Tekan Show All untuk menampilkan semua laporan">
+                          <div class="x_content" data-step="2" data-intro="Tekan Show All untuk menampilkan semua kegiatan yang telah di isi.">
+                            <form class="form form-horizontal" role="form" method="post" action="<?php echo base_url(); ?>Verifikator/ApprovalLaporanKetuaProdi" id="nameform">
+
                             <table class="table table-striped table-bordered myTable display nowrap" style="width:100%">
                               <thead>
                                 <tr>
                                   <th>#</th>
-                                  <th data-step="3" data-intro="Penanda kegiatan sebagai BKD/Remun">Lapor Sebagai</th>
                                   <th>Kegiatan</th>
-                                  <th>Volume/SKS</th>
-                                  <th>Poin</th>
+                                  <th>SKS</th>
                                   <th>File</th>
-                                  <th data-step="4" data-intro="Kolom laporan menampilkan tombol eksekusi untuk menolak dan menyetujui.">Laporan</th>
-                                  <th data-step="5" data-intro="Pada Kolom Verifikator, jika anda sudah selesai memeriksa, maka akan di berikan tanda centang">Verifikator</th>
+                                  <th data-step="6" data-intro="Pada Kolom Laporan Apabila Status sudah di setujui Prodi, anda telah selesai memeriksa.">Laporan</th>
+                                  <th data-step="7" data-intro="Pada Kolom Verifikator, jika sudah selesai Ketua Prodi akan di berikan tanda centang">Verifikator</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -179,18 +178,11 @@
                                   $subkegiatan = wordwrap($dt->sub_kegiatan, 65, "<br />\n");
                                 ?>
                                 <tr>
-                                  <th scope="row"><?php echo $no++; ?></th>
-                                  <td>
-                                    <?php if($dt->lapor_sebagai_bkd=='1'){
-                                              $st="<b><span class='text text-success'>BKD</span></b>";
-                                          }else{
-                                              $st="<b><span class='text text-danger'>Remun</span></b>";
-                                          } echo $st;
-                                    ?>
-                                  </td>
+                                  <th scope="row">
+                                      <input type="checkbox" id="cekbox" name="cekbox[]" value="<?php echo $dt->id_subkegiatan ?>" data-step="3" data-intro="Centang kegiatan yang akan di setujui atau ...." />
+                                  </th>
                                   <td><a href="#"><?php echo wordwrap($dt->kegiatan, 75, "<br />\n").'<br /><span class="text text-danger">('.strtolower($subkegiatan).')</span>'; ?></a></td>
                                   <td><?php echo $dt->sks_subkegiatan; ?></td>
-                                  <td><?php echo $dt->poin_subkegiatan; ?></td>
                                   <td>
                                     <u><?php echo $this->pustaka->status($dt->status); ?></u><br />
                                     <?php
@@ -207,7 +199,7 @@
                                     }
                                     ?>
                                   </td>
-                                  <td>
+                                  <td data-step="4" data-intro="Terima dan Tolak Laporan">
                                       <?php
                                         foreach($filter as $fl);
                                         //Jika assesor 1 belum periksa dan assesor 2 != menolak dan laporan sudah upload
@@ -243,6 +235,21 @@
                                 <?php } ?>
                               </tbody>
                             </table>
+                            <div data-step="4" data-intro="Klik Select All untuk mencentang semua kegiatan.">
+                               <input type="button" onclick="cek_pendidikan(this.form.cekbox)" value="Select All"  class="btn btn-sm btn-danger" />
+                               <input type="button" onclick="uncek_pendidikan(this.form.cekbox)" value="Clear All" class="btn btn-sm btn-danger" /> <br /><br />
+                               <input type="hidden" name="nip" value="<?php echo $this->uri->segment(3) ?>" />
+                            </div>
+
+                              <?php
+                                foreach($cek_approve as $ca);
+                                if($ca->laporan_app_kaprodi==0){
+                              ?>
+                                <button type="submit" form="nameform" class="btn btn-lg btn-success" value="Submit" data-step="5" data-intro="Tekan tombol Approved untuk menyetujui Laporan.">Terima Laporan</button>
+                              <?php
+                              }else{ echo '<h3>Sudah Diperiksa</h3>';}
+                              ?>
+                              </form>
                             <div id="result"></div>
                           </div>
                           <div class="clearfix"></div>
@@ -259,14 +266,13 @@
                             <div class="clearfix"></div>
                           </div>
                           <div class="x_content">
+                            <form method="post" action="<?php echo base_url(); ?>Verifikator/ApprovalLaporanKetuaProdi1" >
                             <table class="table table-striped table-bordered myTable display nowrap" style="width:100%">
                               <thead>
                                 <tr>
                                   <th>#</th>
-                                  <th>Lapor Sebagai</th>
                                   <th>Kegiatan</th>
-                                  <th>Volume/SKS</th>
-                                  <th>Poin</th>
+                                  <th>SKS</th>
                                   <th>File</th>
                                   <th>Laporan</th>
                                   <th>Verifikator</th>
@@ -279,18 +285,11 @@
                                   $subkegiatan1 = wordwrap($dt1->sub_kegiatan, 65, "<br />\n");
                                 ?>
                                 <tr>
-                                  <th scope="row"><?php echo $no++; ?></th>
-                                  <td>
-                                    <?php if($dt1->lapor_sebagai_bkd=='1'){
-                                              $st="<b><span class='text text-success'>BKD</span></b>";
-                                          }else{
-                                              $st="<b><span class='text text-danger'>Remun</span></b>";
-                                          } echo $st;
-                                    ?>
-                                  </td>
+                                  <th scope="row">
+                                    <input type="checkbox" id="cekbox1" name="cekbox1[]" value="<?php echo $dt1->id_subkegiatan ?>" />
+                                  </th>
                                   <td><a href="#"><?php echo wordwrap($dt1->kegiatan, 75, "<br />\n").'<br /><span class="text text-danger">('.strtolower($subkegiatan1).')</span>'; ?></a></td>
                                   <td><?php echo $dt1->sks_subkegiatan; ?></td>
-                                  <td><?php echo $dt1->poin_subkegiatan; ?></td>
                                   <td>
                                     <u><?php echo $this->pustaka->status($dt1->status); ?></u><br />
                                     <?php
@@ -343,6 +342,18 @@
                                 <?php } ?>
                               </tbody>
                             </table>
+                               <input type="button" onclick="cek_penelitian(this.form.cekbox1)" value="Select All"  class="btn btn-sm btn-danger" />
+                               <input type="button" onclick="uncek_penelitian(this.form.cekbox1)" value="Clear All" class="btn btn-sm btn-danger" /> <br /><br />
+                               <input type="hidden" name="nip" value="<?php echo $this->uri->segment(3) ?>" />
+                               <?php
+                                 foreach($cek_approve as $ca);
+                                 if($ca->laporan_app_kaprodi==0){
+                               ?>
+                                 <button type="submit" form="nameform" class="btn btn-lg btn-success" value="Submit">Terima Laporan</button>
+                               <?php
+                               }else{ echo '<h3>Sudah Diperiksa</h3>';}
+                               ?>
+                            </form>
                           </div>
                           <div class="clearfix"></div>
                         </div>
@@ -358,18 +369,17 @@
                             <div class="clearfix"></div>
                           </div>
                           <div class="x_content">
+                            <form method="post" action="<?php echo base_url(); ?>Verifikator/ApprovalLaporanKetuaProdi2" >
                             <table class="table table-striped table-bordered myTable display nowrap" style="width:100%">
                               <thead>
-                                <tr>
-                                  <th>#</th>
-                                  <th>Lapor Sebagai</th>
-                                  <th>Kegiatan</th>
-                                  <th>Volume/SKS</th>
-                                  <th>Poin</th>
-                                  <th>File</th>
-                                  <th>Laporan</th>
-                                  <th>Verifikator</th>
-                                </tr>
+                                  <tr>
+                                    <th>#</th>
+                                    <th>Kegiatan</th>
+                                    <th>SKS</th>
+                                    <th>File</th>
+                                    <th>Laporan</th>
+                                    <th>Verifikator</th>
+                                  </tr>
                               </thead>
                               <tbody>
                                 <?php
@@ -378,18 +388,11 @@
                                   $subkegiatan2 = wordwrap($dt2->sub_kegiatan, 65, "<br />\n");
                                 ?>
                                 <tr>
-                                  <th scope="row"><?php echo $no++; ?></th>
-                                  <td>
-                                    <?php if($dt2->lapor_sebagai_bkd=='1'){
-                                              $st="<b><span class='text text-success'>BKD</span></b>";
-                                          }else{
-                                              $st="<b><span class='text text-danger'>Remun</span></b>";
-                                          } echo $st;
-                                    ?>
-                                  </td>
+                                  <th scope="row">
+                                      <input type="checkbox" id="cekbox2" name="cekbox2[]" value="<?php echo $dt2->id_subkegiatan ?>" />
+                                  </th>
                                   <td><a href="#"><?php echo  wordwrap($dt2->kegiatan, 75, "<br />\n").'<br /><span class="text text-danger">('.strtolower($subkegiatan2).')</span>'; ?></a></td>
                                   <td><?php echo $dt2->sks_subkegiatan; ?></td>
-                                  <td><?php echo $dt2->poin_subkegiatan; ?></td>
                                   <td>
                                     <u><?php echo $this->pustaka->status($dt2->status); ?></u><br />
                                     <?php
@@ -442,7 +445,20 @@
                                 <?php } ?>
                               </tbody>
                             </table>
-                            </div>
+                               <input type="button" onclick="cek_pengabdian(this.form.cekbox2)" value="Select All"  class="btn btn-sm btn-danger" />
+                               <input type="button" onclick="uncek_pengabdian(this.form.cekbox2)" value="Clear All" class="btn btn-sm btn-danger" /> <br /><br />
+                               <input type="hidden" name="nip" value="<?php echo $this->uri->segment(3) ?>" />
+                               <?php
+                                 foreach($cek_approve as $ca);
+                                 if($ca->laporan_app_kaprodi==0){
+                               ?>
+                                 <button type="submit" form="nameform" class="btn btn-lg btn-success" value="Submit" >Terima Laporan</button>
+                               <?php
+                               }else{ echo '<h3>Sudah Diperiksa</h3>';}
+                               ?>
+
+                            </form>
+                          </div>
                           <div class="clearfix"></div>
                         </div>
                       </div>
@@ -457,18 +473,17 @@
                             <div class="clearfix"></div>
                           </div>
                           <div class="x_content">
+                            <form method="post" action="<?php echo base_url(); ?>Verifikator/ApprovalLaporanKetuaProdi3" >
                             <table class="table table-striped table-bordered myTable display nowrap" style="width:100%">
                               <thead>
-                                <tr>
-                                  <th>#</th>
-                                  <th>Lapor Sebagai</th>
-                                  <th>Kegiatan</th>
-                                  <th>Volume/SKS</th>
-                                  <th>Poin</th>
-                                  <th>File</th>
-                                  <th>Laporan</th>
-                                  <th>Verifikator</th>
-                                </tr>
+                                  <tr>
+                                    <th>#</th>
+                                    <th>Kegiatan</th>
+                                    <th>SKS</th>
+                                    <th>Status</th>
+                                    <th>Laporan</th>
+                                    <th>Verifikator</th>
+                                  </tr>
                               </thead>
                               <tbody>
                                 <?php
@@ -477,18 +492,11 @@
                                   $subkegiatan3 = wordwrap($dt3->sub_kegiatan, 65, "<br />\n");
                                 ?>
                                 <tr>
-                                  <th scope="row"><?php echo $no++; ?></th>
-                                  <td>
-                                    <?php if($dt3->lapor_sebagai_bkd=='1'){
-                                              $st="<b><span class='text text-success'>BKD</span></b>";
-                                          }else{
-                                              $st="<b><span class='text text-danger'>Remun</span></b>";
-                                          } echo $st;
-                                    ?>
-                                  </td>
+                                  <th scope="row">
+                                    <input type="checkbox" id="cekbox3" name="cekbox3[]" value="<?php echo $dt3->id_subkegiatan ?>" />
+                                  </th>
                                   <td><a href="#"><?php echo wordwrap($dt3->kegiatan, 75, "<br />\n").'<br /><span class="text text-danger">('.strtolower($subkegiatan3).')</span>'; ?></a></td>
                                   <td><?php echo $dt3->sks_subkegiatan; ?></td>
-                                  <td><?php echo $dt3->poin_subkegiatan; ?></td>
                                   <td>
                                     <u><?php echo $this->pustaka->status($dt3->status); ?></u><br />
                                     <?php
@@ -541,7 +549,20 @@
                                 <?php } ?>
                               </tbody>
                             </table>
-                            </div>
+                               <input type="button" onclick="cek_penunjang(this.form.cekbox3)" value="Select All"  class="btn btn-sm btn-danger" />
+                               <input type="button" onclick="uncek_penunjang(this.form.cekbox3)" value="Clear All" class="btn btn-sm btn-danger" /> <br /><br />
+                               <input type="hidden" name="nip" value="<?php echo $this->uri->segment(3) ?>" />
+
+                               <?php
+                                 foreach($cek_approve as $ca);
+                                 if($ca->laporan_app_kaprodi==0){
+                               ?>
+                                 <button type="submit" form="nameform" class="btn btn-lg btn-success" value="Submit" >Terima Laporan</button>
+                               <?php
+                               }else{ echo '<h3>Sudah Diperiksa</h3>';}
+                               ?>
+                            </form>
+                          </div>
                           <div class="clearfix"></div>
                         </div>
                       </div>

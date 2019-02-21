@@ -307,7 +307,8 @@ foreach ($this->input->post('bkd_kegiatan') as $key => $value) {
 										'app_ketuaprodi' => 1,
 										'status' => 1,
 										'lp_dosen' => 1,
-		                'user_create' => $this->session->userdata('username')
+		                'user_create' => $this->session->userdata('username'),
+										'tambahan' => 1
             );
 						// var_dump($data);
 						//Insert
@@ -787,17 +788,33 @@ function SelesaiLaporan()
 {
 	$id 			= $this->session->userdata('nipp');
 	$segment3 = $this->uri->segment(3);
+	$segment4 = $this->uri->segment(4);
+
 	if($segment3==1){
+			//update tabel verifikator
 		 	$data = array('statuslaporan' => $segment3);
-			$where = array('nip' => $id);
+			$where = array('nip' => $id, 'id_periode' => $segment4);
 			$this->M_rencanakerja->selesai_laporan($where, $data, 'verifikator');
+
+			//Update tabel bkd_subkegiatan_laporan
+			$data = array('laporkan_ke_assesor' => $segment3);
+			$where = array('nip' => $id, 'id_periode' => $segment4);
+			$this->M_rencanakerja->selesai_laporan($where, $data, 'bkd_subkegiatan_laporan');
+
 		 	redirect('RencanaKerja/Laporan');
+
 	}elseif($segment3==0){
-			$id = $this->session->userdata('nipp');
+			//update tabel verifikator
 			$data = array('statuslaporan' => $segment3);
-			$where = array('nip' => $id);
+			$where = array('nip' => $id, 'id_periode' => $segment4);
 			$this->M_rencanakerja->selesai_laporan($where, $data, 'verifikator');
+
+			//Update tabel bkd_subkegiatan_laporan
+			$data = array('laporkan_ke_assesor' => $segment3);
+			$where = array('nip' => $id, 'id_periode' => $segment4);
+			$this->M_rencanakerja->selesai_laporan($where, $data, 'bkd_subkegiatan_laporan');
 			redirect('RencanaKerja/Laporan');
+
 	}else{
 			echo '<h2><a href="'.base_url().'RencanaKerja/Laporan">No Segment, Kembali ke Dashboard Laporan</a></h2>';
 	}

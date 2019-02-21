@@ -7,7 +7,8 @@
             <div class="col-md-12 col-sm-12 col-xs-12">
               <div class="alert alert-success fade in">
                   <a href="#" class="close" data-dismiss="alert">&times;</a>
-                  <?php
+                      <a class="" href="javascript:void(0);" onclick="javascript:introJs().start();"> <span class="btn btn-md btn-danger"> <b id="textkedip">BACA Petunjuk Upload Laporan >></b> </span> </a>
+                <?php
                     foreach($syaratbkd as $dt1);
                     foreach($rekap_dosen as $dt);
 
@@ -54,7 +55,9 @@
                   ?>
                   <fieldset>
                     <legend></legend>
-                  <p><b>Poin P2 merupakan poin yang telah di setujui Ketua Prodi, Assesor 1 dan Assesor 2</b></p><br />
+                  <p data-step="1" data-intro="Ini adalah simulasi perhitungan laporan yang di upload">
+                      <b>Simulasi Perhitungan Berdasarkan Laporan yang di Upload.</b>
+                  </p><br />
                   <div class="col-sm-2">
                     <label><u><span class="required">SYARAT BKD Anda</span></u></label><br />
                       <table border="0" cellpadding="20" cellspacing="2">
@@ -114,23 +117,16 @@
                             <span class="required"><?php echo $point; ?></span>
                           </div>
                   </fieldset>
-
-                  <fieldset>
-                    <legend></legend>
-                      <a class="" href="javascript:void(0);" onclick="javascript:introJs().start();"> <span class="btn btn-md btn-danger">BACA Petunjuk Upload Laporan >></span> </a>
-                    </fieldset>
-
               </div>
             </div>
 
             <div class="alert fade in">
-              <h4>Keterangan Warna Pada Tulisan di Kolom Kegiatan</h4>
+              <h4 data-step="2" data-intro="Kegiatan yang sudah di kelompokan berdasarkan warna tulisan.">Keterangan Warna Pada Tulisan di Kolom Kegiatan</h4>
                 <span class="btn btn-sm btn-success">BKD dan Remunerasi di Hitung</span>
                 <span class="btn btn-sm btn-warning">BKD di Hitung, Remunerasi Tidak di Hitung</span>
                 <span class="btn btn-sm btn-danger">BKD Tidak di Hitung, Remunerasi di Hitung</span>
             </div>
 
-              <!-- <a href="<?php echo base_url() ?>RencanaKerja/FormRencanaTambahan" class="btn btn-md btn-primary"> + Tambah Kegiatan Baru</a> -->
               <div class="row">
               <div class="form-group">
                 <div class="col-sm-12 col-md-12">
@@ -144,9 +140,9 @@
                       </ul>
                       <div class="clearfix"></div>
                     </div>
-                    <div class="x_content" data-step="2" data-intro="Pilih All untuk menampilkan seluruh Rencana Kerja">
-                      <div class="form-group">
-                        <table class="table table-striped table-bordered myTable display nowrap" style="width:100%" data-step="1" data-intro="Ini adalah seluruh List Rencana Kerja Anda">
+                    <div class="x_content">
+                      <div class="form-group" data-step="4" data-intro="Pilih All untuk menampilkan seluruh Rencana Kerja">
+                        <table class="table table-striped table-bordered myTable display nowrap" style="width:100%" data-step="3" data-intro="Ini adalah seluruh List Rencana Kerja Anda">
                           <thead>
                             <tr>
                               <th>#</th>
@@ -166,14 +162,16 @@
                               ?>
                                 <tr>
                                   <th scope="row"><?php echo $no++; ?></th>
-                                  <td><?php echo $kegiatans.'<br /><span class="text ">'.$option->sub_kegiatan.'</span>'; ?></td>
+                                  <td>
+                                    <?php echo wordwrap($kegiatans, 85, "<br />\n").'<br /><span>- '.strtolower($option->sub_kegiatan).'</span>'; ?>
+                                  </td>
                                   <td>
                                     <?php echo $option->sks_post; ?>
                                   </td>
                                   <td>
                                     <?php echo $option->poin_subkegiatan; ?>
                                   </td>
-                                  <td data-step="3" data-intro="Jika Laporan telah dibuka, maka status pada kolom ini adalah (Pelaporan BKD telah di buka)">
+                                  <td data-step="5" data-intro="Jika Laporan telah dibuka, maka status pada kolom ini adalah (Pelaporan BKD telah di buka)">
                                     <?php
                                     if($option->app_ketuaprodi==1 && $option->di_laporkan==1){
                                         echo '<span class="text text-success">Pelaporan BKD telah di buka</span>';
@@ -186,7 +184,7 @@
                                     }
                                     ?>
                                   </td>
-                                  <td data-step="4" data-intro="Dan, akan muncul icon panah berwarna Biru. Klik untuk menuju link upload Berkas">
+                                  <td data-step="6" data-intro="Dan, akan muncul icon panah berwarna Biru. Klik untuk menuju link upload Berkas">
                                     <?php
                                     if($option->app_ketuaprodi==1 && $option->di_laporkan==1){
                                         //$attr = array('target'=>'_blank');
@@ -217,10 +215,10 @@
                                 if ($vr->lp_dosen==1 && $vr->statuslaporan==0) {
                               ?>
                                   <h5>Apabila sudah selesai melakukan seluruh Pelaporan(Upload File) <br />Silahkan Tekan tombol <b>"Selesai Upload Seluruh Laporan"</b> di bawah ini.</h5><br />
-                                  <a href="<?php echo base_url() ?>RencanaKerja/SelesaiLaporan/1" class="btn btn-md btn-danger" data-step="5" data-intro="Terakhir, Usahakan anda telah upload berkas untuk seluruh kegiatan anda, baru kemudian menekan tombol di bawah." onClick="return confirm('Apakah anda sudah selesai melaporkan seluruh Rencana Kerja? Jumlah laporan yang belum anda upload = <?php echo $dl->jumlah; ?> Kegiatan')"> <b>Selesai Upload Seluruh Laporan</b> </a>
+                                  <a href="<?php echo base_url() ?>RencanaKerja/SelesaiLaporan/1/<?php echo $vr->id_periode; ?>" class="btn btn-md btn-danger" data-step="8" data-intro="Terakhir, Usahakan anda telah upload berkas untuk seluruh kegiatan anda, baru kemudian menekan tombol di bawah." onClick="return confirm('Apakah anda sudah selesai melaporkan seluruh Rencana Kerja? Jumlah laporan yang belum anda upload = <?php echo $dl->jumlah; ?> Kegiatan')"> <b>Selesai Upload Seluruh Laporan</b> </a>
                               <?php }elseif ($vr->lp_dosen==1 && $vr->statuslaporan==1) { ?>
-                                <a href="#" class="btn btn-md btn-success" onClick="return confirm('Laporan anda sedang di periksa assesor')"> <b>Laporan anda sedang di periksa Assesor</b> </a>
-                                <a href="<?php echo base_url() ?>RencanaKerja/SelesaiLaporan/0" class="btn btn-md btn-danger" onClick="return confirm('Apakah anda ingin tunda pemeriksaan oleh Assesor ?')"> <b>Reset Pemeriksaan Oleh Assesor</b> </a>
+                                  <a href="#" class="btn btn-md btn-success" onClick="return confirm('Laporan anda sedang di periksa assesor')"> <b>Laporan anda sedang di periksa Assesor</b> </a>
+                                  <a href="<?php echo base_url() ?>RencanaKerja/SelesaiLaporan/0/<?php echo $vr->id_periode; ?>" class="btn btn-md btn-danger" onClick="return confirm('Apakah anda ingin tunda pemeriksaan oleh Assesor ?')"> <b>Reset Pemeriksaan Oleh Assesor</b> </a>
                               <?php }elseif ($vr->p_assesor1==2) { ?>
                                   <h5>Apabila sudah selesai melakukan perbaikan <br />Silahkan Tekan tombol <b>"Selesai Memperbaiki"</b> di bawah ini.</h5><br />
                                   <a href="<?php echo base_url() ?>RencanaKerja/SelesaiLaporan_1" class="btn btn-md btn-danger" onClick="return confirm('Apakah anda sudah selesai memperbaiki laporan?')"> <b>Selesai Perbaikan Laporan</b> </a>
@@ -248,7 +246,7 @@
             </fieldset>
           <div class="form-group">
             <div class="col-sm-12 col-md-12 col-xs-12">
-                <ul class="nav nav-tabs" id="myTab">
+                <ul class="nav nav-tabs" id="myTab" data-step="10" data-intro="Kegiatan yang sudah dilapor akan masuk ke list laporan.">
                     <li class="active"><a data-toggle="tab" href="#pendidikan_tab" class="bg-primary">PENDIDIKAN</a></li>
                     <li><a data-toggle="tab" href="#penelitian_tab" class="bg-primary">PENELITIAN</a></li>
                     <li><a data-toggle="tab" href="#pengabdian_tab" class="bg-primary">PENGABDIAN</a></li>
@@ -351,9 +349,19 @@
                           </div>
                       </div>
                       <div class="form-group">
-                          <label class="col-lg-2 col-sm-2 control-label">SKS</label>
+                          <label class="col-lg-2 col-sm-2 control-label">Volume/SKS</label>
                           <div class="col-lg-10">
                             <input type="text" class="form-control" id="sks" name="sks" />
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label class="col-lg-2 col-sm-2 control-label">Lapor Sebagai BKD ?</label>
+                          <div class="col-lg-10">
+                            <select id="lapor_as_bkd" name="lapor_as_bkd" class="form-control" required>
+                                <option value="">--Pilih--</option>
+                                <option value="1">Ya</option>
+                                <option value="0">Tidak</option>
+                            </select>
                           </div>
                       </div>
                   </div>
@@ -371,7 +379,7 @@
                         <div id="pendidikan_tab" class="tab-pane fade in active">
                               <div class="x_panel">
                                 <div class="x_title">
-                                  <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#exampleModal" data-step="2" data-intro="Klik tombol ini untuk mengisi rencana kerja.">
+                                  <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#exampleModal" data-step="9" data-intro="Klik tombol ini untuk menambah kegiatan baru diluar rencana kerja.">
                                     + Tambah Kegiatan Baru
                                   </button>
                                   <ul class="nav navbar-right panel_toolbox">
@@ -384,12 +392,12 @@
                                     <thead>
                                       <tr>
                                         <th>#</th>
-                                        <th>Hitung Sebagai</th>
+                                        <th data-step="11" data-intro="Jenis laporan BKD/Remun">Lapor Sebagai</th>
                                         <th>Kegiatan</th>
                                         <th>Volume/SKS</th>
                                         <th>Poin <br />Remunerasi</th>
                                         <th>Bukti Fisik</th>
-                                        <th>Laporan</th>
+                                        <th data-step="10" data-intro="Ini adalah kolom status laporan, selama anda belum menekan tombol 'Selesai upload seluruh Laporan', maka kegiatan masih bisa di edit/hapus. ">Laporan</th>
                                         <th>Verifikator</th>
                                       </tr>
                                     </thead>
@@ -406,13 +414,13 @@
                                       ?>
                                       <tr>
                                         <th scope="row"><?php echo $no++; ?></th>
-                                        <td><?php if($dt->bkd_hitung=='1'){$st="<b><span class='text text-success'>BKD <br />& Remun</span></b>"; }else{$st="<b><span class='text text-danger'>Remunerasi</span></b>"; } echo $st; ?></td>
-                                        <td>
-                                            <?php
-                                              if($dt->bkd_hitung==0){
-                                                  echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan).'</span>';
-                                              }else{
-                                            ?>
+                                        <td><?php if($dt->lapor_sebagai_bkd=='1'){$st="<b><span class='text text-success'>BKD</span></b>"; }else{$st="<b><span class='text text-danger'>Remun</span></b>"; } echo $st; ?></td>
+                                        <td data-step="12" data-intro="Klik nama kegiatan untuk mengubah Volume/SKS, Lapor sebagai BKD/Tidak.">
+                                          <?php
+                                            if($dt->bkd_hitung==0 && $dt->laporkan_ke_assesor==0){
+                                                echo wordwrap($kegiatans, 85, "<br />\n").'<br /><span>- '.strtolower($subkegiatan).'</span>';
+                                            }elseif($dt->bkd_hitung==1 && $dt->laporkan_ke_assesor==0){
+                                          ?>
                                               <a href="javascript:;"
                                                   data-id_kegiatan="<?php echo $dt->id_kegiatan ?>"
                                                   data-id_subkegiatan="<?php echo $dt->id_subkegiatan ?>"
@@ -420,9 +428,14 @@
                                                   data-subkegiatan="<?php echo $dt->sub_kegiatan ?>"
                                                   data-sks="<?php echo $dt->sks_post ?>"
                                                   data-toggle="modal" data-target="#edit-pendidikan">
-                                                  <?php echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan).'</span>'; ?>
+                                                  <span class="text-sm text-default">[edit]</span>
+                                                  <?php echo wordwrap($kegiatans, 85, "<br />\n").'<br /><span>- '.strtolower($subkegiatan).'</span>'; ?>
                                               </a>
-                                            <?php  } ?>
+                                          <?php
+                                          }else{
+                                                  echo wordwrap($kegiatans, 85, "<br />\n").'<br /><span>- '.strtolower($subkegiatan).'</span>';
+                                          }
+                                          ?>
                                         </td>
                                         <td align="center"><?php echo $dt->sks_subkegiatan; ?></td>
                                         <td align="center"><?php echo $dt->poin_subkegiatan; ?></td>
@@ -445,9 +458,13 @@
                                         <td>
                                             <?php
                                               $kp = $dt->applaporan_ketuaprodi; $as1=$dt->app_assesor1; $as2=$dt->app_assesor2;
-                                              if($dt->status_laporan==0 && $kp==0 && $as1==0 && $as2==0){
+                                              if($dt->status_laporan==0 && $dt->laporkan_ke_assesor==0 && $kp==0 && $as1==0 && $as2==0){
                                                 echo anchor('RencanaKerja/EditLaporanTambahan/'.$dt->id_subkegiatan,'<span class="btn btn-sm btn-primary">Upload File</span>');
                                                 echo anchor('RencanaKerja/HapusLaporan/'.$dt->id_subkegiatan,'<span class="btn btn-sm btn-danger">Hapus</span>');
+
+                                              }elseif($dt->laporkan_ke_assesor==0  && $kp==0 && $as1==0 && $as2==0){
+                                                  echo anchor('RencanaKerja/EditLaporan2/'.$dt->id_subkegiatan,'<span class="btn btn-sm btn-primary">Edit</span>');
+                                                  echo anchor('RencanaKerja/HapusLaporan/'.$dt->id_subkegiatan,'<span class="btn btn-sm btn-danger">Hapus</span>');
 
                                               }elseif($kp==0 && $as1==0 && $as2==0){
                                                 echo '<span class="text text-primary">Belum Diperiksa</span>';
@@ -523,7 +540,7 @@
                         <div id="penelitian_tab" class="tab-pane fade">
                           <div class="x_panel">
                             <div class="x_title">
-                              <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#exampleModal" data-step="2" data-intro="Klik tombol ini untuk mengisi rencana kerja.">
+                              <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#exampleModal">
                                 + Tambah Kegiatan Baru
                               </button>
                               <ul class="nav navbar-right panel_toolbox">
@@ -536,7 +553,7 @@
                                 <thead>
                                   <tr>
                                     <th>#</th>
-                                    <th>Hitung Sebagai</th>
+                                    <th>Lapor Sebagai</th>
                                     <th>Kegiatan</th>
                                     <th>Volume/SKS</th>
                                     <th>Poin <br />Remunerasi</th>
@@ -549,22 +566,22 @@
                                   <?php
                                   $no = 1;
                                   foreach($penelitian as $dt1){
-                                    if($dt1->bkd_hitung=='1' && $dt1->renum_hitung=='1'){ $kegiatans="<b><span class='text text-success'>".$dt1->kegiatan."</span></b>";}
-                                    if($dt1->bkd_hitung=='1' && $dt1->renum_hitung=='0'){ $kegiatans="<b><span class='text text-warning'>".$dt1->kegiatan."</span></b>";}
-                                    if($dt1->bkd_hitung=='0' && $dt1->renum_hitung=='1'){ $kegiatans="<b><span class='text text-danger'>".$dt1->kegiatan."</span></b>";}
+                                    if($dt1->bkd_hitung=='1' && $dt1->renum_hitung=='1'){ $kegiatans1="<b><span class='text text-success'>".$dt1->kegiatan."</span></b>";}
+                                    if($dt1->bkd_hitung=='1' && $dt1->renum_hitung=='0'){ $kegiatans1="<b><span class='text text-warning'>".$dt1->kegiatan."</span></b>";}
+                                    if($dt1->bkd_hitung=='0' && $dt1->renum_hitung=='1'){ $kegiatans1="<b><span class='text text-danger'>".$dt1->kegiatan."</span></b>";}
                                     $total1[]=$dt1->sks_subkegiatan;
                                     $poin1[]=$dt1->poin_subkegiatan;
                                     $subkegiatan1 = wordwrap($dt1->sub_kegiatan, 65, "<br />\n");
                                   ?>
                                   <tr>
                                     <th scope="row"><?php echo $no++; ?></th>
-                                    <td><?php if($dt1->bkd_hitung=='1'){$st="<b><span class='text text-success'>BKD <br />& Remun</span></b>"; }else{$st="<b><span class='text text-danger'>Remunerasi</span></b>"; } echo $st; ?></td>
+                                    <td><?php if($dt1->lapor_sebagai_bkd=='1'){$st="<b><span class='text text-success'>BKD</span></b>"; }else{$st="<b><span class='text text-danger'>Remun</span></b>"; } echo $st; ?></td>
                                     <td>
-                                        <?php
-                                          if($dt1->bkd_hitung==0){
-                                              echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan).'</span>';
-                                          }else{
-                                        ?>
+                                      <?php
+                                        if($dt1->bkd_hitung==0 && $dt1->laporkan_ke_assesor==0){
+                                            echo wordwrap($kegiatans1, 85, "<br />\n").'<br /><span>- '.strtolower($subkegiatan1).'</span>';
+                                        }elseif($dt1->bkd_hitung==1 && $dt1->laporkan_ke_assesor==0){
+                                      ?>
                                           <a href="javascript:;"
                                               data-id_kegiatan="<?php echo $dt1->id_kegiatan ?>"
                                               data-id_subkegiatan="<?php echo $dt1->id_subkegiatan ?>"
@@ -572,9 +589,14 @@
                                               data-subkegiatan="<?php echo $dt1->sub_kegiatan ?>"
                                               data-sks="<?php echo $dt1->sks_post ?>"
                                               data-toggle="modal" data-target="#edit-pendidikan">
-                                              <?php echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan).'</span>'; ?>
+                                              <span class="text-sm text-default">[edit]</span>
+                                              <?php echo wordwrap($kegiatans1, 85, "<br />\n").'<br /><span>- '.strtolower($subkegiatan1).'</span>'; ?>
                                           </a>
-                                        <?php  } ?>
+                                      <?php
+                                      }else{
+                                              echo wordwrap($kegiatans1, 85, "<br />\n").'<br /><span>- '.strtolower($subkegiatan1).'</span>';
+                                      }
+                                      ?>
                                     </td>
                                     <td><?php echo $dt1->sks_subkegiatan; ?></td>
                                     <td><?php echo $dt1->poin_subkegiatan; ?></td>
@@ -596,8 +618,16 @@
                                     <td>
                                         <?php
                                           $kp = $dt1->applaporan_ketuaprodi; $as1=$dt1->app_assesor1; $as2=$dt1->app_assesor2;
-                                          if($kp==0 && $as1==0 && $as2==0){
-                                            echo '<span class="text text-default">Belum Diperiksa</span>';
+                                          if($dt1->status_laporan==0 && $dt1->laporkan_ke_assesor==0 && $kp==0 && $as1==0 && $as2==0){
+                                            echo anchor('RencanaKerja/EditLaporanTambahan/'.$dt1->id_subkegiatan,'<span class="btn btn-sm btn-primary">Upload File</span>');
+                                            echo anchor('RencanaKerja/HapusLaporan/'.$dt1->id_subkegiatan,'<span class="btn btn-sm btn-danger">Hapus</span>');
+
+                                          }elseif($dt1->laporkan_ke_assesor==0  && $kp==0 && $as1==0 && $as2==0){
+                                              echo anchor('RencanaKerja/EditLaporan2/'.$dt1->id_subkegiatan,'<span class="btn btn-sm btn-primary">Edit</span>');
+                                              echo anchor('RencanaKerja/HapusLaporan/'.$dt1->id_subkegiatan,'<span class="btn btn-sm btn-danger">Hapus</span>');
+
+                                          }elseif($kp==0 && $as1==0 && $as2==0){
+                                            echo '<span class="text text-primary">Belum Diperiksa</span>';
 
                                           }elseif($kp==0 && $as1==1 && $as2==0){
                                             echo '<span class="text text-success">Approve Assesor 1</span>';
@@ -669,7 +699,7 @@
                         <div id="pengabdian_tab" class="tab-pane fade">
                           <div class="x_panel">
                             <div class="x_title">
-                              <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#exampleModal" data-step="2" data-intro="Klik tombol ini untuk mengisi rencana kerja.">
+                              <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#exampleModal">
                                 + Tambah Kegiatan Baru
                               </button>
                               <ul class="nav navbar-right panel_toolbox">
@@ -682,7 +712,7 @@
                                 <thead>
                                   <tr>
                                     <th>#</th>
-                                    <th>Hitung Sebagai</th>
+                                    <th>Lapor Sebagai</th>
                                     <th>Kegiatan</th>
                                     <th>Volume/SKS</th>
                                     <th>Poin <br />Remunerasi</th>
@@ -695,22 +725,22 @@
                                   <?php
                                   $no = 1;
                                   foreach($pengabdian as $dt2){
-                                    if($dt2->bkd_hitung=='1' && $dt2->renum_hitung=='1'){ $kegiatans="<b><span class='text text-success'>".$dt2->kegiatan."</span></b>";}
-                                    if($dt2->bkd_hitung=='1' && $dt2->renum_hitung=='0'){ $kegiatans="<b><span class='text text-warning'>".$dt2->kegiatan."</span></b>";}
-                                    if($dt2->bkd_hitung=='0' && $dt2->renum_hitung=='1'){ $kegiatans="<b><span class='text text-danger'>".$dt2->kegiatan."</span></b>";}
+                                    if($dt2->bkd_hitung=='1' && $dt2->renum_hitung=='1'){ $kegiatans2="<b><span class='text text-success'>".$dt2->kegiatan."</span></b>";}
+                                    if($dt2->bkd_hitung=='1' && $dt2->renum_hitung=='0'){ $kegiatans2="<b><span class='text text-warning'>".$dt2->kegiatan."</span></b>";}
+                                    if($dt2->bkd_hitung=='0' && $dt2->renum_hitung=='1'){ $kegiatans2="<b><span class='text text-danger'>".$dt2->kegiatan."</span></b>";}
                                     $total2[]=$dt2->sks_subkegiatan;
                                     $poin2[]=$dt2->poin_subkegiatan;
                                     $subkegiatan2 = wordwrap($dt2->sub_kegiatan, 65, "<br />\n");
                                   ?>
                                   <tr>
                                     <th scope="row"><?php echo $no++; ?></th>
-                                    <td><?php if($dt2->bkd_hitung=='1'){$st="<b><span class='text text-success'>BKD <br />& Remun</span></b>"; }else{$st="<b><span class='text text-danger'>Remunerasi</span></b>"; } echo $st; ?></td>
+                                    <td><?php if($dt2->lapor_sebagai_bkd=='1'){$st="<b><span class='text text-success'>BKD</span></b>"; }else{$st="<b><span class='text text-danger'>Remun</span></b>"; } echo $st; ?></td>
                                     <td>
-                                        <?php
-                                          if($dt2->bkd_hitung==0){
-                                              echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan).'</span>';
-                                          }else{
-                                        ?>
+                                      <?php
+                                        if($dt2->bkd_hitung==0 && $dt2->laporkan_ke_assesor==0){
+                                            echo wordwrap($kegiatans2, 85, "<br />\n").'<br /><span>- '.strtolower($subkegiatan2).'</span>';
+                                        }elseif($dt2->bkd_hitung==1 && $dt2->laporkan_ke_assesor==0){
+                                      ?>
                                           <a href="javascript:;"
                                               data-id_kegiatan="<?php echo $dt2->id_kegiatan ?>"
                                               data-id_subkegiatan="<?php echo $dt2->id_subkegiatan ?>"
@@ -718,9 +748,14 @@
                                               data-subkegiatan="<?php echo $dt2->sub_kegiatan ?>"
                                               data-sks="<?php echo $dt2->sks_post ?>"
                                               data-toggle="modal" data-target="#edit-pendidikan">
-                                              <?php echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan2).'</span>'; ?>
+                                              <span class="text-sm text-default">[edit]</span>
+                                              <?php echo wordwrap($kegiatans2, 85, "<br />\n").'<br /><span>- '.strtolower($subkegiatan2).'</span>'; ?>
                                           </a>
-                                        <?php  } ?>
+                                      <?php
+                                      }else{
+                                              echo wordwrap($kegiatans2, 85, "<br />\n").'<br /><span>- '.strtolower($subkegiatan2).'</span>';
+                                      }
+                                      ?>
                                     </td>
                                     <td><?php echo $dt2->sks_subkegiatan; ?></td>
                                     <td><?php echo $dt2->poin_subkegiatan; ?></td>
@@ -742,8 +777,16 @@
                                     <td>
                                         <?php
                                           $kp = $dt2->applaporan_ketuaprodi; $as1=$dt2->app_assesor1; $as2=$dt2->app_assesor2;
-                                          if($kp==0 && $as1==0 && $as2==0){
-                                            echo '<span class="text text-default">Belum Diperiksa</span>';
+                                          if($dt2->status_laporan==0 && $dt2->laporkan_ke_assesor==0 && $kp==0 && $as1==0 && $as2==0){
+                                            echo anchor('RencanaKerja/EditLaporanTambahan/'.$dt2->id_subkegiatan,'<span class="btn btn-sm btn-primary">Upload File</span>');
+                                            echo anchor('RencanaKerja/HapusLaporan/'.$dt2->id_subkegiatan,'<span class="btn btn-sm btn-danger">Hapus</span>');
+
+                                          }elseif($dt2->laporkan_ke_assesor==0  && $kp==0 && $as1==0 && $as2==0){
+                                              echo anchor('RencanaKerja/EditLaporan2/'.$dt2->id_subkegiatan,'<span class="btn btn-sm btn-primary">Edit</span>');
+                                              echo anchor('RencanaKerja/HapusLaporan/'.$dt2->id_subkegiatan,'<span class="btn btn-sm btn-danger">Hapus</span>');
+
+                                          }elseif($kp==0 && $as1==0 && $as2==0){
+                                            echo '<span class="text text-primary">Belum Diperiksa</span>';
 
                                           }elseif($kp==0 && $as1==1 && $as2==0){
                                             echo '<span class="text text-success">Approve Assesor 1</span>';
@@ -816,7 +859,7 @@
                         <div id="penunjang_tab" class="tab-pane fade">
                           <div class="x_panel">
                             <div class="x_title">
-                              <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#exampleModal" data-step="2" data-intro="Klik tombol ini untuk mengisi rencana kerja.">
+                              <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#exampleModal">
                                 + Tambah Kegiatan Baru
                               </button>
                               <ul class="nav navbar-right panel_toolbox">
@@ -829,7 +872,7 @@
                                 <thead>
                                   <tr>
                                     <th>#</th>
-                                    <th>Hitung Sebagai</th>
+                                    <th>Lapor Sebagai</th>
                                     <th>Kegiatan</th>
                                     <th>Volume/SKS</th>
                                     <th>Poin <br />Remunerasi</th>
@@ -842,22 +885,29 @@
                                   <?php
                                   $no = 1;
                                   foreach($penunjang as $dt3){
-                                    if($dt3->bkd_hitung=='1' && $dt3->renum_hitung=='1'){ $kegiatans="<b><span class='text text-success'>".$dt3->kegiatan."</span></b>";}
-                                    if($dt3->bkd_hitung=='1' && $dt3->renum_hitung=='0'){ $kegiatans="<b><span class='text text-warning'>".$dt3->kegiatan."</span></b>";}
-                                    if($dt3->bkd_hitung=='0' && $dt3->renum_hitung=='1'){ $kegiatans="<b><span class='text text-danger'>".$dt3->kegiatan."</span></b>";}
+                                    if($dt3->bkd_hitung=='1' && $dt3->renum_hitung=='1'){ $kegiatans3="<b><span class='text text-success'>".$dt3->kegiatan."</span></b>";}
+                                    if($dt3->bkd_hitung=='1' && $dt3->renum_hitung=='0'){ $kegiatans3="<b><span class='text text-warning'>".$dt3->kegiatan."</span></b>";}
+                                    if($dt3->bkd_hitung=='0' && $dt3->renum_hitung=='1'){ $kegiatans3="<b><span class='text text-danger'>".$dt3->kegiatan."</span></b>";}
                                     $total3[]=$dt3->sks_subkegiatan;
                                     $poin3[]=$dt3->poin_subkegiatan;
                                     $subkegiatan3 = wordwrap($dt3->sub_kegiatan, 65, "<br />\n");
                                   ?>
                                   <tr>
                                     <th scope="row"><?php echo $no++; ?></th>
-                                    <td><?php if($dt3->bkd_hitung=='1'){$st="<b><span class='text text-success'>BKD <br />& Remun</span></b>"; }else{$st="<b><span class='text text-danger'>Remunerasi</span></b>"; } echo $st; ?></td>
                                     <td>
-                                        <?php
-                                          if($dt3->bkd_hitung==0){
-                                              echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan).'</span>';
-                                          }else{
-                                        ?>
+                                      <?php if($dt3->lapor_sebagai_bkd=='1'){
+                                                $st="<b><span class='text text-success'>BKD</span></b>";
+                                            }else{
+                                                $st="<b><span class='text text-danger'>Remun</span></b>";
+                                            } echo $st;
+                                      ?>
+                                    </td>
+                                    <td>
+                                      <?php
+                                        if($dt3->bkd_hitung==0 && $dt3->laporkan_ke_assesor==0){
+                                            echo wordwrap($kegiatans3, 85, "<br />\n").'<br /><span>- '.strtolower($subkegiatan3).'</span>';
+                                        }elseif($dt3->bkd_hitung==1 && $dt3->laporkan_ke_assesor==0){
+                                      ?>
                                           <a href="javascript:;"
                                               data-id_kegiatan="<?php echo $dt3->id_kegiatan ?>"
                                               data-id_subkegiatan="<?php echo $dt3->id_subkegiatan ?>"
@@ -865,9 +915,14 @@
                                               data-subkegiatan="<?php echo $dt3->sub_kegiatan ?>"
                                               data-sks="<?php echo $dt3->sks_post ?>"
                                               data-toggle="modal" data-target="#edit-pendidikan">
-                                              <?php echo wordwrap($kegiatans, 75, "<br />\n").'<br /><span>- '.strtolower($subkegiatan).'</span>'; ?>
+                                              <span class="text-sm text-default">[edit]</span>
+                                              <?php echo wordwrap($kegiatans3, 85, "<br />\n").'<br /><span>- '.strtolower($subkegiatan3).'</span>'; ?>
                                           </a>
-                                        <?php  } ?>
+                                      <?php
+                                      }else{
+                                              echo wordwrap($kegiatans3, 85, "<br />\n").'<br /><span>- '.strtolower($subkegiatan3).'</span>';
+                                      }
+                                      ?>
                                     </td>
                                     <td><?php echo $dt3->sks_subkegiatan; ?></td>
                                     <td><?php echo $dt3->poin_subkegiatan; ?></td>
@@ -889,8 +944,16 @@
                                     <td>
                                         <?php
                                           $kp = $dt3->applaporan_ketuaprodi; $as1=$dt3->app_assesor1; $as2=$dt3->app_assesor2;
-                                          if($kp==0 && $as1==0 && $as2==0){
-                                            echo '<span class="text text-default">Belum Diperiksa</span>';
+                                          if($dt3->status_laporan==0 && $dt3->laporkan_ke_assesor==0 && $kp==0 && $as1==0 && $as2==0){
+                                            echo anchor('RencanaKerja/EditLaporanTambahan/'.$dt3->id_subkegiatan,'<span class="btn btn-sm btn-primary">Upload File</span>');
+                                            echo anchor('RencanaKerja/HapusLaporan/'.$dt3->id_subkegiatan,'<span class="btn btn-sm btn-danger">Hapus</span>');
+
+                                          }elseif($dt3->laporkan_ke_assesor==0  && $kp==0 && $as1==0 && $as2==0){
+                                              echo anchor('RencanaKerja/EditLaporan2/'.$dt3->id_subkegiatan,'<span class="btn btn-sm btn-primary">Edit</span>');
+                                              echo anchor('RencanaKerja/HapusLaporan/'.$dt3->id_subkegiatan,'<span class="btn btn-sm btn-danger">Hapus</span>');
+
+                                          }elseif($kp==0 && $as1==0 && $as2==0){
+                                            echo '<span class="text text-primary">Belum Diperiksa</span>';
 
                                           }elseif($kp==0 && $as1==1 && $as2==0){
                                             echo '<span class="text text-success">Approve Assesor 1</span>';

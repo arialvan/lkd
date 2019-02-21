@@ -467,8 +467,8 @@ function get_subkegiatan_laporan($id)
 {
     $this->db->select('*')
                     ->from('bkd_subkegiatan_file a')
-                    ->join('bkd_subkegiatan b','a.id_subkegiatan = b.id_subkegiatan')
-                    ->where('a.id_subkegiatan=', $id);
+                    ->join('bkd_subkegiatan_laporan b','a.id_subkegiatan = b.id_subkegiatan')
+                    ->where('a.id_subkegiatan', $id);
     $query=$this->db->get()->result();
     return $query;
 
@@ -701,12 +701,12 @@ function show_rencana_penunjang($id)
 function show_verifikator()
 {
   $this->db->select('*')
-                  ->from('verifikator')
-                  ->join('periode_lkd','verifikator.id_periode = periode_lkd.id_periode')
-                  ->join('verifikasi','verifikasi.id_verifikator = verifikator.id_verifikator')
-                  ->where('verifikasi.nip',$this->session->userdata('nipp'))
-                  ->where('periode_lkd.status',1)
-                  ->order_by('verifikasi.id_verifikator');
+                  ->from('verifikator a')
+                  ->join('periode_lkd b','a.id_periode = b.id_periode')
+                  ->join('verifikasi c','a.id_verifikator = c.id_verifikator')
+                  ->where('c.nip',$this->session->userdata('nipp'))
+                  ->where('b.status',1)
+                  ->order_by('c.id_verifikator');
   $query=$this->db->get()->result();
   return $query;
 }

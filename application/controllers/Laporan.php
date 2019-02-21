@@ -159,11 +159,13 @@ function ambil_fakultas()
 		foreach ($data as $keys);
 		$sks   = $this->input->post('sks')*$keys->bkd_sks; //Poin Edit
 		$point = $this->input->post('sks')*$keys->poin; //Poin Edit
+		$laporbkd = $this->input->post('lapor_as_bkd');
 
 		$data = array('sub_kegiatan' => $this->input->post('subkegiatan'),
 									'sks_post' => $this->input->post('sks'),
 									'sks_subkegiatan	' => $sks,
-									'poin_subkegiatan	' => $point);
+									'poin_subkegiatan	' => $point,
+									'lapor_sebagai_bkd' => $laporbkd);
 
 	  $where = array('id_subkegiatan' => $this->input->post('id_subkegiatan'));
 	  $this->M_laporan->update_rencana($where, $data, 'bkd_subkegiatan_laporan');

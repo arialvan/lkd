@@ -32,6 +32,12 @@
 
 <script>
 
+// var kedipan = 200;
+// var dumet = setInterval(function () {
+//     var ele = document.getElementById('textkedip');
+//     ele.style.visibility = (ele.style.visibility == 'hidden' ? '' : 'hidden');
+// }, kedipan);
+
 function cek_pendidikan(cekbox){
     for(i=0; i < cekbox.length; i++){
         cekbox[i].checked = true;
@@ -124,7 +130,6 @@ $(document).ready(function() {
             $('#edit-pendidikan').on('show.bs.modal', function (event) {
                 var div   = $(event.relatedTarget) // Tombol dimana modal di tampilkan
                 var modal = $(this)
-
                 // Isi nilai pada field
                 modal.find('#id_kegiatan').attr("value",div.data('id_kegiatan'));
                 modal.find('#id_subkegiatan').attr("value",div.data('id_subkegiatan'));
